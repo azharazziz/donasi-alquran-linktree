@@ -3,13 +3,13 @@ import quranLogo from "@/assets/quran-logo.png";
 const DonationHeader = () => {
   return (
     <header className="flex flex-col items-center text-center px-4 pt-12 pb-8">
-      {/* Logo */}
+      {/* Logo - flexible container preserving original aspect ratio */}
       <div className="animate-scale-in mb-6">
-        <div className="w-28 h-28 rounded-full overflow-hidden border-2 border-gold/30 shadow-lg animate-float">
+        <div className="max-w-[220px] md:max-w-[260px] px-4 py-3 rounded-2xl bg-card border border-border/50 shadow-sm">
           <img
             src={quranLogo}
             alt="Logo Donasi Al-Qur'an"
-            className="w-full h-full object-cover"
+            className="w-full h-auto object-contain"
           />
         </div>
       </div>
