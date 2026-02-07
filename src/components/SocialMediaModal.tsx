@@ -8,6 +8,7 @@ import {
   Globe,
   MessageCircle,
   Share2,
+  MapPinCheck,
 } from "lucide-react";
 import {
   Dialog,
@@ -26,11 +27,18 @@ interface SocialMediaModalProps {
 const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
   const socialMediaLinks = [
     {
-      name: "Kamar Baca Magelang",
-      icon: Instagram,
-      url: "https://instagram.com/kamarbacamgl", // Replace with actual Instagram URL
-      color: "hover:text-pink-500",
-      bgColor: "hover:bg-pink-50",
+        name: "Bubur Kijang",
+        icon: Instagram,
+        url: "https://instagram.com/bubur_kijang", // Replace with actual Instagram URL
+        color: "hover:text-pink-500",
+        bgColor: "hover:bg-pink-50",
+    },
+    {
+        name: "Lokasi Bubur Kijang",
+        icon: MapPinCheck,
+        url: "https://share.google/mAVAKocMZpP8U5bd4", // Replace with actual Google Maps URL
+        color: "hover:text-gree-500",
+        bgColor: "hover:bg-green-50",
     },
     {
         name: "Fotoin Project",
@@ -40,25 +48,11 @@ const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
         bgColor: "hover:bg-pink-50",
     },
     {
-        name: "SKS Foundation",
-        icon: Instagram,
-        url: "https://instagram.com/sksfound", // Replace with actual Instagram URL
-        color: "hover:text-pink-500",
-        bgColor: "hover:bg-pink-50",
-    },
-    {
-        name: "Mie Ayam Cap 2 Jago",
-        icon: Instagram,
-        url: "https://instagram.com/capduajago", // Replace with actual Instagram URL
-        color: "hover:text-pink-500",
-        bgColor: "hover:bg-pink-50",
-    },
-    {
-        name: "Bubur Kijang",
-        icon: Instagram,
-        url: "https://instagram.com/bubur_kijang", // Replace with actual Instagram URL
-        color: "hover:text-pink-500",
-        bgColor: "hover:bg-pink-50",
+      name: "Kamar Baca Magelang",
+      icon: Instagram,
+      url: "https://instagram.com/kamarbacamgl", // Replace with actual Instagram URL
+      color: "hover:text-pink-500",
+      bgColor: "hover:bg-pink-50",
     },
     {
       name: "Kamar Baca Magelang",
@@ -68,12 +62,40 @@ const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
       bgColor: "hover:bg-gray-50",
     },
     {
+        name: "Mie Ayam Cap 2 Jago",
+        icon: Instagram,
+        url: "https://instagram.com/capduajago", // Replace with actual Instagram URL
+        color: "hover:text-pink-500",
+        bgColor: "hover:bg-pink-50",
+    },
+    {
+        name: "Lokasi Mie Ayam Cap 2 Jago",
+        icon: MapPinCheck,
+        url: "https://share.google/B1duOw7KomBpI1igN", // Replace with actual Google Maps URL
+        color: "hover:text-gree-500",
+        bgColor: "hover:bg-green-50",
+    },
+    {
       name: "Sickillshoes",
       icon: Twitter,
       url: "https://twitter.com/sickillshoes", // Replace with actual Twitter URL
       color: "hover:text-black",
       bgColor: "hover:bg-gray-50",
     },
+    {
+        name: "Lokasi Sickillshoes",
+        icon: MapPinCheck,
+        url: "https://share.google/jLIgOpYnA4D6eJxUi", // Replace with actual Google Maps URL
+        color: "hover:text-gree-500",
+        bgColor: "hover:bg-green-50",    
+    },
+    {
+        name: "SKS Foundation",
+        icon: Instagram,
+        url: "https://instagram.com/sksfound", // Replace with actual Instagram URL
+        color: "hover:text-pink-500",
+        bgColor: "hover:bg-pink-50",
+    }
   ];
 
   const handleOpenLink = (url: string) => {
