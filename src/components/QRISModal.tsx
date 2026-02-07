@@ -50,6 +50,20 @@ const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
             <img src={qrCode} alt="QRIS Code" className="w-full h-full object-contain p-2" />
           </div>
 
+          {/* Merchant Information */}
+          <div className="w-full bg-muted/50 rounded-lg p-3 space-y-3">
+            <div className="flex flex-col gap-3">
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground mb-1 font-medium">NMID</p>
+                <p className="text-sm font-semibold text-foreground">ID1023262543904</p>
+              </div>
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground mb-1 font-medium">Merchant Name</p>
+                <p className="text-sm font-semibold text-foreground">Kamar Baca Magelang Warehouse</p>
+              </div>
+            </div>
+          </div>
+
           <p className="text-xs text-muted-foreground text-center leading-relaxed max-w-[250px]">
             Scan menggunakan GoPay, OVO, DANA, ShopeePay, LinkAja, atau aplikasi perbankan Anda
           </p>
