@@ -1,88 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 36 47% 96%;
+    --foreground: 140 30% 10%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 36 40% 98%;
+    --card-foreground: 140 30% 10%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 36 40% 98%;
+    --popover-foreground: 140 30% 10%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 160 90% 18%;
+    --primary-foreground: 36 47% 96%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 160 20% 90%;
+    --secondary-foreground: 160 90% 18%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 36 30% 92%;
+    --muted-foreground: 140 15% 40%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 43 55% 54%;
+    --accent-foreground: 36 47% 96%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 160 15% 85%;
+    --input: 160 15% 85%;
+    --ring: 160 90% 18%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Custom tokens */
+    --gold: 43 55% 54%;
+    --gold-light: 43 60% 75%;
+    --emerald-deep: 160 90% 18%;
+    --emerald-dark: 155 50% 12%;
+    --cream: 36 47% 96%;
+    --cream-dark: 36 30% 90%;
+    --charcoal: 140 30% 10%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 155 50% 6%;
+    --foreground: 36 47% 96%;
+    --card: 155 40% 8%;
+    --card-foreground: 36 47% 96%;
+    --popover: 155 40% 8%;
+    --popover-foreground: 36 47% 96%;
+    --primary: 160 60% 50%;
+    --primary-foreground: 155 50% 6%;
+    --secondary: 155 30% 15%;
+    --secondary-foreground: 36 47% 96%;
+    --muted: 155 20% 15%;
+    --muted-foreground: 36 20% 65%;
+    --accent: 43 55% 54%;
+    --accent-foreground: 155 50% 6%;
+    --border: 155 20% 18%;
+    --input: 155 20% 18%;
+    --ring: 160 60% 50%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -100,6 +90,79 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
+
+  h1, h2, h3 {
+    font-family: 'Amiri', serif;
+  }
+}
+
+@layer components {
+  .islamic-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23065f46' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .islamic-border-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='8' viewBox='0 0 80 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.3'%3E%3Cpath d='M0 4l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .link-card {
+    @apply relative overflow-hidden rounded-2xl border border-border bg-card px-6 py-4 shadow-sm transition-all duration-300;
+  }
+
+  .link-card:hover {
+    @apply shadow-md -translate-y-0.5 border-primary/20;
+  }
+
+  .link-card::after {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.03), hsl(var(--accent) / 0.05));
+  }
+
+  .link-card:hover::after {
+    @apply opacity-100;
+  }
+
+  .gold-divider {
+    @apply h-px w-full;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(var(--gold-light)) 20%,
+      hsl(var(--gold)) 50%,
+      hsl(var(--gold-light)) 80%,
+      transparent 100%
+    );
+  }
+
+  .donation-amount {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--emerald-deep)),
+      hsl(var(--emerald-dark))
+    );
+    @apply text-primary-foreground rounded-2xl;
+  }
+}
+
+@layer utilities {
+  .text-gold {
+    color: hsl(var(--gold));
+  }
+
+  .font-amiri {
+    font-family: 'Amiri', serif;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
 }
