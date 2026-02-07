@@ -6,33 +6,33 @@
 
 @layer base {
   :root {
-    --background: 36 47% 96%;
-    --foreground: 140 30% 10%;
+    --background: 40 33% 96%;
+    --foreground: 220 40% 13%;
 
-    --card: 36 40% 98%;
-    --card-foreground: 140 30% 10%;
+    --card: 40 30% 98%;
+    --card-foreground: 220 40% 13%;
 
-    --popover: 36 40% 98%;
-    --popover-foreground: 140 30% 10%;
+    --popover: 40 30% 98%;
+    --popover-foreground: 220 40% 13%;
 
-    --primary: 160 90% 18%;
-    --primary-foreground: 36 47% 96%;
+    --primary: 220 60% 22%;
+    --primary-foreground: 40 33% 96%;
 
-    --secondary: 160 20% 90%;
-    --secondary-foreground: 160 90% 18%;
+    --secondary: 220 20% 90%;
+    --secondary-foreground: 220 60% 22%;
 
-    --muted: 36 30% 92%;
-    --muted-foreground: 140 15% 40%;
+    --muted: 40 20% 92%;
+    --muted-foreground: 220 15% 40%;
 
-    --accent: 43 55% 54%;
-    --accent-foreground: 36 47% 96%;
+    --accent: 43 45% 54%;
+    --accent-foreground: 40 33% 96%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 160 15% 85%;
-    --input: 160 15% 85%;
-    --ring: 160 90% 18%;
+    --border: 220 15% 85%;
+    --input: 220 15% 85%;
+    --ring: 220 60% 22%;
 
     --radius: 1rem;
 
@@ -46,33 +46,33 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Custom tokens */
-    --gold: 43 55% 54%;
-    --gold-light: 43 60% 75%;
-    --emerald-deep: 160 90% 18%;
-    --emerald-dark: 155 50% 12%;
-    --cream: 36 47% 96%;
-    --cream-dark: 36 30% 90%;
-    --charcoal: 140 30% 10%;
+    --gold: 43 45% 54%;
+    --gold-light: 43 50% 75%;
+    --navy-deep: 220 60% 22%;
+    --navy-dark: 220 55% 15%;
+    --cream: 40 33% 96%;
+    --cream-dark: 40 20% 90%;
+    --charcoal: 220 40% 13%;
   }
 
   .dark {
-    --background: 155 50% 6%;
-    --foreground: 36 47% 96%;
-    --card: 155 40% 8%;
-    --card-foreground: 36 47% 96%;
-    --popover: 155 40% 8%;
-    --popover-foreground: 36 47% 96%;
-    --primary: 160 60% 50%;
-    --primary-foreground: 155 50% 6%;
-    --secondary: 155 30% 15%;
-    --secondary-foreground: 36 47% 96%;
-    --muted: 155 20% 15%;
-    --muted-foreground: 36 20% 65%;
-    --accent: 43 55% 54%;
-    --accent-foreground: 155 50% 6%;
-    --border: 155 20% 18%;
-    --input: 155 20% 18%;
-    --ring: 160 60% 50%;
+    --background: 220 50% 6%;
+    --foreground: 40 33% 96%;
+    --card: 220 40% 8%;
+    --card-foreground: 40 33% 96%;
+    --popover: 220 40% 8%;
+    --popover-foreground: 40 33% 96%;
+    --primary: 220 50% 50%;
+    --primary-foreground: 220 50% 6%;
+    --secondary: 220 30% 15%;
+    --secondary-foreground: 40 33% 96%;
+    --muted: 220 20% 15%;
+    --muted-foreground: 40 20% 65%;
+    --accent: 43 45% 54%;
+    --accent-foreground: 220 50% 6%;
+    --border: 220 20% 18%;
+    --input: 220 20% 18%;
+    --ring: 220 50% 50%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -101,7 +101,7 @@
 
 @layer components {
   .islamic-pattern {
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23065f46' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231a2e50' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
   .islamic-border-pattern {
@@ -141,8 +141,8 @@
   .donation-amount {
     background: linear-gradient(
       135deg,
-      hsl(var(--emerald-deep)),
-      hsl(var(--emerald-dark))
+      hsl(var(--navy-deep)),
+      hsl(var(--navy-dark))
     );
     @apply text-primary-foreground rounded-2xl;
   }

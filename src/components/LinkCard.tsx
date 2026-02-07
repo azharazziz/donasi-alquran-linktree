@@ -5,16 +5,25 @@ interface LinkCardProps {
   icon: LucideIcon;
   title: string;
   subtitle?: string;
-  href: string;
+  href?: string;
+  onClick?: () => void;
 }
 
-const LinkCard = ({ icon: Icon, title, subtitle, href }: LinkCardProps) => {
+const LinkCard = ({ icon: Icon, title, subtitle, href, onClick }: LinkCardProps) => {
+  const handleClick = (e: React.MouseEvent) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
     <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="link-card flex items-center gap-4 group w-full"
+      href={href || "#"}
+      onClick={handleClick}
+      target={onClick ? undefined : "_blank"}
+      rel={onClick ? undefined : "noopener noreferrer"}
+      className="link-card flex items-center gap-4 group w-full cursor-pointer"
     >
       <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
         <Icon size={20} />
