@@ -36,6 +36,12 @@ const LinkList = () => {
       subtitle: "Isi form konfirmasi donasi Anda",
       href: "https://forms.gle/qoKqviu7XksLSBT58",
     },
+    { 
+      icon: FileText,
+      title: "Laporan Donasi",
+      subtitle: "Lihat laporan donasi terkini",
+      href: "https://docs.google.com/spreadsheets/d/16-BQVDuCcsKixvTynVXVIOcYTwCcq-Tkz3rdajJIHis/edit?usp=sharing",
+    },  
     {
       icon: MessageCircle,
       title: "Pertanyaan dan Informasi",

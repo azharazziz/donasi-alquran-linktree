@@ -9,7 +9,7 @@ const Index = () => {
     <div className="min-h-screen bg-background islamic-pattern">
       <div className="flex flex-col items-center max-w-lg mx-auto">
         <DonationHeader />
-        <DonationAmount amount="Rp 125.000.000" />
+        <DonationAmount amount="Rp0" />
         <LinkList />
         <NiatDoa />
         <Footer />
