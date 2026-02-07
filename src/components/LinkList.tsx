@@ -10,16 +10,18 @@ import {
 import LinkCard from "./LinkCard";
 import TransferBankModal from "./TransferBankModal";
 import QRISModal from "./QRISModal";
+import SocialMediaModal from "./SocialMediaModal";
 
 const LinkList = () => {
   const [transferOpen, setTransferOpen] = useState(false);
   const [qrisOpen, setQrisOpen] = useState(false);
+  const [socialMediaOpen, setSocialMediaOpen] = useState(false);
 
   const links = [
     {
       icon: Landmark,
       title: "Donasi via Transfer Bank",
-      subtitle: "BCA / Mandiri / BRI / BNI / BSI",
+      subtitle: "Bank BSI dan UOB",
       onClick: () => setTransferOpen(true),
     },
     {
@@ -30,27 +32,27 @@ const LinkList = () => {
     },
     {
       icon: Globe,
-      title: "Donasi Online",
-      subtitle: "Kitabisa.com & platform lainnya",
-      href: "#online",
+      title: "Konfirmasi Donasi",
+      subtitle: "Isi form konfirmasi donasi Anda",
+      href: "https://forms.gle/qoKqviu7XksLSBT58",
     },
     {
       icon: MessageCircle,
-      title: "Konfirmasi & Informasi",
+      title: "Pertanyaan dan Informasi",
       subtitle: "Hubungi kami via WhatsApp",
-      href: "#whatsapp",
+      href: "https://wa.me/6285155238000",
     },
     {
       icon: FileText,
       title: "Proposal Program",
       subtitle: "Unduh dokumen proposal lengkap",
-      href: "#proposal",
+      href: "https://drive.google.com/file/d/10uaohZ3cxUyyTtA7yRhAH2i2xbyIr993/view?usp=sharing",
     },
     {
       icon: Instagram,
       title: "Media Sosial",
       subtitle: "Instagram & Facebook",
-      href: "#sosmed",
+      onClick: () => setSocialMediaOpen(true),
     },
   ];
 
@@ -72,6 +74,7 @@ const LinkList = () => {
 
       <TransferBankModal open={transferOpen} onOpenChange={setTransferOpen} />
       <QRISModal open={qrisOpen} onOpenChange={setQrisOpen} />
+      <SocialMediaModal open={socialMediaOpen} onOpenChange={setSocialMediaOpen} />
     </>
   );
 };

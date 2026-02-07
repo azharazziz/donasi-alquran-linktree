@@ -19,30 +19,15 @@ interface BankAccount {
 
 const bankAccounts: BankAccount[] = [
   {
-    bankName: "Bank Central Asia (BCA)",
-    accountNumber: "123 456 7890",
-    accountHolder: "Yayasan Donasi Al-Qur'an",
-  },
-  {
-    bankName: "Bank Mandiri",
-    accountNumber: "987 654 3210",
-    accountHolder: "Yayasan Donasi Al-Qur'an",
-  },
-  {
-    bankName: "Bank Rakyat Indonesia (BRI)",
-    accountNumber: "111 222 3334",
-    accountHolder: "Yayasan Donasi Al-Qur'an",
-  },
-  {
-    bankName: "Bank Negara Indonesia (BNI)",
-    accountNumber: "555 666 7778",
-    accountHolder: "Yayasan Donasi Al-Qur'an",
+    bankName: "United Overseas Bank (UOB)",
+    accountNumber: "727 313 5875",
+    accountHolder: "Azhar A",
   },
   {
     bankName: "Bank Syariah Indonesia (BSI)",
-    accountNumber: "999 888 7776",
-    accountHolder: "Yayasan Donasi Al-Qur'an",
-  },
+    accountNumber: "732 453 0732",
+    accountHolder: "Azhar A",
+  }
 ];
 
 interface TransferBankModalProps {

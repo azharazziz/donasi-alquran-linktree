@@ -1,11 +1,17 @@
 import { Heart } from "lucide-react";
+import BuburKijang from "@/assets/bubur-kijang.png";
+import CapDuaJago from "@/assets/cap-dua-jago.png";
+import FotoinProject from "@/assets/fotoin-project.png";
+import KamarBacaMagelang from "@/assets/kamar-baca-magelang.png";
+import SKSFoundation from "@/assets/sks-foundation.png";
 
 // Replace these with actual initiator logo imports or URLs
 const initiators = [
-  { name: "Yayasan Nusantara Mengaji", initials: "YNM", logo: "" },
-  { name: "Lembaga Dakwah Indonesia", initials: "LDI", logo: "" },
-  { name: "Forum Pesantren Nusantara", initials: "FPN", logo: "" },
-  { name: "Komunitas Peduli Qur'an", initials: "KPQ", logo: "" },
+  { name: "kamar Baca Magelang", initials: "KBM", logo: KamarBacaMagelang },
+  { name: "Fotoin Project", initials: "FP", logo: FotoinProject },
+  { name: "SKS Foundation", initials: "SKS", logo: SKSFoundation },
+  { name: "Mie Ayam Cap 2 Jago", initials: "MAC2J", logo: CapDuaJago },
+  { name: "Bubur Kijang", initials: "BK", logo: BuburKijang },
 ];
 
 const Footer = () => {
@@ -19,13 +25,13 @@ const Footer = () => {
         <p className="text-xs uppercase tracking-widest text-muted-foreground mb-5 font-medium">
           Diinisiasi oleh
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+        <div className="flex flex-wrap justify-center gap-4 mb-4">
           {initiators.map((org) => (
             <div
               key={org.name}
               className="flex flex-col items-center gap-2 group"
             >
-              <div className="w-full max-w-[100px] aspect-[3/2] rounded-xl bg-muted border border-border flex items-center justify-center p-2 transition-colors duration-300 group-hover:border-primary/20 group-hover:bg-primary/5 overflow-hidden">
+              <div className="w-full max-w-[100px] aspect-[3/2] rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center p-2 transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-slate-800 overflow-hidden">
                 {org.logo ? (
                   <img
                     src={org.logo}

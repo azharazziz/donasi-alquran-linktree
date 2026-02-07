@@ -7,6 +7,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import qrCode from "@/assets/qris-code.png";
 
 interface QRISModalProps {
   open: boolean;
@@ -14,6 +15,23 @@ interface QRISModalProps {
 }
 
 const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(qrCode);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "qris-code.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Failed to download QRIS code:", error);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
@@ -29,12 +47,7 @@ const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
         <div className="flex flex-col items-center gap-4 mt-2">
           {/* QRIS placeholder - replace src with actual QRIS image */}
           <div className="w-64 h-64 rounded-2xl border-2 border-border bg-card flex items-center justify-center overflow-hidden">
-            <div className="flex flex-col items-center gap-3 text-muted-foreground">
-              <QrCode size={80} strokeWidth={1} />
-              <p className="text-xs text-center px-4">
-                Ganti dengan gambar QRIS Anda
-              </p>
-            </div>
+            <img src={qrCode} alt="QRIS Code" className="w-full h-full object-contain p-2" />
           </div>
 
           <p className="text-xs text-muted-foreground text-center leading-relaxed max-w-[250px]">
@@ -45,9 +58,7 @@ const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
             variant="outline"
             size="sm"
             className="gap-2"
-            onClick={() => {
-              // TODO: Replace with actual QRIS image download
-            }}
+            onClick={handleDownload}
           >
             <Download size={14} />
             Simpan Gambar QRIS

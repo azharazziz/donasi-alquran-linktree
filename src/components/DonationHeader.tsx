@@ -1,13 +1,14 @@
 import quranLogo from "@/assets/quran-logo.png";
+import logo from "@/assets/logo.png";
 
 const DonationHeader = () => {
   return (
     <header className="flex flex-col items-center text-center px-4 pt-12 pb-8">
       {/* Logo - flexible container preserving original aspect ratio */}
       <div className="animate-scale-in mb-6">
-        <div className="max-w-[220px] md:max-w-[260px] px-4 py-3 rounded-2xl bg-card border border-border/50 shadow-sm">
+        <div className="w-full">
           <img
-            src={quranLogo}
+            src={logo}
             alt="Logo Donasi Al-Qur'an"
             className="w-full h-auto object-contain"
           />
@@ -16,19 +17,17 @@ const DonationHeader = () => {
 
       {/* Title */}
       <h1 className="text-3xl md:text-4xl font-serif font-bold text-primary mb-3 animate-fade-in-up">
-        Donasi Al-Qur&apos;an
+        Donasi Al-Qur&apos;an 2026
       </h1>
 
       {/* Tagline */}
       <p className="text-lg md:text-xl font-serif italic text-gold mb-4 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-        &ldquo;Sebarkan Cahaya Ilmu, Hidupkan Generasi&rdquo;
+        &ldquo;Jadikan ramadhanmu penuh cahaya iman yang menghidupkan harapan dan menumbuhkan keberkahan&rdquo;
       </p>
 
       {/* Description */}
       <p className="max-w-md text-sm md:text-base text-muted-foreground leading-relaxed animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-        Program pengadaan dan distribusi mushaf Al-Qur&apos;an untuk pesantren, masjid, 
-        dan komunitas yang membutuhkan di seluruh Indonesia. Mari bersama menjadi bagian 
-        dari kebaikan yang terus mengalir.
+        Mari bersama-sama kita wujudkan impian untuk menyebarkan cahaya Al-Qur&apos;an. Dengan donasi Anda, kita dapat memberikan Al-Qur&apos;an kepada mereka yang membutuhkan, memperkuat iman, dan menumbuhkan keberkahan di bulan suci Ramadhan ini.
       </p>
     </header>
   );
