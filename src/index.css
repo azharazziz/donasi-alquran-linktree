@@ -56,31 +56,36 @@
   }
 
   .dark {
-    --background: 220 50% 6%;
+    --background: 220 50% 15%;
     --foreground: 40 33% 96%;
-    --card: 220 40% 8%;
+    --card: 220 40% 20%;
     --card-foreground: 40 33% 96%;
-    --popover: 220 40% 8%;
+    --popover: 220 40% 20%;
     --popover-foreground: 40 33% 96%;
-    --primary: 220 50% 50%;
-    --primary-foreground: 220 50% 6%;
-    --secondary: 220 30% 15%;
+    --primary: 220 70% 60%;
+    --primary-foreground: 40 33% 96%;
+    --secondary: 220 30% 30%;
     --secondary-foreground: 40 33% 96%;
-    --muted: 220 20% 15%;
-    --muted-foreground: 40 20% 65%;
+    --muted: 220 20% 35%;
+    --muted-foreground: 40 20% 80%;
     --accent: 43 45% 54%;
-    --accent-foreground: 220 50% 6%;
-    --border: 220 20% 18%;
-    --input: 220 20% 18%;
-    --ring: 220 50% 50%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
+    --accent-foreground: 220 50% 15%;
+    --border: 220 20% 30%;
+    --input: 220 20% 30%;
+    --ring: 220 70% 60%;
+    --sidebar-background: 220 50% 15%;
+    --sidebar-foreground: 40 33% 96%;
+    --sidebar-primary: 220 70% 60%;
+    --sidebar-primary-foreground: 220 50% 15%;
+    --sidebar-accent: 220 40% 25%;
+    --sidebar-accent-foreground: 40 33% 96%;
+    --sidebar-border: 220 20% 30%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Dark mode custom tokens */
+    --navy-deep: 220 70% 60%;
+    --navy-dark: 220 50% 15%;
+    --charcoal: 220 40% 20%;
   }
 }
 
@@ -100,12 +105,22 @@
 }
 
 @layer components {
+  /* Light mode patterns */
   .islamic-pattern {
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231a2e50' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
   .islamic-border-pattern {
     background-image: url("data:image/svg+xml,%3Csvg width='80' height='8' viewBox='0 0 80 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.3'%3E%3Cpath d='M0 4l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Dark mode patterns */
+  .dark .islamic-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2366b3ff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .dark .islamic-border-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='8' viewBox='0 0 80 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a574' fill-opacity='0.4'%3E%3Cpath d='M0 4l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4zm8 0l4-4 4 4-4 4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
   .link-card {
@@ -119,7 +134,7 @@
   .link-card::after {
     content: '';
     @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    background: linear-gradient(135deg, hsl(var(--primary) / 0.03), hsl(var(--accent) / 0.05));
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--accent) / 0.1));
   }
 
   .link-card:hover::after {
@@ -144,7 +159,8 @@
       hsl(var(--navy-deep)),
       hsl(var(--navy-dark))
     );
-    @apply text-primary-foreground rounded-2xl;
+    @apply rounded-2xl;
+    color: hsl(var(--primary-foreground));
   }
 }
 
