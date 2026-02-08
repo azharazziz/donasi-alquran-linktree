@@ -6,16 +6,19 @@ import {
   MessageCircle,
   FileText,
   Instagram,
+  BarChart3,
 } from "lucide-react";
 import LinkCard from "./LinkCard";
 import TransferBankModal from "./TransferBankModal";
 import QRISModal from "./QRISModal";
 import SocialMediaModal from "./SocialMediaModal";
+import DonationReportModal from "./DonationReportModal";
 
 const LinkList = () => {
   const [transferOpen, setTransferOpen] = useState(false);
   const [qrisOpen, setQrisOpen] = useState(false);
   const [socialMediaOpen, setSocialMediaOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
 
   const links = [
     {
@@ -36,12 +39,12 @@ const LinkList = () => {
       subtitle: "Isi form konfirmasi donasi Anda",
       href: "https://forms.gle/qoKqviu7XksLSBT58",
     },
-    { 
-      icon: FileText,
+    {
+      icon: BarChart3,
       title: "Laporan Donasi",
       subtitle: "Lihat laporan donasi terkini",
-      href: "https://docs.google.com/spreadsheets/d/16-BQVDuCcsKixvTynVXVIOcYTwCcq-Tkz3rdajJIHis/edit?usp=sharing",
-    },  
+      onClick: () => setReportOpen(true),
+    },
     {
       icon: MessageCircle,
       title: "Pertanyaan dan Informasi",
@@ -81,6 +84,7 @@ const LinkList = () => {
       <TransferBankModal open={transferOpen} onOpenChange={setTransferOpen} />
       <QRISModal open={qrisOpen} onOpenChange={setQrisOpen} />
       <SocialMediaModal open={socialMediaOpen} onOpenChange={setSocialMediaOpen} />
+      <DonationReportModal open={reportOpen} onOpenChange={setReportOpen} />
     </>
   );
 };
