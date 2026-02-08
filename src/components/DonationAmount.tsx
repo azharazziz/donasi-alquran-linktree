@@ -1,10 +1,12 @@
 import { BookOpen } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DonationAmountProps {
   amount: string;
+  loading?: boolean;
 }
 
-const DonationAmount = ({ amount }: DonationAmountProps) => {
+const DonationAmount = ({ amount, loading }: DonationAmountProps) => {
   return (
     <section className="px-4 pb-8 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
       <div className="donation-amount max-w-md mx-auto p-6 text-center shadow-lg">
@@ -17,9 +19,13 @@ const DonationAmount = ({ amount }: DonationAmountProps) => {
         <p className="text-sm opacity-80 mb-1">
           Donasi terkumpul sebesar
         </p>
-        <p className="text-3xl md:text-4xl font-serif font-bold tracking-tight">
-          {amount}
-        </p>
+        {loading ? (
+          <Skeleton className="h-10 w-48 mx-auto rounded-lg" />
+        ) : (
+          <p className="text-3xl md:text-4xl font-serif font-bold tracking-tight">
+            {amount}
+          </p>
+        )}
         <p className="text-xs mt-3 opacity-60">
           Jazākumullāhu khairan atas setiap kebaikan
         </p>
