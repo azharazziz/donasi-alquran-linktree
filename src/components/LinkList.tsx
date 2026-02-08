@@ -57,7 +57,7 @@ const LinkList = () => {
     {
       icon: Instagram,
       title: "Media Sosial",
-      subtitle: "Instagram & Facebook",
+      subtitle: "Twitter, Instagram, dan Lokasi",
       onClick: () => setSocialMediaOpen(true),
     },
   ];
