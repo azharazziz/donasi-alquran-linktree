@@ -10,38 +10,56 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, RefreshCw, AlertCircle, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  useDonasiMasuk,
-  useRealisasi,
-  usePenyaluran,
-  type DonasiMasukRow,
-  type RealisasiRow,
-  type PenyaluranRow,
+  useGoogleSheetDynamic,
+  type SheetName,
 } from "@/hooks/useGoogleSheets";
-import DonasiMasukDetail from "./DonasiMasukDetail";
-import RealisasiDetail from "./RealisasiDetail";
-import PenyaluranDetail from "./PenyaluranDetail";
+import DynamicDetailModal from "./DynamicDetailModal";
 
 interface DonationReportModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
+const TAB_CONFIG: { key: string; label: string; sheet: SheetName }[] = [
+  { key: "donasi", label: "Donasi Masuk", sheet: "Donasi Masuk" },
+  { key: "realisasi", label: "Realisasi", sheet: "Realisasi" },
+  { key: "penyaluran", label: "Penyaluran", sheet: "Penyaluran Donasi" },
+];
+
+function stripHideMarker(header: string): string {
+  return header.replace(/\s*\[hide\]\s*/gi, "").trim();
+}
+
+function isHiddenColumn(header: string): boolean {
+  return /\[hide\]/i.test(header);
+}
+
 const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) => {
   const [activeTab, setActiveTab] = useState("donasi");
 
-  const donasi = useDonasiMasuk(open);
-  const realisasi = useRealisasi(open);
-  const penyaluran = usePenyaluran(open);
+  const donasi = useGoogleSheetDynamic("Donasi Masuk", open);
+  const realisasi = useGoogleSheetDynamic("Realisasi", open);
+  const penyaluran = useGoogleSheetDynamic("Penyaluran Donasi", open);
+
+  const sheetDataMap: Record<string, typeof donasi> = {
+    donasi,
+    realisasi,
+    penyaluran,
+  };
 
   // Detail modal state
-  const [selectedDonasi, setSelectedDonasi] = useState<DonasiMasukRow | null>(null);
-  const [selectedRealisasi, setSelectedRealisasi] = useState<RealisasiRow | null>(null);
-  const [selectedPenyaluran, setSelectedPenyaluran] = useState<PenyaluranRow | null>(null);
+  const [selectedRow, setSelectedRow] = useState<Record<string, string> | null>(null);
+  const [selectedHeaders, setSelectedHeaders] = useState<string[]>([]);
+  const [detailTitle, setDetailTitle] = useState("Detail");
 
   const handleRefresh = () => {
-    if (activeTab === "donasi") donasi.refetch();
-    if (activeTab === "realisasi") realisasi.refetch();
-    if (activeTab === "penyaluran") penyaluran.refetch();
+    sheetDataMap[activeTab]?.refetch();
+  };
+
+  const handleRowClick = (row: Record<string, string>, headers: string[], tabLabel: string) => {
+    setSelectedRow(row);
+    setSelectedHeaders(headers);
+    setDetailTitle(`Detail ${tabLabel}`);
   };
 
   return (
@@ -72,91 +90,59 @@ const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) =
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
             <div className="px-6">
               <TabsList className="w-full grid grid-cols-3 h-9">
-                <TabsTrigger value="donasi" className="text-xs">
-                  Donasi Masuk
-                </TabsTrigger>
-                <TabsTrigger value="realisasi" className="text-xs">
-                  Realisasi
-                </TabsTrigger>
-                <TabsTrigger value="penyaluran" className="text-xs">
-                  Penyaluran
-                </TabsTrigger>
+                {TAB_CONFIG.map((tab) => (
+                  <TabsTrigger key={tab.key} value={tab.key} className="text-xs">
+                    {tab.label}
+                  </TabsTrigger>
+                ))}
               </TabsList>
             </div>
 
             <div className="flex-1 overflow-y-auto px-6 pb-6 pt-3 min-h-0">
-              <TabsContent value="donasi" className="mt-0">
-                <SheetTable
-                  loading={donasi.loading}
-                  error={donasi.error}
-                  data={donasi.data}
-                  columns={["Tanggal", "Donatur", "Nominal"]}
-                  renderRow={(row: DonasiMasukRow) => [row.tanggal, row.donatur, row.nominal]}
-                  onRowClick={(row) => setSelectedDonasi(row)}
-                />
-              </TabsContent>
-
-              <TabsContent value="realisasi" className="mt-0">
-                <SheetTable
-                  loading={realisasi.loading}
-                  error={realisasi.error}
-                  data={realisasi.data}
-                  columns={["Tanggal", "Keperluan", "Nominal"]}
-                  renderRow={(row: RealisasiRow) => [row.tanggal, row.keperluan, row.nominal]}
-                  onRowClick={(row) => setSelectedRealisasi(row)}
-                />
-              </TabsContent>
-
-              <TabsContent value="penyaluran" className="mt-0">
-                <SheetTable
-                  loading={penyaluran.loading}
-                  error={penyaluran.error}
-                  data={penyaluran.data}
-                  columns={["Tanggal", "Tempat", "Qty Quran"]}
-                  renderRow={(row: PenyaluranRow) => [row.tanggal, row.tempat, row.qtyAlQuran]}
-                  onRowClick={(row) => setSelectedPenyaluran(row)}
-                />
-              </TabsContent>
+              {TAB_CONFIG.map((tab) => {
+                const data = sheetDataMap[tab.key];
+                return (
+                  <TabsContent key={tab.key} value={tab.key} className="mt-0">
+                    <DynamicSheetTable
+                      loading={data.loading}
+                      error={data.error}
+                      headers={data.headers}
+                      rows={data.rows}
+                      onRowClick={(row) => handleRowClick(row, data.headers, tab.label)}
+                    />
+                  </TabsContent>
+                );
+              })}
             </div>
           </Tabs>
         </DialogContent>
       </Dialog>
 
-      {/* Detail modals */}
-      <DonasiMasukDetail
-        open={!!selectedDonasi}
-        onOpenChange={(v) => !v && setSelectedDonasi(null)}
-        data={selectedDonasi}
-      />
-      <RealisasiDetail
-        open={!!selectedRealisasi}
-        onOpenChange={(v) => !v && setSelectedRealisasi(null)}
-        data={selectedRealisasi}
-      />
-      <PenyaluranDetail
-        open={!!selectedPenyaluran}
-        onOpenChange={(v) => !v && setSelectedPenyaluran(null)}
-        data={selectedPenyaluran}
+      {/* Unified detail modal */}
+      <DynamicDetailModal
+        open={!!selectedRow}
+        onOpenChange={(v) => !v && setSelectedRow(null)}
+        row={selectedRow}
+        headers={selectedHeaders}
+        title={detailTitle}
       />
     </>
   );
 };
 
-// Generic table renderer
-function SheetTable<T>({
+// Dynamic table renderer
+function DynamicSheetTable({
   loading,
   error,
-  data,
-  columns,
-  renderRow,
+  headers,
+  rows,
   onRowClick,
 }: {
   loading: boolean;
   error: string | null;
-  data: T[];
-  columns: string[];
-  renderRow: (row: T) => string[];
-  onRowClick: (row: T) => void;
+  headers: string[];
+  rows: Record<string, string>[];
+  onRowClick: (row: Record<string, string>) => void;
 }) {
   if (loading) {
     return (
@@ -178,7 +164,7 @@ function SheetTable<T>({
     );
   }
 
-  if (data.length === 0) {
+  if (rows.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 gap-3">
         <p className="text-sm text-muted-foreground">Belum ada data</p>
@@ -186,44 +172,53 @@ function SheetTable<T>({
     );
   }
 
+  // Filter out hidden columns for table view
+  const visibleHeaders = headers.filter((h) => !isHiddenColumn(h));
+
+  if (visibleHeaders.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 gap-3">
+        <p className="text-sm text-muted-foreground">Tidak ada kolom untuk ditampilkan</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2">
       {/* Column headers */}
-      <div className="grid gap-2 px-3 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wider"
-        style={{ gridTemplateColumns: `repeat(${columns.length}, 1fr) 28px` }}
+      <div
+        className="grid gap-2 px-3 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wider"
+        style={{ gridTemplateColumns: `repeat(${visibleHeaders.length}, 1fr) 28px` }}
       >
-        {columns.map((col) => (
-          <span key={col}>{col}</span>
+        {visibleHeaders.map((header) => (
+          <span key={header}>{stripHideMarker(header)}</span>
         ))}
         <span />
       </div>
 
       {/* Rows */}
-      {data.map((row, i) => {
-        const cells = renderRow(row);
-        return (
-          <button
-            key={i}
-            onClick={() => onRowClick(row)}
-            className="grid gap-2 px-3 py-3 rounded-xl border border-border bg-card hover:bg-muted/50 hover:border-primary/20 transition-all duration-200 text-left group cursor-pointer"
-            style={{ gridTemplateColumns: `repeat(${columns.length}, 1fr) 28px` }}
-          >
-            {cells.map((cell, j) => (
-              <span
-                key={j}
-                className="text-xs text-foreground truncate"
-                title={cell}
-              >
-                {cell || "-"}
-              </span>
-            ))}
-            <Eye
-              size={14}
-              className="text-muted-foreground group-hover:text-primary transition-colors self-center"
-            />
-          </button>
-        );
-      })}
+      {rows.map((row, i) => (
+        <button
+          key={i}
+          onClick={() => onRowClick(row)}
+          className="grid gap-2 px-3 py-3 rounded-xl border border-border bg-card hover:bg-muted/50 hover:border-primary/20 transition-all duration-200 text-left group cursor-pointer"
+          style={{ gridTemplateColumns: `repeat(${visibleHeaders.length}, 1fr) 28px` }}
+        >
+          {visibleHeaders.map((header) => (
+            <span
+              key={header}
+              className="text-xs text-foreground truncate"
+              title={row[header] || ""}
+            >
+              {row[header] || "-"}
+            </span>
+          ))}
+          <Eye
+            size={14}
+            className="text-muted-foreground group-hover:text-primary transition-colors self-center"
+          />
+        </button>
+      ))}
     </div>
   );
 }

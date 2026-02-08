@@ -3,13 +3,16 @@ import DonationAmount from "@/components/DonationAmount";
 import LinkList from "@/components/LinkList";
 import NiatDoa from "@/components/NiatDoa";
 import Footer from "@/components/Footer";
+import { useDonasiTotal } from "@/hooks/useGoogleSheets";
 
 const Index = () => {
+  const { total, loading } = useDonasiTotal();
+
   return (
     <div className="min-h-screen bg-background islamic-pattern">
       <div className="flex flex-col items-center max-w-lg mx-auto">
         <DonationHeader />
-        <DonationAmount amount="Rp0" />
+        <DonationAmount amount={total} loading={loading} />
         <LinkList />
         <NiatDoa />
         <Footer />
