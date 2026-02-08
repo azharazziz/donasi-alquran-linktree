@@ -67,6 +67,24 @@ function isDirectImageUrl(url: string): boolean {
   return /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?.*)?$/i.test(url);
 }
 
+function extractInstagramPostId(url: string): string | null {
+  // Extract post ID from Instagram URLs
+  // Format: https://www.instagram.com/p/POST_ID/ or https://www.instagram.com/reel/REEL_ID/
+  const match = url.match(/(?:instagram\.com|instagr\.am)\/(?:p|reel)\/([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
+// Extend window type for Instagram embed
+declare global {
+  interface Window {
+    instgrm?: {
+      Embeds?: {
+        process?: () => void;
+      };
+    };
+  }
+}
+
 function BuktiRenderer({ value }: { value: string }) {
   const [imgError, setImgError] = useState(false);
 
@@ -76,17 +94,20 @@ function BuktiRenderer({ value }: { value: string }) {
 
   const driveId = extractGoogleDriveId(value);
 
-  // Google Drive image
+  // Google Drive - use iframe embed
   if (driveId && !imgError) {
-    const thumbnailUrl = `https://drive.google.com/thumbnail?id=${driveId}&sz=w800`;
+    const embedUrl = `https://drive.google.com/file/d/${driveId}/preview`;
     return (
       <div className="space-y-3">
-        <img
-          src={thumbnailUrl}
-          alt="Bukti"
-          className="w-full rounded-lg border border-border object-contain max-h-64"
-          onError={() => setImgError(true)}
-        />
+        <div className="bg-muted rounded-lg border border-border overflow-hidden">
+          <iframe
+            src={embedUrl}
+            className="w-full h-96"
+            allow="autoplay"
+            title="Google Drive preview"
+            onError={() => setImgError(true)}
+          />
+        </div>
         <a
           href={value}
           target="_blank"
@@ -94,38 +115,59 @@ function BuktiRenderer({ value }: { value: string }) {
           className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline"
         >
           <ExternalLink size={12} />
-          Buka di tab baru
+          Buka di Google Drive
         </a>
       </div>
     );
   }
 
-  // Instagram link
+  // Instagram - show as embedded iframe (Instagram post)
   if (isInstagramUrl(value)) {
-    return (
-      <a
-        href={value}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 text-sm text-primary hover:underline bg-muted/50 px-3 py-2 rounded-lg"
-      >
-        <Instagram size={16} />
-        Lihat di Instagram
-        <ExternalLink size={12} />
-      </a>
-    );
+    const postId = extractInstagramPostId(value);
+    if (postId) {
+      return (
+        <div className="space-y-3">
+          <div className="bg-muted rounded-lg border border-border overflow-hidden">
+            <iframe
+              src={`https://www.instagram.com/p/${postId}/embed/`}
+              width="100%"
+              height="450"
+              frameBorder="0"
+              scrolling="no"
+              title="Instagram post"
+              style={{ 
+                maxWidth: "100%",
+                background: "#FFF"
+              }}
+            />
+          </div>
+          <a
+            href={value}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+          >
+            <Instagram size={16} />
+            Lihat di Instagram
+            <ExternalLink size={12} />
+          </a>
+        </div>
+      );
+    }
   }
 
   // Direct image URL
   if (isDirectImageUrl(value) && !imgError) {
     return (
       <div className="space-y-3">
-        <img
-          src={value}
-          alt="Bukti"
-          className="w-full rounded-lg border border-border object-contain max-h-64"
-          onError={() => setImgError(true)}
-        />
+        <div className="bg-muted rounded-lg border border-border overflow-hidden">
+          <img
+            src={value}
+            alt="Bukti"
+            className="w-full object-contain max-h-96"
+            onError={() => setImgError(true)}
+          />
+        </div>
         <a
           href={value}
           target="_blank"
