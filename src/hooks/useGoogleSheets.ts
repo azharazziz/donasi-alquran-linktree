@@ -136,7 +136,7 @@ function cleanHeaderLabel(label: string): string {
   // If the label contains a known column keyword at the end, extract it
   const knownKeywords = [
     "Tanggal", "Donatur", "Nominal", "Saldo", "Keperluan",
-    "Quran Qty", "Iqro Qty", "Tempat", "QTY IQRO", "QTY AL QURAN", "Bukti",
+    "Quran Qty", "Iqro Qty", "Tempat", "Qty Iqro", "Qty Al Quran", "Bukti",
   ];
 
   for (const kw of knownKeywords) {
