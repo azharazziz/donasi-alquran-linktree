@@ -7,7 +7,6 @@ import {
   Mail,
   Globe,
   MessageCircle,
-  Share2,
   MapPinCheck,
 } from "lucide-react";
 import {
@@ -108,10 +107,9 @@ const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl font-serif text-primary flex items-center gap-2">
-            <Share2 size={24} />
+          <DialogTitle className="text-xl font-serif text-primary">
             Media Sosial Kami
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">

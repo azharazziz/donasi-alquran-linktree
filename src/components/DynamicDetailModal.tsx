@@ -206,9 +206,9 @@ const DynamicDetailModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-lg font-serif text-primary">
+          <DialogTitle className="text-xl font-serif text-primary">
             {title}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-xs">

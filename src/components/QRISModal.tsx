@@ -34,7 +34,7 @@ const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm">
+      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-serif text-primary">
             Donasi via QRIS
