@@ -65,8 +65,8 @@ const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) =
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-lg max-h-[85vh] flex flex-col p-0">
-          <DialogHeader className="px-6 pt-6 pb-2">
+        <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
             <div className="flex items-center justify-between">
               <div>
                 <DialogTitle className="text-xl font-serif text-primary">
