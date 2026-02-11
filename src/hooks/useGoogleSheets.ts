@@ -380,6 +380,61 @@ export function useRealisasiTotal(enabled = true) {
   return { total, loading };
 }
 
+// --- Donatur list hook ---
+
+export function useDonaturList(enabled = true) {
+  const [names, setNames] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const ANON = new Set(["nn", "anonim", "anonymous", ""]);
+
+  const fetchNames = useCallback(async () => {
+    if (!enabled) return;
+    setLoading(true);
+    try {
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent("Donasi Masuk")}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const text = await response.text();
+      const json = extractGvizJson(text);
+      if (!json?.table) throw new Error("Invalid response");
+
+      const cols = json.table.cols || [];
+      const rows = json.table.rows || [];
+
+      let donaturIndex = -1;
+      for (let i = 0; i < cols.length; i++) {
+        const label = cleanHeaderLabel(cols[i].label || "");
+        if (label === "Donatur") { donaturIndex = i; break; }
+      }
+
+      if (donaturIndex === -1) { setNames([]); return; }
+
+      const seen = new Set<string>();
+      const result: string[] = [];
+      for (const row of rows) {
+        const cell = row.c?.[donaturIndex];
+        const raw = (cell?.v?.toString() ?? "").trim();
+        const display = ANON.has(raw.toLowerCase()) ? "Hamba Allah" : raw;
+        if (display && !seen.has(display)) {
+          seen.add(display);
+          result.push(display);
+        }
+      }
+      setNames(result);
+    } catch (err) {
+      console.error("Failed to fetch donatur list:", err);
+      setNames([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [enabled]);
+
+  useEffect(() => { fetchNames(); }, [fetchNames]);
+
+  return { names, loading };
+}
+
 // --- Legacy typed hooks (kept for backward compatibility) ---
 
 function mapDonasiMasuk(raw: Record<string, string>[]): DonasiMasukRow[] {
