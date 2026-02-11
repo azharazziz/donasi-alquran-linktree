@@ -319,6 +319,67 @@ export function useDonasiTotal(enabled = true) {
   return { total, loading };
 }
 
+// --- Realisasi total hook ---
+
+export function useRealisasiTotal(enabled = true) {
+  const [total, setTotal] = useState<string>("Rp0");
+  const [loading, setLoading] = useState(false);
+
+  const fetchTotal = useCallback(async () => {
+    if (!enabled) return;
+    setLoading(true);
+    try {
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent("Realisasi")}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const text = await response.text();
+      const json = extractGvizJson(text);
+      if (!json?.table) throw new Error("Invalid response");
+
+      const cols = json.table.cols || [];
+      const rows = json.table.rows || [];
+
+      let nominalIndex = -1;
+      for (let i = 0; i < cols.length; i++) {
+        const label = cleanHeaderLabel(cols[i].label || "");
+        if (label === "Nominal") {
+          nominalIndex = i;
+          break;
+        }
+      }
+
+      if (nominalIndex === -1) {
+        setTotal("Rp0");
+        return;
+      }
+
+      let sum = 0;
+      for (const row of rows) {
+        const cell = row.c?.[nominalIndex];
+        if (cell?.v != null) {
+          const num = typeof cell.v === "number" ? cell.v : parseFloat(String(cell.v).replace(/[^\d.-]/g, ""));
+          if (!isNaN(num)) {
+            sum += num;
+          }
+        }
+      }
+
+      setTotal("Rp" + sum.toLocaleString("id-ID"));
+    } catch (err) {
+      console.error("Failed to fetch realisasi total:", err);
+      setTotal("Rp0");
+    } finally {
+      setLoading(false);
+    }
+  }, [enabled]);
+
+  useEffect(() => {
+    fetchTotal();
+  }, [fetchTotal]);
+
+  return { total, loading };
+}
+
 // --- Legacy typed hooks (kept for backward compatibility) ---
 
 function mapDonasiMasuk(raw: Record<string, string>[]): DonasiMasukRow[] {
