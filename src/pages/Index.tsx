@@ -3,6 +3,7 @@ import DonationAmount from "@/components/DonationAmount";
 import RealisasiAmount from "@/components/RealisasiAmount";
 import LinkList from "@/components/LinkList";
 import NiatDoa from "@/components/NiatDoa";
+import DonaturSection from "@/components/DonaturSection";
 import Footer from "@/components/Footer";
 import { useDonasiTotal, useRealisasiTotal } from "@/hooks/useGoogleSheets";
 
@@ -18,6 +19,7 @@ const Index = () => {
         <RealisasiAmount amount={realisasiTotal} loading={realisasiLoading} />
         <LinkList />
         <NiatDoa />
+        <DonaturSection />
         <Footer />
       </div>
     </div>
