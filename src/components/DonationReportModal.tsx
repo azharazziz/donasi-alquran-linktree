@@ -67,35 +67,31 @@ const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) =
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <div className="flex items-center justify-between">
-              <div>
                 <DialogTitle className="text-xl font-serif text-primary">
                   Laporan Donasi
                 </DialogTitle>
                 <DialogDescription className="text-muted-foreground">
                   Data laporan dari Google Sheets
                 </DialogDescription>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleRefresh}
-                className="h-8 w-8 text-muted-foreground hover:text-primary"
-              >
-                <RefreshCw size={14} />
-              </Button>
-            </div>
           </DialogHeader>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
-            <div className="px-6">
-              <TabsList className="w-full grid grid-cols-3 h-9">
+            <div className="px-6 flex items-center justify-between gap-3">
+              <TabsList className="grid grid-cols-3 h-9">
                 {TAB_CONFIG.map((tab) => (
                   <TabsTrigger key={tab.key} value={tab.key} className="text-xs">
                     {tab.label}
                   </TabsTrigger>
                 ))}
               </TabsList>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleRefresh}
+                className="h-8 w-8 text-muted-foreground hover:text-primary flex-shrink-0"
+              >
+                <RefreshCw size={14} />
+              </Button>
             </div>
 
             <div className="flex-1 overflow-y-auto px-6 pb-6 pt-3 min-h-0">
