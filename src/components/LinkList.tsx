@@ -37,7 +37,7 @@ const LinkList = () => {
       icon: Globe,
       title: "Konfirmasi Donasi",
       subtitle: "Isi form konfirmasi donasi Anda",
-      href: "https://forms.gle/qoKqviu7XksLSBT58",
+      href: "https://forms.gle/AVJgpsJNoYHFCjz66",
     },
     {
       icon: BarChart3,
