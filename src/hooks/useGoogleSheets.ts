@@ -11,138 +11,76 @@ import {
 
 export type { SheetName };
 
-// --- Existing typed interfaces (kept for backward compatibility) ---
+// ---------------------------------------------------------------------------
+// Cell / response parsing
+// ---------------------------------------------------------------------------
 
-export interface DonasiMasukRow {
-  tanggal: string;
-  donatur: string;
-  nominal: string;
-  saldo: string;
-}
+type GvizCell = { v: string | number | null; f?: string } | null;
 
-export interface RealisasiRow {
-  tanggal: string;
-  keperluan: string;
-  quranQty: string;
-  iqroQty: string;
-  nominal: string;
-  saldo: string;
-}
-
-export interface PenyaluranRow {
-  tanggal: string;
-  tempat: string;
-  qtyIqro: string;
-  qtyAlQuran: string;
-  bukti: string;
-}
-
-// --- Date parsing helper ---
-
-function parseDateValue(cell: { v: string | number | null; f?: string } | null): string {
+function parseDateValue(cell: GvizCell): string {
   if (!cell) return "";
-
   const vStr = cell.v?.toString() ?? "";
-
-  // Try to parse Google's Date(y,m,d) format
   const dateMatch = vStr.match(/^Date\((\d+),(\d+),(\d+)\)$/);
   if (dateMatch) {
-    const year = parseInt(dateMatch[1]);
-    const month = parseInt(dateMatch[2]); // 0-indexed
-    const day = parseInt(dateMatch[3]);
+    const [, y, m, d] = dateMatch.map(Number);
     try {
-      return format(new Date(year, month, day), "d MMM yyyy");
-    } catch {
-      // fallback to formatted value
-    }
+      return format(new Date(y, m, d), "d MMM yyyy");
+    } catch { /* fall through */ }
   }
-
-  // Use formatted value if available
-  if (cell.f) return cell.f;
-
-  return vStr;
-}
-
-function parseCellValue(cell: { v: string | number | null; f?: string } | null): string {
-  if (!cell) return "";
-
-  const vStr = cell.v?.toString() ?? "";
-
-  // Check if it's a date value
-  if (vStr.startsWith("Date(")) {
-    return parseDateValue(cell);
-  }
-
-  // Use formatted value if available, otherwise raw value
   return cell.f ?? vStr;
 }
 
-// --- Legacy parser (kept for backward compatibility) ---
-
-function parseGvizResponse(text: string): Record<string, string>[] {
-  const jsonStart = text.indexOf("{");
-  const jsonEnd = text.lastIndexOf("}");
-  if (jsonStart === -1 || jsonEnd === -1) return [];
-
-  try {
-    const json = JSON.parse(text.substring(jsonStart, jsonEnd + 1));
-    const cols: { label: string }[] = json.table?.cols || [];
-    const rows: { c: ({ v: string | number | null; f?: string } | null)[] }[] =
-      json.table?.rows || [];
-
-    const headers = cols.map((c) => c.label || "");
-
-    return rows.map((row) => {
-      const obj: Record<string, string> = {};
-      row.c?.forEach((cell, i) => {
-        const key = headers[i] || `col_${i}`;
-        obj[key] = parseCellValue(cell);
-      });
-      return obj;
-    });
-  } catch (err) {
-    console.error("Failed to parse Google Sheets response:", err);
-    return [];
-  }
+function parseCellValue(cell: GvizCell): string {
+  if (!cell) return "";
+  const vStr = cell.v?.toString() ?? "";
+  if (vStr.startsWith("Date(")) return parseDateValue(cell);
+  return cell.f ?? vStr;
 }
-
-// --- Dynamic parser ---
 
 interface GvizJson {
   table?: {
     cols?: { label: string; type?: string }[];
-    rows?: { c: ({ v: string | number | null; f?: string } | null)[] }[];
+    rows?: { c: GvizCell[] }[];
     parsedNumHeaders?: number;
   };
 }
 
 function extractGvizJson(text: string): GvizJson | null {
-  const jsonStart = text.indexOf("{");
-  const jsonEnd = text.lastIndexOf("}");
-  if (jsonStart === -1 || jsonEnd === -1) return null;
+  const start = text.indexOf("{");
+  const end = text.lastIndexOf("}");
+  if (start === -1 || end === -1) return null;
   try {
-    return JSON.parse(text.substring(jsonStart, jsonEnd + 1));
+    return JSON.parse(text.substring(start, end + 1));
   } catch {
     return null;
   }
 }
 
+/** Strips sheet-title prefixes that Google merges into column labels. */
 function cleanHeaderLabel(label: string): string {
-  // Remove common sheet title prefixes like "Laporan Donasi Al Quran 2026"
-  // These appear when headers get merged with the sheet title
   const cleaned = label.trim();
-
-  // If the label contains a known column keyword at the end, extract it
-  const knownKeywords = Object.values(COLUMNS);
-
-  for (const kw of knownKeywords) {
-    if (cleaned.endsWith(kw) && cleaned.length > kw.length) {
-      return kw;
-    }
+  for (const kw of Object.values(COLUMNS)) {
+    if (cleaned.endsWith(kw) && cleaned.length > kw.length) return kw;
   }
-
   return cleaned;
 }
+
+// ---------------------------------------------------------------------------
+// Generic fetch helper
+// ---------------------------------------------------------------------------
+
+async function fetchSheetJson(sheetName: SheetName): Promise<GvizJson> {
+  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = extractGvizJson(await res.text());
+  if (!json?.table) throw new Error("Invalid response format");
+  return json;
+}
+
+// ---------------------------------------------------------------------------
+// useGoogleSheetDynamic — dynamic headers + rows for the report modal
+// ---------------------------------------------------------------------------
 
 export interface DynamicSheetData {
   headers: string[];
@@ -163,42 +101,28 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
     setLoading(true);
     setError(null);
     try {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const text = await response.text();
-      const json = extractGvizJson(text);
-      if (!json?.table) throw new Error("Invalid response format");
-
-      const cols = json.table.cols || [];
-      const rawRows = json.table.rows || [];
-      const parsedNumHeaders = json.table.parsedNumHeaders ?? 1;
+      const json = await fetchSheetJson(sheetName);
+      const cols = json.table!.cols ?? [];
+      const rawRows = json.table!.rows ?? [];
+      const parsedNumHeaders = json.table!.parsedNumHeaders ?? 1;
 
       let extractedHeaders: string[];
-      let dataRows: { c: ({ v: string | number | null; f?: string } | null)[] }[];
+      let dataRows: { c: GvizCell[] }[];
 
-      if (parsedNumHeaders > 0 && cols.some((c) => c.label && c.label.trim() !== "")) {
-        // Headers from column labels
-        extractedHeaders = cols.map((c) => cleanHeaderLabel(c.label || `col_${cols.indexOf(c)}`));
+      if (parsedNumHeaders > 0 && cols.some((c) => c.label?.trim())) {
+        extractedHeaders = cols.map((c, i) => cleanHeaderLabel(c.label || `col_${i}`));
         dataRows = rawRows;
       } else {
-        // Headers not parsed (e.g. Penyaluran) — detect from data rows
+        // Sheets like "Penyaluran" have no parsed headers — detect from data rows
         let headerRowIndex = -1;
         for (let i = 0; i < Math.min(rawRows.length, 5); i++) {
-          const row = rawRows[i];
-          const cellValues = row.c?.map((cell) => cell?.v?.toString() ?? "") ?? [];
+          const cellValues = rawRows[i].c?.map((c) => c?.v?.toString() ?? "") ?? [];
           const nonEmpty = cellValues.filter((v) => v.length > 0);
-          const hasDateValues = cellValues.some((v) => v.startsWith("Date("));
-          if (nonEmpty.length >= 2 && !hasDateValues) {
-            headerRowIndex = i;
-            break;
-          }
+          const hasDate = cellValues.some((v) => v.startsWith("Date("));
+          if (nonEmpty.length >= 2 && !hasDate) { headerRowIndex = i; break; }
         }
-
         if (headerRowIndex >= 0) {
-          extractedHeaders = rawRows[headerRowIndex].c?.map(
-            (cell) => cell?.v?.toString()?.trim() ?? ""
-          ) ?? [];
+          extractedHeaders = rawRows[headerRowIndex].c?.map((c) => c?.v?.toString()?.trim() ?? "") ?? [];
           dataRows = rawRows.slice(headerRowIndex + 1);
         } else {
           extractedHeaders = cols.map((_, i) => `col_${i}`);
@@ -206,32 +130,26 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
         }
       }
 
-      // Filter out empty headers
       const validIndices = extractedHeaders
         .map((h, i) => ({ header: h, index: i }))
         .filter((item) => item.header.length > 0);
 
-      const finalHeaders = validIndices.map((item) => item.header);
-
-      // Map rows
       const mappedRows = dataRows
-        .filter((row) => {
-          const cells = row.c ?? [];
-          return validIndices.some((item) => {
-            const cell = cells[item.index];
-            return cell && (cell.v !== null && cell.v !== undefined && cell.v !== "");
-          });
-        })
+        .filter((row) =>
+          validIndices.some(({ index }) => {
+            const c = row.c?.[index];
+            return c && c.v !== null && c.v !== undefined && c.v !== "";
+          })
+        )
         .map((row) => {
           const obj: Record<string, string> = {};
-          validIndices.forEach((item) => {
-            const cell = row.c?.[item.index] ?? null;
-            obj[item.header] = parseCellValue(cell);
+          validIndices.forEach(({ header, index }) => {
+            obj[header] = parseCellValue(row.c?.[index] ?? null);
           });
           return obj;
         });
 
-      setHeaders(finalHeaders);
+      setHeaders(validIndices.map((item) => item.header));
       setRows(mappedRows);
     } catch (err) {
       console.error(`Failed to fetch ${sheetName}:`, err);
@@ -241,59 +159,38 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
     }
   }, [sheetName, enabled]);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   return { headers, rows, loading, error, refetch: fetchData };
 }
 
-// --- Donation total hook ---
+// ---------------------------------------------------------------------------
+// useDonasiTotal — sum of Nominal column from "Donasi Masuk"
+// ---------------------------------------------------------------------------
 
 export function useDonasiTotal(enabled = true) {
-  const [total, setTotal] = useState<string>("Rp0");
+  const [total, setTotal] = useState("Rp0");
   const [loading, setLoading] = useState(false);
 
   const fetchTotal = useCallback(async () => {
     if (!enabled) return;
     setLoading(true);
     try {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAMES.DONASI_MASUK)}`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const text = await response.text();
-      const json = extractGvizJson(text);
-      if (!json?.table) throw new Error("Invalid response");
+      const json = await fetchSheetJson(SHEET_NAMES.DONASI_MASUK);
+      const cols = json.table!.cols ?? [];
+      const rows = json.table!.rows ?? [];
 
-      const cols = json.table.cols || [];
-      const rows = json.table.rows || [];
+      const nominalIndex = cols.findIndex(
+        (c) => cleanHeaderLabel(c.label || "") === COLUMNS.NOMINAL
+      );
+      if (nominalIndex === -1) { setTotal("Rp0"); return; }
 
-      // Find the Nominal column index
-      let nominalIndex = -1;
-      for (let i = 0; i < cols.length; i++) {
-        const label = cleanHeaderLabel(cols[i].label || "");
-        if (label === COLUMNS.NOMINAL) {
-          nominalIndex = i;
-          break;
-        }
-      }
-
-      if (nominalIndex === -1) {
-        setTotal("Rp0");
-        return;
-      }
-
-      // Sum numeric values
-      let sum = 0;
-      for (const row of rows) {
+      const sum = rows.reduce((acc, row) => {
         const cell = row.c?.[nominalIndex];
-        if (cell?.v != null) {
-          const num = typeof cell.v === "number" ? cell.v : parseFloat(String(cell.v).replace(/[^\d.-]/g, ""));
-          if (!isNaN(num)) {
-            sum += num;
-          }
-        }
-      }
+        if (cell?.v == null) return acc;
+        const num = typeof cell.v === "number" ? cell.v : parseFloat(String(cell.v).replace(/[^\d.-]/g, ""));
+        return acc + (isNaN(num) ? 0 : num);
+      }, 0);
 
       setTotal("Rp" + sum.toLocaleString("id-ID"));
     } catch (err) {
@@ -304,57 +201,37 @@ export function useDonasiTotal(enabled = true) {
     }
   }, [enabled]);
 
-  useEffect(() => {
-    fetchTotal();
-  }, [fetchTotal]);
-
+  useEffect(() => { fetchTotal(); }, [fetchTotal]);
   return { total, loading };
 }
 
-// --- Realisasi total hook ---
+// ---------------------------------------------------------------------------
+// useRealisasiTotal — sum of Nominal column from "Realisasi"
+// ---------------------------------------------------------------------------
 
 export function useRealisasiTotal(enabled = true) {
-  const [total, setTotal] = useState<string>("Rp0");
+  const [total, setTotal] = useState("Rp0");
   const [loading, setLoading] = useState(false);
 
   const fetchTotal = useCallback(async () => {
     if (!enabled) return;
     setLoading(true);
     try {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAMES.REALISASI)}`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const text = await response.text();
-      const json = extractGvizJson(text);
-      if (!json?.table) throw new Error("Invalid response");
+      const json = await fetchSheetJson(SHEET_NAMES.REALISASI);
+      const cols = json.table!.cols ?? [];
+      const rows = json.table!.rows ?? [];
 
-      const cols = json.table.cols || [];
-      const rows = json.table.rows || [];
+      const nominalIndex = cols.findIndex(
+        (c) => cleanHeaderLabel(c.label || "") === COLUMNS.NOMINAL
+      );
+      if (nominalIndex === -1) { setTotal("Rp0"); return; }
 
-      let nominalIndex = -1;
-      for (let i = 0; i < cols.length; i++) {
-        const label = cleanHeaderLabel(cols[i].label || "");
-        if (label === COLUMNS.NOMINAL) {
-          nominalIndex = i;
-          break;
-        }
-      }
-
-      if (nominalIndex === -1) {
-        setTotal("Rp0");
-        return;
-      }
-
-      let sum = 0;
-      for (const row of rows) {
+      const sum = rows.reduce((acc, row) => {
         const cell = row.c?.[nominalIndex];
-        if (cell?.v != null) {
-          const num = typeof cell.v === "number" ? cell.v : parseFloat(String(cell.v).replace(/[^\d.-]/g, ""));
-          if (!isNaN(num)) {
-            sum += num;
-          }
-        }
-      }
+        if (cell?.v == null) return acc;
+        const num = typeof cell.v === "number" ? cell.v : parseFloat(String(cell.v).replace(/[^\d.-]/g, ""));
+        return acc + (isNaN(num) ? 0 : num);
+      }, 0);
 
       setTotal("Rp" + sum.toLocaleString("id-ID"));
     } catch (err) {
@@ -365,14 +242,13 @@ export function useRealisasiTotal(enabled = true) {
     }
   }, [enabled]);
 
-  useEffect(() => {
-    fetchTotal();
-  }, [fetchTotal]);
-
+  useEffect(() => { fetchTotal(); }, [fetchTotal]);
   return { total, loading };
 }
 
-// --- Donatur list hook ---
+// ---------------------------------------------------------------------------
+// useDonaturList — unique donor names from "Donasi Masuk"
+// ---------------------------------------------------------------------------
 
 export function useDonaturList(enabled = true) {
   const [names, setNames] = useState<string[]>([]);
@@ -382,29 +258,19 @@ export function useDonaturList(enabled = true) {
     if (!enabled) return;
     setLoading(true);
     try {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAMES.DONASI_MASUK)}`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const text = await response.text();
-      const json = extractGvizJson(text);
-      if (!json?.table) throw new Error("Invalid response");
+      const json = await fetchSheetJson(SHEET_NAMES.DONASI_MASUK);
+      const cols = json.table!.cols ?? [];
+      const rows = json.table!.rows ?? [];
 
-      const cols = json.table.cols || [];
-      const rows = json.table.rows || [];
-
-      let donaturIndex = -1;
-      for (let i = 0; i < cols.length; i++) {
-        const label = cleanHeaderLabel(cols[i].label || "");
-        if (label === COLUMNS.DONATUR) { donaturIndex = i; break; }
-      }
-
+      const donaturIndex = cols.findIndex(
+        (c) => cleanHeaderLabel(c.label || "") === COLUMNS.DONATUR
+      );
       if (donaturIndex === -1) { setNames([]); return; }
 
       const seen = new Set<string>();
       const result: string[] = [];
       for (const row of rows) {
-        const cell = row.c?.[donaturIndex];
-        const raw = (cell?.v?.toString() ?? "").trim();
+        const raw = (row.c?.[donaturIndex]?.v?.toString() ?? "").trim();
         const display = ANONYMOUS_NAMES.has(raw.toLowerCase()) ? ANONYMOUS_DISPLAY : raw;
         if (display && !seen.has(display)) {
           seen.add(display);
@@ -421,91 +287,5 @@ export function useDonaturList(enabled = true) {
   }, [enabled]);
 
   useEffect(() => { fetchNames(); }, [fetchNames]);
-
   return { names, loading };
-}
-
-// --- Legacy typed hooks (kept for backward compatibility) ---
-
-function mapDonasiMasuk(raw: Record<string, string>[]): DonasiMasukRow[] {
-  return raw
-    .filter((r) => r[COLUMNS.TANGGAL] || r[COLUMNS.DONATUR] || r[COLUMNS.NOMINAL])
-    .map((r) => ({
-      tanggal: r[COLUMNS.TANGGAL] || "",
-      donatur: r[COLUMNS.DONATUR] || "",
-      nominal: r[COLUMNS.NOMINAL] || "",
-      saldo: r[COLUMNS.SALDO] || "",
-    }));
-}
-
-function mapRealisasi(raw: Record<string, string>[]): RealisasiRow[] {
-  return raw
-    .filter((r) => r[COLUMNS.TANGGAL] || r[COLUMNS.KEPERLUAN] || r[COLUMNS.NOMINAL])
-    .map((r) => ({
-      tanggal: r[COLUMNS.TANGGAL] || "",
-      keperluan: r[COLUMNS.KEPERLUAN] || "",
-      quranQty: r[COLUMNS.QURAN_QTY] || "",
-      iqroQty: r[COLUMNS.IQRO_QTY] || "",
-      nominal: r[COLUMNS.NOMINAL] || "",
-      saldo: r[COLUMNS.SALDO] || "",
-    }));
-}
-
-function mapPenyaluran(raw: Record<string, string>[]): PenyaluranRow[] {
-  return raw
-    .filter((r) => r[COLUMNS.TANGGAL] || r[COLUMNS.TEMPAT])
-    .map((r) => ({
-      tanggal: r[COLUMNS.TANGGAL] || "",
-      tempat: r[COLUMNS.TEMPAT] || "",
-      qtyIqro: r[COLUMNS.QTY_IQRO] || "",
-      qtyAlQuran: r[COLUMNS.QTY_AL_QURAN] || "",
-      bukti: r[COLUMNS.BUKTI] || "",
-    }));
-}
-
-export function useGoogleSheet<T>(
-  sheetName: SheetName,
-  mapper: (raw: Record<string, string>[]) => T[],
-  enabled = true
-) {
-  const [data, setData] = useState<T[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchData = useCallback(async () => {
-    if (!enabled) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
-      const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const text = await response.text();
-      const raw = parseGvizResponse(text);
-      setData(mapper(raw));
-    } catch (err) {
-      console.error(`Failed to fetch ${sheetName}:`, err);
-      setError(err instanceof Error ? err.message : "Gagal memuat data");
-    } finally {
-      setLoading(false);
-    }
-  }, [sheetName, mapper, enabled]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-  return { data, loading, error, refetch: fetchData };
-}
-
-export function useDonasiMasuk(enabled = true) {
-  return useGoogleSheet(SHEET_NAMES.DONASI_MASUK, mapDonasiMasuk, enabled);
-}
-
-export function useRealisasi(enabled = true) {
-  return useGoogleSheet(SHEET_NAMES.REALISASI, mapRealisasi, enabled);
-}
-
-export function usePenyaluran(enabled = true) {
-  return useGoogleSheet(SHEET_NAMES.PENYALURAN, mapPenyaluran, enabled);
 }
