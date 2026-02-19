@@ -198,11 +198,11 @@ Kolaborasi dan skalabilitas adalah prioritas. Berikut cara menambah sheet baru:
 
 Program ini adalah hasil kolaborasi dari:
 
-- 🏛️ **Kamar Baca Magelang**
-- 📸 **Fotoin Project**
-- 🏢 **SKS Foundation**
-- 🍜 **Mie Ayam Cap 2 Jago**
-- 🍲 **Bubur Kijang**
+- **Kamar Baca Magelang**
+- **Fotoin Project**
+- **SKS Foundation**
+- **Mie Ayam Cap 2 Jago**
+- **Bubur Kijang**
 
 Terima kasih atas komitmen dan dedikasi dalam menyebarkan Al-Qur'an kepada masyarakat! 💚
 
@@ -211,8 +211,16 @@ Terima kasih atas komitmen dan dedikasi dalam menyebarkan Al-Qur'an kepada masya
 ## 📞 Pertanyaan atau Kontribusi?
 
 Kami terbuka untuk saran, laporan bug, atau kontribusi dari komunitas. Silakan hubungi kami melalui:
-- **Email**: [setup di config]
-- **Instagram**: [setup di config]
-- **Twitter**: [setup di config]
+- **Email**: azharazziz13[at]gmail.com
+- **Instagram**: @kamarbacamgl
+- **Twitter**: @kamarbacamgl
 
 **Jazakallahu Khairun** atas dukungan Anda! 🙏
+
+---
+
+## 💖 Built with Love
+
+Proyek ini dikembangkan dengan ❤️ menggunakan **[Lovable.app](https://lovable.app)** — AI-powered platform untuk membangun aplikasi dengan cepat dan mudah.
+
+---
