@@ -1,16 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { format } from "date-fns";
+import {
+  SPREADSHEET_ID,
+  SHEET_NAMES,
+  COLUMNS,
+  ANONYMOUS_NAMES,
+  ANONYMOUS_DISPLAY,
+  type SheetName,
+} from "@/config";
 
-const SPREADSHEET_ID = "16-BQVDuCcsKixvTynVXVIOcYTwCcq-Tkz3rdajJIHis";
-
-// Sheet names mapped to their gid values
-const SHEET_CONFIG = {
-  "Donasi Masuk": 0,
-  "Realisasi": 1,
-  "Penyaluran Donasi": 2,
-} as const;
-
-export type SheetName = keyof typeof SHEET_CONFIG;
+export type { SheetName };
 
 // --- Existing typed interfaces (kept for backward compatibility) ---
 
@@ -131,13 +130,10 @@ function extractGvizJson(text: string): GvizJson | null {
 function cleanHeaderLabel(label: string): string {
   // Remove common sheet title prefixes like "Laporan Donasi Al Quran 2026"
   // These appear when headers get merged with the sheet title
-  let cleaned = label.trim();
+  const cleaned = label.trim();
 
   // If the label contains a known column keyword at the end, extract it
-  const knownKeywords = [
-    "Tanggal", "Donatur", "Nominal", "Saldo", "Keperluan",
-    "Quran Qty", "Iqro Qty", "Tempat", "Qty Iqro", "Qty Al Quran", "Bukti",
-  ];
+  const knownKeywords = Object.values(COLUMNS);
 
   for (const kw of knownKeywords) {
     if (cleaned.endsWith(kw) && cleaned.length > kw.length) {
@@ -187,13 +183,11 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
         dataRows = rawRows;
       } else {
         // Headers not parsed (e.g. Penyaluran) — detect from data rows
-        // Find the first row where most cells have non-empty string values (the header row)
         let headerRowIndex = -1;
         for (let i = 0; i < Math.min(rawRows.length, 5); i++) {
           const row = rawRows[i];
           const cellValues = row.c?.map((cell) => cell?.v?.toString() ?? "") ?? [];
           const nonEmpty = cellValues.filter((v) => v.length > 0);
-          // A header row typically has mostly text, not dates/numbers
           const hasDateValues = cellValues.some((v) => v.startsWith("Date("));
           if (nonEmpty.length >= 2 && !hasDateValues) {
             headerRowIndex = i;
@@ -207,7 +201,6 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
           ) ?? [];
           dataRows = rawRows.slice(headerRowIndex + 1);
         } else {
-          // Fallback: use col indices
           extractedHeaders = cols.map((_, i) => `col_${i}`);
           dataRows = rawRows;
         }
@@ -223,7 +216,6 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
       // Map rows
       const mappedRows = dataRows
         .filter((row) => {
-          // Skip completely empty rows
           const cells = row.c ?? [];
           return validIndices.some((item) => {
             const cell = cells[item.index];
@@ -266,7 +258,7 @@ export function useDonasiTotal(enabled = true) {
     if (!enabled) return;
     setLoading(true);
     try {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent("Donasi Masuk")}`;
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAMES.DONASI_MASUK)}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
@@ -280,7 +272,7 @@ export function useDonasiTotal(enabled = true) {
       let nominalIndex = -1;
       for (let i = 0; i < cols.length; i++) {
         const label = cleanHeaderLabel(cols[i].label || "");
-        if (label === "Nominal") {
+        if (label === COLUMNS.NOMINAL) {
           nominalIndex = i;
           break;
         }
@@ -329,7 +321,7 @@ export function useRealisasiTotal(enabled = true) {
     if (!enabled) return;
     setLoading(true);
     try {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent("Realisasi")}`;
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAMES.REALISASI)}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
@@ -342,7 +334,7 @@ export function useRealisasiTotal(enabled = true) {
       let nominalIndex = -1;
       for (let i = 0; i < cols.length; i++) {
         const label = cleanHeaderLabel(cols[i].label || "");
-        if (label === "Nominal") {
+        if (label === COLUMNS.NOMINAL) {
           nominalIndex = i;
           break;
         }
@@ -386,13 +378,11 @@ export function useDonaturList(enabled = true) {
   const [names, setNames] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const ANON = new Set(["nn", "anonim", "anonymous", ""]);
-
   const fetchNames = useCallback(async () => {
     if (!enabled) return;
     setLoading(true);
     try {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent("Donasi Masuk")}`;
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAMES.DONASI_MASUK)}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
@@ -405,7 +395,7 @@ export function useDonaturList(enabled = true) {
       let donaturIndex = -1;
       for (let i = 0; i < cols.length; i++) {
         const label = cleanHeaderLabel(cols[i].label || "");
-        if (label === "Donatur") { donaturIndex = i; break; }
+        if (label === COLUMNS.DONATUR) { donaturIndex = i; break; }
       }
 
       if (donaturIndex === -1) { setNames([]); return; }
@@ -415,7 +405,7 @@ export function useDonaturList(enabled = true) {
       for (const row of rows) {
         const cell = row.c?.[donaturIndex];
         const raw = (cell?.v?.toString() ?? "").trim();
-        const display = ANON.has(raw.toLowerCase()) ? "Hamba Allah" : raw;
+        const display = ANONYMOUS_NAMES.has(raw.toLowerCase()) ? ANONYMOUS_DISPLAY : raw;
         if (display && !seen.has(display)) {
           seen.add(display);
           result.push(display);
@@ -439,37 +429,37 @@ export function useDonaturList(enabled = true) {
 
 function mapDonasiMasuk(raw: Record<string, string>[]): DonasiMasukRow[] {
   return raw
-    .filter((r) => r["Tanggal"] || r["Donatur"] || r["Nominal"])
+    .filter((r) => r[COLUMNS.TANGGAL] || r[COLUMNS.DONATUR] || r[COLUMNS.NOMINAL])
     .map((r) => ({
-      tanggal: r["Tanggal"] || "",
-      donatur: r["Donatur"] || "",
-      nominal: r["Nominal"] || "",
-      saldo: r["Saldo"] || "",
+      tanggal: r[COLUMNS.TANGGAL] || "",
+      donatur: r[COLUMNS.DONATUR] || "",
+      nominal: r[COLUMNS.NOMINAL] || "",
+      saldo: r[COLUMNS.SALDO] || "",
     }));
 }
 
 function mapRealisasi(raw: Record<string, string>[]): RealisasiRow[] {
   return raw
-    .filter((r) => r["Tanggal"] || r["Keperluan"] || r["Nominal"])
+    .filter((r) => r[COLUMNS.TANGGAL] || r[COLUMNS.KEPERLUAN] || r[COLUMNS.NOMINAL])
     .map((r) => ({
-      tanggal: r["Tanggal"] || "",
-      keperluan: r["Keperluan"] || "",
-      quranQty: r["Quran Qty"] || "",
-      iqroQty: r["Iqro Qty"] || "",
-      nominal: r["Nominal"] || "",
-      saldo: r["Saldo"] || "",
+      tanggal: r[COLUMNS.TANGGAL] || "",
+      keperluan: r[COLUMNS.KEPERLUAN] || "",
+      quranQty: r[COLUMNS.QURAN_QTY] || "",
+      iqroQty: r[COLUMNS.IQRO_QTY] || "",
+      nominal: r[COLUMNS.NOMINAL] || "",
+      saldo: r[COLUMNS.SALDO] || "",
     }));
 }
 
 function mapPenyaluran(raw: Record<string, string>[]): PenyaluranRow[] {
   return raw
-    .filter((r) => r["Tanggal"] || r["Tempat"])
+    .filter((r) => r[COLUMNS.TANGGAL] || r[COLUMNS.TEMPAT])
     .map((r) => ({
-      tanggal: r["Tanggal"] || "",
-      tempat: r["Tempat"] || "",
-      qtyIqro: r["QTY IQRO"] || "",
-      qtyAlQuran: r["QTY AL QURAN"] || "",
-      bukti: r["Bukti"] || "",
+      tanggal: r[COLUMNS.TANGGAL] || "",
+      tempat: r[COLUMNS.TEMPAT] || "",
+      qtyIqro: r[COLUMNS.QTY_IQRO] || "",
+      qtyAlQuran: r[COLUMNS.QTY_AL_QURAN] || "",
+      bukti: r[COLUMNS.BUKTI] || "",
     }));
 }
 
@@ -509,13 +499,13 @@ export function useGoogleSheet<T>(
 }
 
 export function useDonasiMasuk(enabled = true) {
-  return useGoogleSheet("Donasi Masuk", mapDonasiMasuk, enabled);
+  return useGoogleSheet(SHEET_NAMES.DONASI_MASUK, mapDonasiMasuk, enabled);
 }
 
 export function useRealisasi(enabled = true) {
-  return useGoogleSheet("Realisasi", mapRealisasi, enabled);
+  return useGoogleSheet(SHEET_NAMES.REALISASI, mapRealisasi, enabled);
 }
 
 export function usePenyaluran(enabled = true) {
-  return useGoogleSheet("Penyaluran Donasi", mapPenyaluran, enabled);
+  return useGoogleSheet(SHEET_NAMES.PENYALURAN, mapPenyaluran, enabled);
 }
