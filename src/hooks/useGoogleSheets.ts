@@ -165,6 +165,30 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
 }
 
 // ---------------------------------------------------------------------------
+// Helper: extract latest date from any sheet's rows
+// ---------------------------------------------------------------------------
+
+function extractLatestDate(cols: { label: string; type?: string }[], rows: { c: GvizCell[] }[]): Date | null {
+  const dateIndex = cols.findIndex(
+    (c) => cleanHeaderLabel(c.label || "") === COLUMNS.TANGGAL || c.type === "date"
+  );
+  if (dateIndex === -1) return null;
+
+  let latest: Date | null = null;
+  for (const row of rows) {
+    const dateCell = row.c?.[dateIndex];
+    const dateStr = dateCell?.v?.toString() ?? "";
+    const dateMatch = dateStr.match(/^Date\((\d+),(\d+),(\d+)\)$/);
+    if (dateMatch) {
+      const [, y, m, d] = dateMatch.map(Number);
+      const date = new Date(y, m, d);
+      if (!latest || date > latest) latest = date;
+    }
+  }
+  return latest;
+}
+
+// ---------------------------------------------------------------------------
 // useDonasiTotal — sum of Nominal column from "Donasi Masuk"
 // ---------------------------------------------------------------------------
 
@@ -177,9 +201,15 @@ export function useDonasiTotal(enabled = true) {
     if (!enabled) return;
     setLoading(true);
     try {
-      const json = await fetchSheetJson(SHEET_NAMES.DONASI_MASUK);
-      const cols = json.table!.cols ?? [];
-      const rows = json.table!.rows ?? [];
+      // Fetch all sheets in parallel
+      const [donasiJson, realisasiJson, penyaluranJson] = await Promise.all([
+        fetchSheetJson(SHEET_NAMES.DONASI_MASUK),
+        fetchSheetJson(SHEET_NAMES.REALISASI).catch(() => null),
+        fetchSheetJson(SHEET_NAMES.PENYALURAN).catch(() => null),
+      ]);
+
+      const cols = donasiJson.table!.cols ?? [];
+      const rows = donasiJson.table!.rows ?? [];
 
       const nominalIndex = cols.findIndex(
         (c) => cleanHeaderLabel(c.label || "") === COLUMNS.NOMINAL
@@ -187,35 +217,25 @@ export function useDonasiTotal(enabled = true) {
       if (nominalIndex === -1) { setTotal("Rp0"); return; }
 
       let sum = 0;
-      let latestDate: Date | null = null;
-
-      // Find the date column index
-      const dateIndex = cols.findIndex(
-        (c) => cleanHeaderLabel(c.label || "") === COLUMNS.TANGGAL || c.type === "date"
-      );
-
       for (const row of rows) {
         const cell = row.c?.[nominalIndex];
         if (cell?.v != null) {
           const num = typeof cell.v === "number" ? cell.v : parseFloat(String(cell.v).replace(/[^\d.-]/g, ""));
           if (!isNaN(num)) sum += num;
         }
-
-        // Track latest date
-        if (dateIndex !== -1) {
-          const dateCell = row.c?.[dateIndex];
-          const dateStr = dateCell?.v?.toString() ?? "";
-          const dateMatch = dateStr.match(/^Date\((\d+),(\d+),(\d+)\)$/);
-          if (dateMatch) {
-            const [, y, m, d] = dateMatch.map(Number);
-            const date = new Date(y, m, d);
-            if (!latestDate || date > latestDate) latestDate = date;
-          }
-        }
       }
 
+      // Find latest date across all sheets
+      const dates = [
+        extractLatestDate(cols, rows),
+        realisasiJson ? extractLatestDate(realisasiJson.table!.cols ?? [], realisasiJson.table!.rows ?? []) : null,
+        penyaluranJson ? extractLatestDate(penyaluranJson.table!.cols ?? [], penyaluranJson.table!.rows ?? []) : null,
+      ].filter((d): d is Date => d !== null);
+
+      const latestDate = dates.length > 0 ? dates.reduce((a, b) => (a > b ? a : b)) : null;
+
       setTotal("Rp" + sum.toLocaleString("id-ID"));
-      setLastUpdate(format(new Date(), "d MMM yyyy, HH:mm"));
+      setLastUpdate(latestDate ? format(latestDate, "d MMM yyyy") : null);
     } catch (err) {
       console.error("Failed to fetch donation total:", err);
       setTotal("Rp0");
