@@ -26,8 +26,8 @@ interface DynamicDetailModalProps {
   title?: string;
 }
 
-function stripHideMarker(header: string): string {
-  return header.replace(/\s*\[hide\]\s*/gi, "").trim();
+function stripMarkers(header: string): string {
+  return header.replace(/\s*\[(hide|private)\]\s*/gi, "").trim();
 }
 
 function getFieldIcon(label: string) {
@@ -218,7 +218,7 @@ const DynamicDetailModal = ({
 
         <div className="space-y-4 mt-2">
           {headers.map((rawHeader) => {
-            const cleanLabel = stripHideMarker(rawHeader);
+            const cleanLabel = stripMarkers(rawHeader);
             const value = row[rawHeader] ?? "";
             const isBukti = cleanLabel.toLowerCase().includes("bukti");
             const Icon = getFieldIcon(cleanLabel);

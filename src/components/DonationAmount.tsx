@@ -1,12 +1,13 @@
-import { BookOpen } from "lucide-react";
+import { BookOpen, Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface DonationAmountProps {
   amount: string;
   loading?: boolean;
+  lastUpdate?: string | null;
 }
 
-const DonationAmount = ({ amount, loading }: DonationAmountProps) => {
+const DonationAmount = ({ amount, loading, lastUpdate }: DonationAmountProps) => {
   return (
     <section className="px-4 pb-8 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
       <div className="donation-amount max-w-md mx-auto p-6 text-center shadow-lg">
@@ -29,6 +30,12 @@ const DonationAmount = ({ amount, loading }: DonationAmountProps) => {
         <p className="text-xs mt-3 opacity-60">
           Jazākumullāhu khairan atas setiap kebaikan
         </p>
+        {lastUpdate && (
+          <div className="flex items-center justify-center gap-1.5 mt-3 opacity-50">
+            <Clock size={10} />
+            <span className="text-[10px]">Terakhir diperbarui: {lastUpdate}</span>
+          </div>
+        )}
       </div>
     </section>
   );
