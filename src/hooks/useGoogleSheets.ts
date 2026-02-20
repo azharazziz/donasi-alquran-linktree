@@ -320,6 +320,7 @@ export function useDonaturList(enabled = true) {
           result.push(display);
         }
       }
+      result.sort();
       setNames(result);
     } catch (err) {
       console.error("Failed to fetch donatur list:", err);
