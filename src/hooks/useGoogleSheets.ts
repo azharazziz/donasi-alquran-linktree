@@ -215,9 +215,7 @@ export function useDonasiTotal(enabled = true) {
       }
 
       setTotal("Rp" + sum.toLocaleString("id-ID"));
-      if (latestDate) {
-        setLastUpdate(format(latestDate, "d MMM yyyy"));
-      }
+      setLastUpdate(format(new Date(), "d MMM yyyy, HH:mm"));
     } catch (err) {
       console.error("Failed to fetch donation total:", err);
       setTotal("Rp0");
