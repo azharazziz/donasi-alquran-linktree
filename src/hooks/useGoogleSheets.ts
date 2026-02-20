@@ -170,6 +170,7 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
 
 export function useDonasiTotal(enabled = true) {
   const [total, setTotal] = useState("Rp0");
+  const [lastUpdate, setLastUpdate] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchTotal = useCallback(async () => {
@@ -185,14 +186,38 @@ export function useDonasiTotal(enabled = true) {
       );
       if (nominalIndex === -1) { setTotal("Rp0"); return; }
 
-      const sum = rows.reduce((acc, row) => {
+      let sum = 0;
+      let latestDate: Date | null = null;
+
+      // Find the date column index
+      const dateIndex = cols.findIndex(
+        (c) => cleanHeaderLabel(c.label || "") === COLUMNS.TANGGAL || c.type === "date"
+      );
+
+      for (const row of rows) {
         const cell = row.c?.[nominalIndex];
-        if (cell?.v == null) return acc;
-        const num = typeof cell.v === "number" ? cell.v : parseFloat(String(cell.v).replace(/[^\d.-]/g, ""));
-        return acc + (isNaN(num) ? 0 : num);
-      }, 0);
+        if (cell?.v != null) {
+          const num = typeof cell.v === "number" ? cell.v : parseFloat(String(cell.v).replace(/[^\d.-]/g, ""));
+          if (!isNaN(num)) sum += num;
+        }
+
+        // Track latest date
+        if (dateIndex !== -1) {
+          const dateCell = row.c?.[dateIndex];
+          const dateStr = dateCell?.v?.toString() ?? "";
+          const dateMatch = dateStr.match(/^Date\((\d+),(\d+),(\d+)\)$/);
+          if (dateMatch) {
+            const [, y, m, d] = dateMatch.map(Number);
+            const date = new Date(y, m, d);
+            if (!latestDate || date > latestDate) latestDate = date;
+          }
+        }
+      }
 
       setTotal("Rp" + sum.toLocaleString("id-ID"));
+      if (latestDate) {
+        setLastUpdate(format(latestDate, "d MMM yyyy"));
+      }
     } catch (err) {
       console.error("Failed to fetch donation total:", err);
       setTotal("Rp0");
@@ -202,7 +227,7 @@ export function useDonasiTotal(enabled = true) {
   }, [enabled]);
 
   useEffect(() => { fetchTotal(); }, [fetchTotal]);
-  return { total, loading };
+  return { total, loading, lastUpdate };
 }
 
 // ---------------------------------------------------------------------------

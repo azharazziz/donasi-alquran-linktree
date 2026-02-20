@@ -26,12 +26,16 @@ const TAB_CONFIG: { key: string; label: string; sheet: SheetName }[] = [
   { key: "penyaluran", label: "Penyaluran", sheet: "Penyaluran Donasi" },
 ];
 
-function stripHideMarker(header: string): string {
-  return header.replace(/\s*\[hide\]\s*/gi, "").trim();
+function stripMarkers(header: string): string {
+  return header.replace(/\s*\[(hide|private)\]\s*/gi, "").trim();
 }
 
 function isHiddenColumn(header: string): boolean {
-  return /\[hide\]/i.test(header);
+  return /\[(hide|private)\]/i.test(header);
+}
+
+function isPrivateColumn(header: string): boolean {
+  return /\[private\]/i.test(header);
 }
 
 const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) => {
@@ -104,7 +108,7 @@ const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) =
                       error={data.error}
                       headers={data.headers}
                       rows={data.rows}
-                      onRowClick={(row) => handleRowClick(row, data.headers, tab.label)}
+                      onRowClick={(row) => handleRowClick(row, data.headers.filter(h => !isPrivateColumn(h)), tab.label)}
                     />
                   </TabsContent>
                 );
@@ -187,7 +191,7 @@ function DynamicSheetTable({
         style={{ gridTemplateColumns: `repeat(${visibleHeaders.length}, 1fr) 28px` }}
       >
         {visibleHeaders.map((header) => (
-          <span key={header}>{stripHideMarker(header)}</span>
+          <span key={header}>{stripMarkers(header)}</span>
         ))}
         <span />
       </div>

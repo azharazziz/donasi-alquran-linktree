@@ -8,14 +8,14 @@ import Footer from "@/components/Footer";
 import { useDonasiTotal, useRealisasiTotal } from "@/hooks/useGoogleSheets";
 
 const Index = () => {
-  const { total, loading } = useDonasiTotal();
+  const { total, loading, lastUpdate } = useDonasiTotal();
   const { total: realisasiTotal, loading: realisasiLoading } = useRealisasiTotal();
 
   return (
     <div className="min-h-screen bg-background islamic-pattern">
       <div className="flex flex-col items-center max-w-lg mx-auto">
         <DonationHeader />
-        <DonationAmount amount={total} loading={loading} />
+        <DonationAmount amount={total} loading={loading} lastUpdate={lastUpdate} />
         <RealisasiAmount amount={realisasiTotal} loading={realisasiLoading} />
         <LinkList />
         <NiatDoa />
