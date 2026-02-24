@@ -1,15 +1,4 @@
 import {
-  Instagram,
-  Facebook,
-  Twitter,
-  Youtube,
-  Linkedin,
-  Mail,
-  Globe,
-  MessageCircle,
-  MapPinCheck,
-} from "lucide-react";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -17,6 +6,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { SOCIAL_MEDIA_LINKS } from "@/config";
 
 interface SocialMediaModalProps {
   open: boolean;
@@ -24,79 +14,6 @@ interface SocialMediaModalProps {
 }
 
 const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
-  const socialMediaLinks = [
-    {
-        name: "Bubur Kijang",
-        icon: Instagram,
-        url: "https://instagram.com/bubur_kijang", // Replace with actual Instagram URL
-        color: "hover:text-pink-500",
-        bgColor: "hover:bg-pink-50",
-    },
-    {
-        name: "Lokasi Bubur Kijang",
-        icon: MapPinCheck,
-        url: "https://share.google/mAVAKocMZpP8U5bd4", // Replace with actual Google Maps URL
-        color: "hover:text-gree-500",
-        bgColor: "hover:bg-green-50",
-    },
-    {
-        name: "Fotoin Project",
-        icon: Instagram,
-        url: "https://instagram.com/fotoin.project", // Replace with actual Instagram URL
-        color: "hover:text-pink-600",
-        bgColor: "hover:bg-pink-50",
-    },
-    {
-      name: "Kamar Baca Magelang",
-      icon: Instagram,
-      url: "https://instagram.com/kamarbacamgl", // Replace with actual Instagram URL
-      color: "hover:text-pink-500",
-      bgColor: "hover:bg-pink-50",
-    },
-    {
-      name: "Kamar Baca Magelang",
-      icon: Twitter,
-      url: "https://twitter.com/kamarbacamgl", // Replace with actual Twitter URL
-      color: "hover:text-black",
-      bgColor: "hover:bg-gray-50",
-    },
-    {
-        name: "Mie Ayam Cap 2 Jago",
-        icon: Instagram,
-        url: "https://instagram.com/capduajago", // Replace with actual Instagram URL
-        color: "hover:text-pink-500",
-        bgColor: "hover:bg-pink-50",
-    },
-    {
-        name: "Lokasi Mie Ayam Cap 2 Jago",
-        icon: MapPinCheck,
-        url: "https://share.google/B1duOw7KomBpI1igN", // Replace with actual Google Maps URL
-        color: "hover:text-gree-500",
-        bgColor: "hover:bg-green-50",
-    },
-    {
-      name: "Sickillshoes",
-      icon: Twitter,
-      url: "https://twitter.com/sickillshoes", // Replace with actual Twitter URL
-      color: "hover:text-black",
-      bgColor: "hover:bg-gray-50",
-    },
-    {
-        name: "Lokasi Sickillshoes",
-        icon: MapPinCheck,
-        url: "https://share.google/jLIgOpYnA4D6eJxUi", // Replace with actual Google Maps URL
-        color: "hover:text-gree-500",
-        bgColor: "hover:bg-green-50",    
-    },
-    {
-        name: "SKS Foundation",
-        icon: Instagram,
-        url: "https://instagram.com/sksfound", // Replace with actual Instagram URL
-        color: "hover:text-pink-500",
-        bgColor: "hover:bg-pink-50",
-    }
-  ];
-
   const handleOpenLink = (url: string) => {
     if (url.startsWith("mailto:")) {
       window.location.href = url;
@@ -107,8 +24,8 @@ const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="max-w-md max-h-[85vh] flex flex-col p-0">
+        <DialogHeader className="px-6 pt-6 pb-0">
           <DialogTitle className="text-xl font-serif text-primary">
             Media Sosial Kami
           </DialogTitle>
@@ -118,8 +35,9 @@ const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-2 gap-3 mt-4">
-          {socialMediaLinks.map((social) => {
+        <div className="overflow-y-auto flex-1 px-6 py-4">
+          <div className="grid grid-cols-2 gap-3">
+          {SOCIAL_MEDIA_LINKS.map((social) => {
             const Icon = social.icon;
             return (
               <Button
@@ -142,6 +60,7 @@ const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
             Terima kasih telah mengikuti kami dan mendukung program donasi
             Al-Qur&apos;an
           </p>
+        </div>
         </div>
       </DialogContent>
     </Dialog>

@@ -69,8 +69,8 @@ const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) =
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
+        <DialogContent className="max-w-md max-h-[85vh] flex flex-col p-0">
+          <DialogHeader className="px-6 pt-6 pb-0">
                 <DialogTitle className="text-xl font-serif text-primary">
                   Laporan Donasi
                 </DialogTitle>
@@ -79,8 +79,8 @@ const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) =
                 </DialogDescription>
           </DialogHeader>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
-            <div className="px-6 flex items-center justify-between gap-3">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col overflow-hidden flex-1">
+            <div className="px-6 py-3 flex items-center justify-between gap-3">
               <TabsList className="grid grid-cols-3 h-9">
                 {TAB_CONFIG.map((tab) => (
                   <TabsTrigger key={tab.key} value={tab.key} className="text-xs">
@@ -98,7 +98,7 @@ const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) =
               </Button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-6 pb-6 pt-3 min-h-0">
+            <div className="overflow-y-auto flex-1 px-6 pb-6 pt-3 min-h-0">
               {TAB_CONFIG.map((tab) => {
                 const data = sheetDataMap[tab.key];
                 return (

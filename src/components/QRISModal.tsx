@@ -1,4 +1,4 @@
-import { Download, QrCode } from "lucide-react";
+import { Download } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -7,7 +7,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import qrCode from "@/assets/qris-code.png";
+import { QRIS_CONFIG, NIAT_DONASI } from "@/config";
 
 interface QRISModalProps {
   open: boolean;
@@ -17,12 +17,12 @@ interface QRISModalProps {
 const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
   const handleDownload = async () => {
     try {
-      const response = await fetch(qrCode);
+      const response = await fetch(QRIS_CONFIG.image);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "qris-code.png";
+      link.download = QRIS_CONFIG.downloadFilename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -34,20 +34,21 @@ const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="max-w-md max-h-[85vh] flex flex-col p-0">
+        <DialogHeader className="px-6 pt-6 pb-0">
           <DialogTitle className="text-xl font-serif text-primary">
-            Donasi via QRIS
+            {QRIS_CONFIG.title}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            Silakan pindai QRIS berikut menggunakan aplikasi pembayaran Anda
+            {QRIS_CONFIG.description}
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-col items-center gap-4 mt-2">
+        <div className="overflow-y-auto flex-1 px-6 py-4">
+          <div className="flex flex-col items-center gap-4">
           {/* QRIS placeholder - replace src with actual QRIS image */}
           <div className="w-64 h-64 rounded-2xl border-2 border-border bg-card flex items-center justify-center overflow-hidden">
-            <img src={qrCode} alt="QRIS Code" className="w-full h-full object-contain p-2" />
+            <img src={QRIS_CONFIG.image} alt={QRIS_CONFIG.imageAlt} className="w-full h-full object-contain p-2" />
           </div>
 
           {/* Merchant Information */}
@@ -55,17 +56,17 @@ const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
             <div className="flex flex-col gap-3">
               <div className="text-center">
                 <p className="text-xs text-muted-foreground mb-1 font-medium">NMID</p>
-                <p className="text-sm font-semibold text-foreground">ID1023262543904</p>
+                <p className="text-sm font-semibold text-foreground">{QRIS_CONFIG.nmid}</p>
               </div>
               <div className="text-center">
                 <p className="text-xs text-muted-foreground mb-1 font-medium">Merchant Name</p>
-                <p className="text-sm font-semibold text-foreground">Kamar Baca Magelang Warehouse</p>
+                <p className="text-sm font-semibold text-foreground">{QRIS_CONFIG.merchantName}</p>
               </div>
             </div>
           </div>
 
           <p className="text-xs text-muted-foreground text-center leading-relaxed max-w-[250px]">
-            Scan menggunakan GoPay, OVO, DANA, ShopeePay, LinkAja, atau aplikasi perbankan Anda
+            {QRIS_CONFIG.scanInfo}
           </p>
 
           <Button
@@ -75,19 +76,19 @@ const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
             onClick={handleDownload}
           >
             <Download size={14} />
-            Simpan Gambar QRIS
+            {QRIS_CONFIG.downloadText}
           </Button>
         </div>
 
         {/* Niat Donasi */}
         <div className="mt-4 rounded-xl bg-primary/5 border border-primary/10 p-4 text-center">
           <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2 font-medium">
-            Niat Donasi
+            {NIAT_DONASI.label}
           </p>
           <p className="text-sm font-serif italic text-foreground leading-relaxed">
-            &ldquo;Saya niat berdonasi Al-Qur&apos;an karena Allah Ta&apos;ala,
-            semoga menjadi amal jariyah yang terus mengalir pahalanya.&rdquo;
+            &ldquo;{NIAT_DONASI.text}&rdquo;
           </p>
+        </div>
         </div>
       </DialogContent>
     </Dialog>

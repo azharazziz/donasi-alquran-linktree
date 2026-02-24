@@ -1,18 +1,10 @@
 import { useState } from "react";
-import {
-  Landmark,
-  QrCode,
-  Globe,
-  MessageCircle,
-  FileText,
-  Instagram,
-  BarChart3,
-} from "lucide-react";
 import LinkCard from "./LinkCard";
 import TransferBankModal from "./TransferBankModal";
 import QRISModal from "./QRISModal";
 import SocialMediaModal from "./SocialMediaModal";
 import DonationReportModal from "./DonationReportModal";
+import { LINKS } from "@/config";
 
 const LinkList = () => {
   const [transferOpen, setTransferOpen] = useState(false);
@@ -20,62 +12,36 @@ const LinkList = () => {
   const [socialMediaOpen, setSocialMediaOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
 
-  const links = [
-    {
-      icon: Landmark,
-      title: "Donasi via Transfer Bank",
-      subtitle: "Bank BSI dan UOB",
-      onClick: () => setTransferOpen(true),
-    },
-    {
-      icon: QrCode,
-      title: "Donasi via QRIS",
-      subtitle: "Scan & bayar dari semua e-wallet",
-      onClick: () => setQrisOpen(true),
-    },
-    {
-      icon: Globe,
-      title: "Konfirmasi Donasi",
-      subtitle: "Isi form konfirmasi donasi Anda",
-      href: "https://forms.gle/AVJgpsJNoYHFCjz66",
-    },
-    {
-      icon: BarChart3,
-      title: "Laporan Donasi",
-      subtitle: "Lihat laporan donasi terkini",
-      onClick: () => setReportOpen(true),
-    },
-    {
-      icon: MessageCircle,
-      title: "Pertanyaan dan Informasi",
-      subtitle: "Hubungi kami via WhatsApp",
-      href: "https://wa.me/6285155238000",
-    },
-    {
-      icon: FileText,
-      title: "Proposal Program",
-      subtitle: "Unduh dokumen proposal lengkap",
-      href: "https://drive.google.com/file/d/10uaohZ3cxUyyTtA7yRhAH2i2xbyIr993/view?usp=sharing",
-    },
-    {
-      icon: Instagram,
-      title: "Media Sosial",
-      subtitle: "Twitter, Instagram, dan Lokasi",
-      onClick: () => setSocialMediaOpen(true),
-    },
-  ];
+  // Map action types to their handlers
+  const getHandler = (action?: string) => {
+    switch (action) {
+      case "transfer":
+        return () => setTransferOpen(true);
+      case "qris":
+        return () => setQrisOpen(true);
+      case "report":
+        return () => setReportOpen(true);
+      case "social":
+        return () => setSocialMediaOpen(true);
+      default:
+        return undefined;
+    }
+  };
 
   return (
     <>
       <section className="px-4 pb-8 w-full max-w-md mx-auto">
         <div className="flex flex-col gap-3">
-          {links.map((link, index) => (
+          {LINKS.map((link, index) => (
             <div
               key={link.title}
               className="animate-fade-in-up"
               style={{ animationDelay: `${0.4 + index * 0.08}s`, opacity: 0 }}
             >
-              <LinkCard {...link} />
+              <LinkCard 
+                {...link}
+                onClick={getHandler(link.action)}
+              />
             </div>
           ))}
         </div>

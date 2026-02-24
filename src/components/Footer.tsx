@@ -1,18 +1,5 @@
 import { Heart } from "lucide-react";
-import BuburKijang from "@/assets/bubur-kijang.png";
-import CapDuaJago from "@/assets/cap-dua-jago.png";
-import FotoinProject from "@/assets/fotoin-project.png";
-import KamarBacaMagelang from "@/assets/kamar-baca-magelang.png";
-import SKSFoundation from "@/assets/sks-foundation.png";
-
-// Replace these with actual initiator logo imports or URLs
-const initiators = [
-  { name: "kamar Baca Magelang", initials: "KBM", logo: KamarBacaMagelang },
-  { name: "Fotoin Project", initials: "FP", logo: FotoinProject },
-  { name: "SKS Foundation", initials: "SKS", logo: SKSFoundation },
-  { name: "Mie Ayam Cap 2 Jago", initials: "MAC2J", logo: CapDuaJago },
-  { name: "Bubur Kijang", initials: "BK", logo: BuburKijang },
-];
+import { INITIATORS, HELPERS, INITIATOR_LOGOS } from "@/config";
 
 const Footer = () => {
   return (
@@ -26,15 +13,15 @@ const Footer = () => {
           Diinisiasi oleh
         </p>
         <div className="flex flex-wrap justify-center gap-4 mb-4">
-          {initiators.map((org) => (
+          {INITIATORS.map((org) => (
             <div
               key={org.name}
               className="flex flex-col items-center gap-2 group"
             >
               <div className="w-full max-w-[100px] aspect-[3/2] rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center p-2 transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-slate-800 overflow-hidden">
-                {org.logo ? (
+                {INITIATOR_LOGOS[org.name] ? (
                   <img
-                    src={org.logo}
+                    src={INITIATOR_LOGOS[org.name]}
                     alt={org.name}
                     className="max-w-full max-h-full object-contain"
                   />
@@ -52,6 +39,25 @@ const Footer = () => {
         </div>
       </div>
 
+      {/* Helpers */}
+      <div className="text-center mb-8">
+        <p className="text-xs uppercase tracking-widest text-muted-foreground mb-4 font-medium">
+          Dibantu oleh
+        </p>
+        <div className="flex flex-wrap justify-center gap-2">
+          {HELPERS.map((helper, index) => (
+            <span
+              key={index}
+              className="inline-block px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs text-foreground font-medium hover:bg-primary/20 transition-colors"
+            >
+              {helper}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="gold-divider mb-8" />
+
       {/* Islamic Quote */}
       <div className="text-center mb-6 px-4">
         <p className="text-sm font-serif italic text-muted-foreground leading-relaxed">
@@ -62,15 +68,18 @@ const Footer = () => {
         </p>
       </div>
 
+      <div className="gold-divider mb-8" />
+
       {/* Copyright */}
       <div className="text-center">
         <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
           <span>Dibuat dengan</span>
           <Heart size={12} className="text-gold fill-gold" />
-          <span>untuk kebaikan umat</span>
+          <span> oleh <a href="https://azharazziz.github.io" target="_blank" rel="noopener noreferrer" className="text-gold font-semibold hover:underline">Azhar Azziz</a> untuk kebaikan umat</span>
         </div>
+        <div className="gold-divider my-4 max-w-[120px] mx-auto" />
         <p className="text-[10px] text-muted-foreground/60 mt-1">
-          © {new Date().getFullYear()} Donasi Al-Qur&apos;an. Semua hak dilindungi.
+          © 2021 - {new Date().getFullYear()}. Semua hak dilindungi.
         </p>
       </div>
     </footer>

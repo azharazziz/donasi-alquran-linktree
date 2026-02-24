@@ -206,8 +206,8 @@ const DynamicDetailModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="max-w-md max-h-[85vh] flex flex-col p-0">
+        <DialogHeader className="px-6 pt-6 pb-0">
           <DialogTitle className="text-xl font-serif text-primary">
             {title}
           </DialogTitle>
@@ -216,7 +216,8 @@ const DynamicDetailModal = ({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 mt-2">
+        <div className="overflow-y-auto flex-1 px-6 py-4">
+          <div className="space-y-4">
           {headers.map((rawHeader) => {
             const cleanLabel = stripMarkers(rawHeader);
             const value = row[rawHeader] ?? "";
@@ -242,6 +243,7 @@ const DynamicDetailModal = ({
               </div>
             );
           })}
+        </div>
         </div>
       </DialogContent>
     </Dialog>

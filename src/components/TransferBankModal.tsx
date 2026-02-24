@@ -9,26 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-
-interface BankAccount {
-  bankName: string;
-  bankLogo?: string;
-  accountNumber: string;
-  accountHolder: string;
-}
-
-const bankAccounts: BankAccount[] = [
-  {
-    bankName: "United Overseas Bank (UOB)",
-    accountNumber: "727 313 5875",
-    accountHolder: "Azhar A",
-  },
-  {
-    bankName: "Bank Syariah Indonesia (BSI)",
-    accountNumber: "732 453 0732",
-    accountHolder: "Azhar A",
-  }
-];
+import { BANK_ACCOUNTS, NIAT_DONASI } from "@/config";
 
 interface TransferBankModalProps {
   open: boolean;
@@ -52,8 +33,8 @@ const TransferBankModal = ({ open, onOpenChange }: TransferBankModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="max-w-md max-h-[85vh] flex flex-col p-0">
+        <DialogHeader className="px-6 pt-6 pb-0">
           <DialogTitle className="text-xl font-serif text-primary">
             Donasi via Transfer Bank
           </DialogTitle>
@@ -62,8 +43,9 @@ const TransferBankModal = ({ open, onOpenChange }: TransferBankModalProps) => {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-col gap-3 mt-2">
-          {bankAccounts.map((bank, index) => (
+        <div className="overflow-y-auto flex-1 px-6 py-4">
+          <div className="flex flex-col gap-3">
+          {BANK_ACCOUNTS.map((bank, index) => (
             <div
               key={index}
               className="rounded-xl border border-border bg-card p-4 flex flex-col gap-2"
@@ -114,12 +96,12 @@ const TransferBankModal = ({ open, onOpenChange }: TransferBankModalProps) => {
         {/* Niat Donasi */}
         <div className="mt-4 rounded-xl bg-primary/5 border border-primary/10 p-4 text-center">
           <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2 font-medium">
-            Niat Donasi
+            {NIAT_DONASI.label}
           </p>
           <p className="text-sm font-serif italic text-foreground leading-relaxed">
-            &ldquo;Saya niat berdonasi Al-Qur&apos;an karena Allah Ta&apos;ala,
-            semoga menjadi amal jariyah yang terus mengalir pahalanya.&rdquo;
+            &ldquo;{NIAT_DONASI.text}&rdquo;
           </p>
+        </div>
         </div>
       </DialogContent>
     </Dialog>
