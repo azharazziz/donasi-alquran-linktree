@@ -5,9 +5,10 @@ import TransferBankModal from "./TransferBankModal";
 import QRISModal from "./QRISModal";
 import SocialMediaModal from "./SocialMediaModal";
 import DonationReportModal from "./DonationReportModal";
-import { LINKS, DONATION_STATUS } from "@/config";
+import { useYearContext } from "@/contexts/YearContext";
 
 const LinkList = () => {
+  const { config } = useYearContext();
   const [transferOpen, setTransferOpen] = useState(false);
   const [qrisOpen, setQrisOpen] = useState(false);
   const [socialMediaOpen, setSocialMediaOpen] = useState(false);
@@ -31,7 +32,7 @@ const LinkList = () => {
 
   return (
     <>
-      {!DONATION_STATUS.isOpen && (
+      {!config.donationStatus.isOpen && (
         <section className="px-4 pb-6 w-full max-w-md mx-auto animate-fade-in-up" style={{ animationDelay: "0.25s" }}>
           <div className="relative overflow-hidden rounded-2xl border border-destructive/50 dark:border-destructive/40 bg-destructive/5 dark:bg-destructive/10 px-6 py-4 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 hover:border-destructive/70 group">
             <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08))'}} />
@@ -44,7 +45,7 @@ const LinkList = () => {
                   Donasi Ditutup
                 </p>
                 <p className="text-xs text-destructive/70 dark:text-destructive/80 mt-0.5">
-                  {DONATION_STATUS.closedMessage}
+                  {config.donationStatus.closedMessage}
                 </p>
               </div>
             </div>
@@ -54,10 +55,10 @@ const LinkList = () => {
       
       <section className="px-4 pb-8 w-full max-w-md mx-auto">
         <div className="flex flex-col gap-3">
-          {LINKS
+          {config.links
             .filter((link) => {
               // Hide transfer and QRIS links if donations are closed
-              if (!DONATION_STATUS.isOpen) {
+              if (!config.donationStatus.isOpen) {
                 return !['transfer', 'qris'].includes('action' in link ? link.action : '');
               }
               return true;

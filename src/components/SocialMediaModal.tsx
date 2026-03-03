@@ -6,7 +6,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { SOCIAL_MEDIA_LINKS } from "@/config";
+import { useYearContext } from "@/contexts/YearContext";
 
 interface SocialMediaModalProps {
   open: boolean;
@@ -14,6 +14,7 @@ interface SocialMediaModalProps {
 }
 
 const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
+  const { config } = useYearContext();
   const handleOpenLink = (url: string) => {
     try {
       const parsed = new URL(url);
@@ -43,7 +44,7 @@ const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
 
         <div className="overflow-y-auto flex-1 px-6 py-4">
           <div className="grid grid-cols-2 gap-3">
-          {SOCIAL_MEDIA_LINKS.map((social) => {
+          {config.socialMediaLinks.map((social) => {
             const Icon = social.icon;
             return (
               <Button

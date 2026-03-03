@@ -64,7 +64,7 @@ const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) =
                   Laporan Donasi
                 </DialogTitle>
                 <DialogDescription className="text-muted-foreground">
-                  Data laporan dari Google Sheets
+                  Data laporan terkini. Diperbarui secara berkala.
                 </DialogDescription>
           </DialogHeader>
 

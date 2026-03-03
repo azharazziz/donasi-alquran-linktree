@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { BANK_ACCOUNTS, NIAT_DONASI } from "@/config";
+import { useYearContext } from "@/contexts/YearContext";
 
 interface TransferBankModalProps {
   open: boolean;
@@ -17,6 +17,7 @@ interface TransferBankModalProps {
 }
 
 const TransferBankModal = ({ open, onOpenChange }: TransferBankModalProps) => {
+  const { config } = useYearContext();
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const { toast } = useToast();
 
@@ -45,7 +46,7 @@ const TransferBankModal = ({ open, onOpenChange }: TransferBankModalProps) => {
 
         <div className="overflow-y-auto flex-1 px-6 py-4">
           <div className="flex flex-col gap-3">
-          {BANK_ACCOUNTS.map((bank, index) => (
+          {config.bankAccounts.map((bank, index) => (
             <div
               key={index}
               className="rounded-xl border border-border bg-card p-4 flex flex-col gap-2"
@@ -96,10 +97,10 @@ const TransferBankModal = ({ open, onOpenChange }: TransferBankModalProps) => {
         {/* Niat Donasi */}
         <div className="mt-4 rounded-xl bg-primary/5 border border-primary/10 p-4 text-center">
           <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2 font-medium">
-            {NIAT_DONASI.label}
+            {config.niatDonasi.label}
           </p>
           <p className="text-sm font-serif italic text-foreground leading-relaxed">
-            &ldquo;{NIAT_DONASI.text}&rdquo;
+            &ldquo;{config.niatDonasi.text}&rdquo;
           </p>
         </div>
         </div>

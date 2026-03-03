@@ -1,16 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { format } from "date-fns";
-import {
-  SPREADSHEET_ID,
-  SHEET_NAMES,
-  COLUMNS,
-  ANONYMOUS_NAMES,
-  ANONYMOUS_DISPLAY,
-  type SheetName,
-} from "@/config";
 import { stripFlags } from "@/lib/flags";
+import { useYearContext } from "@/contexts/YearContext";
 
-export type { SheetName };
+export type SheetName = "Donasi Masuk" | "Realisasi" | "Penyaluran Donasi";
 
 // ---------------------------------------------------------------------------
 // Cell / response parsing
@@ -62,11 +55,11 @@ function extractGvizJson(text: string): GvizJson | null {
  * Used internally for column matching (finding TANGGAL, NOMINAL, etc.)
  * Does NOT strip flags - use stripFlags() separately for display.
  */
-function normalizeHeaderForMatching(label: string): string {
+function normalizeHeaderForMatching(label: string, columns: Record<string, string>): string {
   const trimmed = label.trim();
   // Remove common sheet prefixes like "Donasi Masuk " from "Donasi Masuk Nominal [hide]"
   // But preserve the flags
-  for (const kw of Object.values(COLUMNS)) {
+  for (const kw of Object.values(columns)) {
     // Check if the label contains this keyword (potentially with flags after it)
     const pattern = new RegExp(`\\b${kw}\\b`, "i");
     if (pattern.test(stripFlags(trimmed))) {
@@ -81,9 +74,9 @@ function normalizeHeaderForMatching(label: string): string {
  * For column matching only - strips flags and sheet prefixes.
  * Used internally in column detection logic only.
  */
-function cleanHeaderLabel(label: string): string {
+function cleanHeaderLabel(label: string, columns: Record<string, string>): string {
   const cleaned = stripFlags(label.trim());
-  for (const kw of Object.values(COLUMNS)) {
+  for (const kw of Object.values(columns)) {
     if (cleaned.endsWith(kw) && cleaned.length > kw.length) return kw;
   }
   return cleaned;
@@ -93,8 +86,8 @@ function cleanHeaderLabel(label: string): string {
 // Generic fetch helper
 // ---------------------------------------------------------------------------
 
-async function fetchSheetJson(sheetName: SheetName): Promise<GvizJson> {
-  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+async function fetchSheetJson(spreadsheetId: string, sheetName: SheetName): Promise<GvizJson> {
+  const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const json = extractGvizJson(await res.text());
@@ -183,6 +176,7 @@ export interface DynamicSheetData {
  * <DetailModal headers={detailHeaders} row={rows[index]} />
  */
 export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): DynamicSheetData {
+  const { config } = useYearContext();
   const [headers, setHeaders] = useState<string[]>([]);
   const [rows, setRows] = useState<Record<string, string>[]>([]);
   const [loading, setLoading] = useState(false);
@@ -193,7 +187,7 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
     setLoading(true);
     setError(null);
     try {
-      const json = await fetchSheetJson(sheetName);
+      const json = await fetchSheetJson(config.spreadsheetId, sheetName);
       const cols = json.table!.cols ?? [];
       const rawRows = json.table!.rows ?? [];
       const parsedNumHeaders = json.table!.parsedNumHeaders ?? 1;
@@ -251,7 +245,7 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
     } finally {
       setLoading(false);
     }
-  }, [sheetName, enabled]);
+  }, [sheetName, enabled, config.spreadsheetId]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
@@ -262,9 +256,9 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
 // Helper: extract latest date from any sheet's rows
 // ---------------------------------------------------------------------------
 
-function extractLatestDate(cols: { label: string; type?: string }[], rows: { c: GvizCell[] }[]): Date | null {
+function extractLatestDate(cols: { label: string; type?: string }[], rows: { c: GvizCell[] }[], tanggalColumn: string): Date | null {
   const dateIndex = cols.findIndex(
-    (c) => cleanHeaderLabel(c.label || "") === COLUMNS.TANGGAL || c.type === "date"
+    (c) => cleanHeaderLabel(c.label || "", { tanggal: tanggalColumn }) === tanggalColumn || c.type === "date"
   );
   if (dateIndex === -1) return null;
 
@@ -287,6 +281,7 @@ function extractLatestDate(cols: { label: string; type?: string }[], rows: { c: 
 // ---------------------------------------------------------------------------
 
 export function useDonasiTotal(enabled = true) {
+  const { config } = useYearContext();
   const [total, setTotal] = useState("Rp0");
   const [lastUpdate, setLastUpdate] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -296,17 +291,18 @@ export function useDonasiTotal(enabled = true) {
     setLoading(true);
     try {
       // Fetch all sheets in parallel
+      const sheetNamesDonasi = config.sheetNames;
       const [donasiJson, realisasiJson, penyaluranJson] = await Promise.all([
-        fetchSheetJson(SHEET_NAMES.DONASI_MASUK),
-        fetchSheetJson(SHEET_NAMES.REALISASI).catch(() => null),
-        fetchSheetJson(SHEET_NAMES.PENYALURAN).catch(() => null),
+        fetchSheetJson(config.spreadsheetId, sheetNamesDonasi.donasiMasuk),
+        fetchSheetJson(config.spreadsheetId, sheetNamesDonasi.realisasi).catch(() => null),
+        fetchSheetJson(config.spreadsheetId, sheetNamesDonasi.penyaluran).catch(() => null),
       ]);
 
       const cols = donasiJson.table!.cols ?? [];
       const rows = donasiJson.table!.rows ?? [];
 
       const nominalIndex = cols.findIndex(
-        (c) => cleanHeaderLabel(c.label || "") === COLUMNS.NOMINAL
+        (c) => cleanHeaderLabel(c.label || "", config.columns) === config.columns.nominal
       );
       if (nominalIndex === -1) { setTotal("Rp0"); return; }
 
@@ -321,9 +317,9 @@ export function useDonasiTotal(enabled = true) {
 
       // Find latest date across all sheets
       const dates = [
-        extractLatestDate(cols, rows),
-        realisasiJson ? extractLatestDate(realisasiJson.table!.cols ?? [], realisasiJson.table!.rows ?? []) : null,
-        penyaluranJson ? extractLatestDate(penyaluranJson.table!.cols ?? [], penyaluranJson.table!.rows ?? []) : null,
+        extractLatestDate(cols, rows, config.columns.tanggal),
+        realisasiJson ? extractLatestDate(realisasiJson.table!.cols ?? [], realisasiJson.table!.rows ?? [], config.columns.tanggal) : null,
+        penyaluranJson ? extractLatestDate(penyaluranJson.table!.cols ?? [], penyaluranJson.table!.rows ?? [], config.columns.tanggal) : null,
       ].filter((d): d is Date => d !== null);
 
       const latestDate = dates.length > 0 ? dates.reduce((a, b) => (a > b ? a : b)) : null;
@@ -336,7 +332,7 @@ export function useDonasiTotal(enabled = true) {
     } finally {
       setLoading(false);
     }
-  }, [enabled]);
+  }, [enabled, config]);
 
   useEffect(() => { fetchTotal(); }, [fetchTotal]);
   return { total, loading, lastUpdate };
@@ -347,6 +343,7 @@ export function useDonasiTotal(enabled = true) {
 // ---------------------------------------------------------------------------
 
 export function useRealisasiTotal(enabled = true) {
+  const { config } = useYearContext();
   const [total, setTotal] = useState("Rp0");
   const [loading, setLoading] = useState(false);
 
@@ -354,12 +351,12 @@ export function useRealisasiTotal(enabled = true) {
     if (!enabled) return;
     setLoading(true);
     try {
-      const json = await fetchSheetJson(SHEET_NAMES.REALISASI);
+      const json = await fetchSheetJson(config.spreadsheetId, config.sheetNames.realisasi);
       const cols = json.table!.cols ?? [];
       const rows = json.table!.rows ?? [];
 
       const nominalIndex = cols.findIndex(
-        (c) => cleanHeaderLabel(c.label || "") === COLUMNS.NOMINAL
+        (c) => cleanHeaderLabel(c.label || "", config.columns) === config.columns.nominal
       );
       if (nominalIndex === -1) { setTotal("Rp0"); return; }
 
@@ -377,7 +374,7 @@ export function useRealisasiTotal(enabled = true) {
     } finally {
       setLoading(false);
     }
-  }, [enabled]);
+  }, [enabled, config]);
 
   useEffect(() => { fetchTotal(); }, [fetchTotal]);
   return { total, loading };
@@ -388,6 +385,7 @@ export function useRealisasiTotal(enabled = true) {
 // ---------------------------------------------------------------------------
 
 export function useDonaturList(enabled = true) {
+  const { config } = useYearContext();
   const [names, setNames] = useState<string[]>([]);
   const [anonCount, setAnonCount] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -396,22 +394,23 @@ export function useDonaturList(enabled = true) {
     if (!enabled) return;
     setLoading(true);
     try {
-      const json = await fetchSheetJson(SHEET_NAMES.DONASI_MASUK);
+      const json = await fetchSheetJson(config.spreadsheetId, config.sheetNames.donasiMasuk);
       const cols = json.table!.cols ?? [];
       const rows = json.table!.rows ?? [];
 
       const donaturIndex = cols.findIndex(
-        (c) => cleanHeaderLabel(c.label || "") === COLUMNS.DONATUR
+        (c) => cleanHeaderLabel(c.label || "", config.columns) === config.columns.donatur
       );
       if (donaturIndex === -1) { setNames([]); setAnonCount(0); return; }
 
+      const anonymousSet = new Set(config.anonymousDonorNames.map(n => n.toLowerCase()));
       const seen = new Set<string>();
       const result: string[] = [];
       let anonCount = 0;
       
       for (const row of rows) {
         const raw = (row.c?.[donaturIndex]?.v?.toString() ?? "").trim();
-        const isAnonymous = ANONYMOUS_NAMES.has(raw.toLowerCase());
+        const isAnonymous = anonymousSet.has(raw.toLowerCase());
         
         if (isAnonymous) {
           anonCount++;
@@ -430,7 +429,7 @@ export function useDonaturList(enabled = true) {
     } finally {
       setLoading(false);
     }
-  }, [enabled]);
+  }, [enabled, config]);
 
   useEffect(() => { fetchNames(); }, [fetchNames]);
   return { names, anonCount, loading };
