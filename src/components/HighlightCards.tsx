@@ -1,5 +1,4 @@
 import { BookOpen, Gift, Package, Heart, Star, LucideIcon, Sparkles } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useHighlightItems, type HighlightItem } from "@/hooks/useHighlightItems";
 
 // ---------------------------------------------------------------------------
@@ -33,19 +32,9 @@ function getIcon(item: HighlightItem): LucideIcon {
 const HighlightCards = () => {
   const { items, loading } = useHighlightItems();
 
-  if (loading) {
-    return (
-      <section className="px-4 pb-5 animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
-        <div className="max-w-md mx-auto grid grid-cols-2 gap-3">
-          {[1, 2].map((i) => (
-            <Skeleton key={i} className="h-28 rounded-2xl" />
-          ))}
-        </div>
-      </section>
-    );
-  }
-
-  if (items.length === 0) return null;
+  // Filter items with total > 0 and hide if none
+  const displayItems = items.filter(item => item.total > 0);
+  if (displayItems.length === 0) return null;
 
   return (
     <section className="px-4 pb-5 animate-fade-in-up" style={{ animationDelay: "0.5s" }}>
@@ -60,14 +49,14 @@ const HighlightCards = () => {
 
         <div
           className={`grid gap-3 ${
-            items.length === 1
+            displayItems.length === 1
               ? "grid-cols-1 max-w-[200px] mx-auto"
-              : items.length === 3
+              : displayItems.length === 3
               ? "grid-cols-3"
               : "grid-cols-2"
           }`}
         >
-          {items.map((item, idx) => (
+          {displayItems.map((item, idx) => (
             <HighlightCard key={item.name} item={item} index={idx} />
           ))}
         </div>

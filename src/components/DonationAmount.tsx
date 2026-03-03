@@ -8,6 +8,11 @@ interface DonationAmountProps {
 }
 
 const DonationAmount = ({ amount, loading, lastUpdate }: DonationAmountProps) => {
+  // Hide card if no data
+  if (!loading && (amount === "Rp0" || amount === "")) {
+    return null;
+  }
+
   return (
     <section className="px-4 pb-8 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
       <div className="donation-amount max-w-md mx-auto p-6 text-center shadow-lg">

@@ -9,6 +9,11 @@ interface RealisasiAmountProps {
 const RealisasiAmount = ({ amount, loading }: RealisasiAmountProps) => {
   const isEmpty = !loading && (!amount || amount === "Rp0");
 
+  // Hide card if no data
+  if (isEmpty) {
+    return null;
+  }
+
   return (
     <section className="px-4 pb-6 animate-fade-in-up" style={{ animationDelay: "0.45s" }}>
       <div className="max-w-md mx-auto px-5 py-4 rounded-xl border border-border/60 bg-card/80 backdrop-blur-sm shadow-sm text-center">
@@ -20,8 +25,6 @@ const RealisasiAmount = ({ amount, loading }: RealisasiAmountProps) => {
         </div>
         {loading ? (
           <Skeleton className="h-7 w-36 mx-auto rounded-md" />
-        ) : isEmpty ? (
-          <p className="text-sm text-muted-foreground/70 italic">Data belum tersedia</p>
         ) : (
           <p className="text-xl font-serif font-semibold text-primary tracking-tight">
             {amount}
