@@ -1,6 +1,7 @@
 import DonationHeader from "@/components/DonationHeader";
 import DonationAmount from "@/components/DonationAmount";
 import RealisasiAmount from "@/components/RealisasiAmount";
+import HighlightCards from "@/components/HighlightCards";
 import LinkList from "@/components/LinkList";
 import NiatDoa from "@/components/NiatDoa";
 import DonaturSection from "@/components/DonaturSection";
@@ -17,6 +18,7 @@ const Index = () => {
         <DonationHeader />
         <DonationAmount amount={total} loading={loading} lastUpdate={lastUpdate} />
         <RealisasiAmount amount={realisasiTotal} loading={realisasiLoading} />
+        <HighlightCards />
         <LinkList />
         <NiatDoa />
         <DonaturSection />
