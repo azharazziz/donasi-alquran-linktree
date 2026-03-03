@@ -8,6 +8,7 @@ import {
   ANONYMOUS_DISPLAY,
   type SheetName,
 } from "@/config";
+import { stripFlags } from "@/lib/flags";
 
 export type { SheetName };
 
@@ -56,9 +57,9 @@ function extractGvizJson(text: string): GvizJson | null {
   }
 }
 
-/** Strips sheet-title prefixes that Google merges into column labels. */
+/** Strips sheet-title prefixes and bracket flags from column labels. */
 function cleanHeaderLabel(label: string): string {
-  const cleaned = label.trim();
+  const cleaned = stripFlags(label.trim());
   for (const kw of Object.values(COLUMNS)) {
     if (cleaned.endsWith(kw) && cleaned.length > kw.length) return kw;
   }

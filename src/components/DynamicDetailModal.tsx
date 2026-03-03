@@ -17,6 +17,7 @@ import {
   ExternalLink,
   Instagram,
 } from "lucide-react";
+import { stripFlags } from "@/lib/flags";
 
 interface DynamicDetailModalProps {
   open: boolean;
@@ -24,10 +25,6 @@ interface DynamicDetailModalProps {
   row: Record<string, string> | null;
   headers: string[];
   title?: string;
-}
-
-function stripMarkers(header: string): string {
-  return header.replace(/\s*\[(hide|private)\]\s*/gi, "").trim();
 }
 
 function getFieldIcon(label: string) {
@@ -219,7 +216,7 @@ const DynamicDetailModal = ({
         <div className="overflow-y-auto flex-1 px-6 py-4">
           <div className="space-y-4">
           {headers.map((rawHeader) => {
-            const cleanLabel = stripMarkers(rawHeader);
+            const cleanLabel = stripFlags(rawHeader);
             const value = row[rawHeader] ?? "";
             const isBukti = cleanLabel.toLowerCase().includes("bukti");
             const Icon = getFieldIcon(cleanLabel);
