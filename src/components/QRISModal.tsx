@@ -18,12 +18,12 @@ const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
   const { config } = useYearContext();
   const handleDownload = async () => {
     try {
-      const response = await fetch(QRIS_CONFIG.image);
+      const response = await fetch(config.qrisConfig.image);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = QRIS_CONFIG.downloadFilename;
+      link.download = config.qrisConfig.downloadFilename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -71,7 +71,6 @@ const QRISModal = ({ open, onOpenChange }: QRISModalProps) => {
           </p>
 
           <Button
-            variant="outline"
             size="sm"
             className="gap-2"
             onClick={handleDownload}

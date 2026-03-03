@@ -94,7 +94,7 @@ const config2025: YearlyConfig = {
       icon: Globe,
       title: "Konfirmasi Donasi",
       subtitle: "Isi form konfirmasi donasi Anda",
-      href: "https://forms.gle/AVJgpsJNoYHFCjz66",
+      href: "#",
     },
     {
       icon: BarChart3,
@@ -112,7 +112,7 @@ const config2025: YearlyConfig = {
       icon: FileText,
       title: "Proposal Program",
       subtitle: "Unduh dokumen proposal lengkap",
-      href: "https://drive.google.com/file/d/10uaohZ3cxUyyTtA7yRhAH2i2xbyIr993/view?usp=sharing",
+      href: "#",
     },
     {
       icon: Instagram,
@@ -147,7 +147,7 @@ const config2025: YearlyConfig = {
   ],
 
   donationStatus: {
-    isOpen: true,
+    isOpen: false,
     closedMessage: "Periode donasi telah ditutup. Terima kasih atas perhatian Anda. Hubungi kami untuk informasi lebih lanjut.",
   },
 
