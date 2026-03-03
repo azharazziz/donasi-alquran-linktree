@@ -40,7 +40,7 @@ const LinkList = () => {
             >
               <LinkCard 
                 {...link}
-                onClick={getHandler(link.action)}
+                onClick={getHandler('action' in link ? link.action : undefined)}
               />
             </div>
           ))}
