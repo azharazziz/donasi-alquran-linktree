@@ -1,7 +1,8 @@
 import { Heart } from "lucide-react";
-import { INITIATORS, HELPERS, INITIATOR_LOGOS } from "@/config";
+import { useYearContext } from "@/contexts/YearContext";
 
 const Footer = () => {
+  const { config } = useYearContext();
   return (
     <footer className="px-4 pb-10 pt-4 w-full max-w-md mx-auto animate-fade-in-up" style={{ animationDelay: "0.9s", opacity: 0 }}>
       {/* Divider */}
@@ -13,15 +14,15 @@ const Footer = () => {
           Diinisiasi oleh
         </p>
         <div className="flex flex-wrap justify-center gap-4 mb-4">
-          {INITIATORS.map((org) => (
+          {config.initiators.map((org) => (
             <div
               key={org.name}
               className="flex flex-col items-center gap-2 group"
             >
               <div className="w-full max-w-[100px] aspect-[3/2] rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center p-2 transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-slate-800 overflow-hidden">
-                {INITIATOR_LOGOS[org.name] ? (
+                {config.initiatorLogos[org.name] ? (
                   <img
-                    src={INITIATOR_LOGOS[org.name]}
+                    src={config.initiatorLogos[org.name]}
                     alt={org.name}
                     className="max-w-full max-h-full object-contain"
                   />
@@ -45,7 +46,7 @@ const Footer = () => {
           Dibantu oleh
         </p>
         <div className="flex flex-wrap justify-center gap-2">
-          {HELPERS.map((helper, index) => (
+          {config.helpers.map((helper, index) => (
             <span
               key={index}
               className="inline-block px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs text-foreground font-medium hover:bg-primary/20 transition-colors"

@@ -38,10 +38,17 @@ export interface YearlyConfig {
   anonymousDonorDisplay: string;
 
   // Content
+  logo: string; // Main logo image path
+  headerText: {
+    title: string;
+    tagline: string;
+    description: string;
+  };
   initiators: Array<{
     name: string;
     initials: string;
   }>;
+  initiatorLogos: Record<string, string>; // Mapping of initiator names to logo paths
   helpers: string[];
 
   // Links
@@ -63,6 +70,7 @@ export interface YearlyConfig {
   qrisConfig: {
     title: string;
     description: string;
+    image: string; // QRIS image path
     nmid: string;
     merchantName: string;
     scanInfo: string;

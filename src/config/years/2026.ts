@@ -21,13 +21,22 @@ import {
   MapPinCheck,
 } from "lucide-react";
 import type { YearlyConfig } from "../types";
+import Logo from "@/assets/logo.png";
+import BuburKijangLogo from "@/assets/bubur-kijang.png";
+import CapDuaJagoLogo from "@/assets/cap-dua-jago.png";
+import FotoinProjectLogo from "@/assets/fotoin-project.png";
+import KamarBacaMagelangLogo from "@/assets/kamar-baca-magelang.png";
+import SKSFoundationLogo from "@/assets/sks-foundation.png";
+import QRISImage from "@/assets/qris-code.png";
 
 const config2026: YearlyConfig = {
   theme: {
-    primaryColor: "#3b82f6", // Blue
+    primaryColor: "#082e6e", // Blue
   },
 
   spreadsheetId: "16-BQVDuCcsKixvTynVXVIOcYTwCcq-Tkz3rdajJIHis",
+
+  logo: Logo,
 
   sheetNames: {
     donasiMasuk: "Donasi Masuk",
@@ -52,6 +61,12 @@ const config2026: YearlyConfig = {
   anonymousDonorNames: ["nn", "anonim", "anonymous", ""],
   anonymousDonorDisplay: "Hamba Allah",
 
+  headerText: {
+    title: "Donasi Al-Qur'an 2026",
+    tagline: "Jadikan ramadhanmu penuh cahaya iman yang menghidupkan harapan dan menumbuhkan keberkahan",
+    description: "Mari bersama-sama kita wujudkan impian untuk menyebarkan cahaya Al-Qur'an. Dengan donasi Anda, kita dapat memberikan Al-Qur'an kepada mereka yang membutuhkan, memperkuat iman, dan menumbuhkan keberkahan di bulan suci Ramadhan ini.",
+  },
+
   initiators: [
     { name: "Kamar Baca Magelang", initials: "KBM" },
     { name: "Fotoin Project", initials: "FP" },
@@ -59,6 +74,14 @@ const config2026: YearlyConfig = {
     { name: "Mie Ayam Cap 2 Jago", initials: "MAC2J" },
     { name: "Bubur Kijang", initials: "BK" },
   ],
+
+  initiatorLogos: {
+    "Kamar Baca Magelang": KamarBacaMagelangLogo,
+    "Fotoin Project": FotoinProjectLogo,
+    "SKS Foundation": SKSFoundationLogo,
+    "Mie Ayam Cap 2 Jago": CapDuaJagoLogo,
+    "Bubur Kijang": BuburKijangLogo,
+  },
 
   helpers: [
     "Jazimatul Nurkhamidah",
@@ -118,6 +141,7 @@ const config2026: YearlyConfig = {
   qrisConfig: {
     title: "Donasi via QRIS",
     description: "Silakan pindai QRIS berikut menggunakan aplikasi pembayaran Anda",
+    image: QRISImage,
     nmid: "ID1023262543904",
     merchantName: "Kamar Baca Magelang Warehouse",
     scanInfo: "Scan menggunakan GoPay, OVO, DANA, ShopeePay, LinkAja, atau aplikasi perbankan Anda",

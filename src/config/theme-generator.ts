@@ -24,6 +24,8 @@ export interface ColorPalette {
   border: string;
   input: string;
   ring: string;
+  gold: string;
+  goldLight: string;
 }
 
 interface HSLColor {
@@ -162,6 +164,10 @@ export function generateColorPalette(primaryHex: string): ColorPalette {
   // Destructive color (red)
   const destructive: HSLColor = { h: 0, s: 84, l: 60 }; // Standard red color
 
+  // Gold colors (fixed hue around 45 degrees for golden appearance)
+  const gold: HSLColor = { h: 45, s: 79, l: 60 }; // Rich gold
+  const goldLight: HSLColor = { h: 45, s: 70, l: 75 }; // Light gold
+
   return {
     primary: hslToString(primary),
     primaryForeground: "0 0% 100%", // White text on primary
@@ -187,6 +193,9 @@ export function generateColorPalette(primaryHex: string): ColorPalette {
     destructive: hslToString(destructive),
     destructiveForeground: "210 40% 98%", // Light text on destructive
 
+
+    gold: hslToString(gold),
+    goldLight: hslToString(goldLight),
     border: hslToString(border),
     input: "0 0% 100%", // White input
 
@@ -217,6 +226,8 @@ export function paletteToCssVariables(
     "--muted-foreground": palette.mutedForeground,
     "--destructive": palette.destructive,
     "--destructive-foreground": palette.destructiveForeground,
+    "--gold": palette.gold,
+    "--gold-light": palette.goldLight,
     "--border": palette.border,
     "--input": palette.input,
     "--ring": palette.ring,

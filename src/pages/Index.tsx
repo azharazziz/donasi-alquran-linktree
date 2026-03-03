@@ -7,7 +7,6 @@ import NiatDoa from "@/components/NiatDoa";
 import DonaturSection from "@/components/DonaturSection";
 import Footer from "@/components/Footer";
 import { YearSwitcher } from "@/components/YearSwitcher";
-import { ThemeDebug } from "@/components/ThemeDebug";
 import { useDonasiTotal, useRealisasiTotal } from "@/hooks/useGoogleSheets";
 
 const Index = () => {
@@ -33,9 +32,6 @@ const Index = () => {
         <DonaturSection />
         <Footer />
       </div>
-
-      {/* Debug Panel */}
-      <ThemeDebug />
     </div>
   );
 };

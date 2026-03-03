@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { SPREADSHEET_ID, SHEET_NAMES } from "@/config";
 import { isHighlightColumn, extractFlag, stripFlags } from "@/lib/flags";
+import { useYearContext } from "@/contexts/YearContext";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -57,8 +57,8 @@ function extractGvizJson(text: string): GvizJson | null {
   }
 }
 
-async function fetchSheetJson(sheetName: string): Promise<GvizJson> {
-  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+async function fetchSheetJson(spreadsheetId: string, sheetName: string): Promise<GvizJson> {
+  const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const json = extractGvizJson(await res.text());
@@ -207,6 +207,7 @@ function sumHighlightColumns(headers: string[], dataRows: { c: GvizCell[] }[]): 
  * ));
  */
 export function useHighlightItems(enabled = true) {
+  const { config } = useYearContext();
   const [items, setItems] = useState<HighlightItem[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -214,9 +215,9 @@ export function useHighlightItems(enabled = true) {
     if (!enabled) return;
     setLoading(true);
     try {
-      const allSheets = Object.values(SHEET_NAMES);
+      const allSheets = Object.values(config.sheetNames);
       const jsonResults = await Promise.all(
-        allSheets.map((name) => fetchSheetJson(name).catch(() => null))
+        allSheets.map((name) => fetchSheetJson(config.spreadsheetId, name).catch(() => null))
       );
 
       const allItems: HighlightItem[] = [];
@@ -250,7 +251,7 @@ export function useHighlightItems(enabled = true) {
     } finally {
       setLoading(false);
     }
-  }, [enabled]);
+  }, [enabled, config]);
 
   useEffect(() => {
     fetchData();

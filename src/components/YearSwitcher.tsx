@@ -3,17 +3,17 @@
  * Displays available years and allows switching between them
  */
 
-import { useYearConfig } from "@/hooks/useYearConfig";
+import { useYearContext } from "@/contexts/YearContext";
 
 interface YearSwitcherProps {
   variant?: "buttons" | "select";
 }
 
 /**
- * YearSwitcher with button layout
+ * YearSwitcher with button or dropdown layout
  */
 export function YearSwitcher({ variant = "buttons" }: YearSwitcherProps) {
-  const { activeYear, availableYears, setActiveYear } = useYearConfig();
+  const { activeYear, availableYears, setActiveYear } = useYearContext();
 
   if (variant === "select") {
     return (
@@ -38,11 +38,11 @@ export function YearSwitcher({ variant = "buttons" }: YearSwitcherProps) {
         <button
           key={year}
           onClick={() => {
-            console.log("🔘 Clicked year button:", year);
+            console.log(`[YearSwitcher] Button clicked for year ${year}`);
             setActiveYear(year);
           }}
           className={`
-            px-3 py-2 rounded-lg transition-all duration-200 font-medium text-sm cursor-pointer
+            px-3 py-2 rounded-lg transition-all duration-200 font-medium text-sm
             ${
               activeYear === year
                 ? "bg-primary text-primary-foreground shadow-md"

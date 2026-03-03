@@ -3,7 +3,6 @@
  * Aggregates all yearly configurations and provides default year selection logic
  */
 
-import config2024 from "./years/2024";
 import config2025 from "./years/2025";
 import config2026 from "./years/2026";
 import type { YearlyConfig } from "./types";
@@ -13,7 +12,6 @@ import { generateColorPalette } from "./theme-generator";
  * All available yearly configurations
  */
 export const CONFIG_BY_YEAR = {
-  2024: config2024,
   2025: config2025,
   2026: config2026,
 } as const;

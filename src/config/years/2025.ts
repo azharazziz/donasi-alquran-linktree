@@ -15,13 +15,22 @@ import {
   MapPinCheck,
 } from "lucide-react";
 import type { YearlyConfig } from "../types";
+import Logo from "@/assets/logo-2025.png";
+import BuburKijangLogo from "@/assets/bubur-kijang.png";
+import CapDuaJagoLogo from "@/assets/cap-dua-jago.png";
+import FotoinProjectLogo from "@/assets/fotoin-project.png";
+import KamarBacaMagelangLogo from "@/assets/kamar-baca-magelang.png";
+import SKSFoundationLogo from "@/assets/sks-foundation.png";
+import QRISImage from "@/assets/qris-code.png";
 
 const config2025: YearlyConfig = {
   theme: {
-    primaryColor: "#10b981", // Emerald/Green
+    primaryColor: "#164c67", // Emerald/Green
   },
 
-  spreadsheetId: "16-BQVDuCcsKixvTynVXVIOcYTwCcq-Tkz3rdajJIHis",
+  spreadsheetId: "1q__tKYjR_SDgzul8NPiiclYdne7iE2jH42UUjbOcxTI",
+
+  logo: Logo,
 
   sheetNames: {
     donasiMasuk: "Donasi Masuk",
@@ -46,16 +55,25 @@ const config2025: YearlyConfig = {
   anonymousDonorNames: ["nn", "anonim", "anonymous", ""],
   anonymousDonorDisplay: "Hamba Allah",
 
+  headerText: {
+    title: "Donasi Al-Qur'an 2025",
+    tagline: "Rahasia kebahagiaan adalah dengan memperbanyak berbagi",
+    description: "Setiap lembar Al-Qur’an yang kita baca, setiap doa yang kita panjatkan, adalah jejak perjalanan kita menuju-Nya. Di Ramadhan ini, mari kita hadirkan kembali kenangan indah dengan berbagi Al-Qur’an untuk TPA & masjid yang membutuhkan.",
+  },
+
   initiators: [
     { name: "Kamar Baca Magelang", initials: "KBM" },
     { name: "Fotoin Project", initials: "FP" },
     { name: "SKS Foundation", initials: "SKS" },
-    { name: "Mie Ayam Cap 2 Jago", initials: "MAC2J" },
-    { name: "Bubur Kijang", initials: "BK" },
   ],
 
+  initiatorLogos: {
+    "Kamar Baca Magelang": KamarBacaMagelangLogo,
+    "Fotoin Project": FotoinProjectLogo,
+    "SKS Foundation": SKSFoundationLogo,
+  },
+
   helpers: [
-    "Jazimatul Nurkhamidah",
     "Mila Nuraeni",
   ],
 
@@ -63,7 +81,7 @@ const config2025: YearlyConfig = {
     {
       icon: Landmark,
       title: "Donasi via Transfer Bank",
-      subtitle: "Bank BSI dan UOB",
+      subtitle: "Bank BSI",
       action: "transfer",
     },
     {
@@ -112,6 +130,7 @@ const config2025: YearlyConfig = {
   qrisConfig: {
     title: "Donasi via QRIS",
     description: "Silakan pindai QRIS berikut menggunakan aplikasi pembayaran Anda",
+    image: QRISImage,
     nmid: "ID1023262543904",
     merchantName: "Kamar Baca Magelang Warehouse",
     scanInfo: "Scan menggunakan GoPay, OVO, DANA, ShopeePay, LinkAja, atau aplikasi perbankan Anda",
@@ -125,11 +144,6 @@ const config2025: YearlyConfig = {
       accountNumber: "727 313 5875",
       accountHolder: "Azhar A",
     },
-    {
-      bankName: "Bank Syariah Indonesia (BSI)",
-      accountNumber: "732 453 0732",
-      accountHolder: "Azhar A",
-    },
   ],
 
   donationStatus: {
@@ -138,20 +152,6 @@ const config2025: YearlyConfig = {
   },
 
   socialMediaLinks: [
-    {
-      name: "Bubur Kijang",
-      icon: Instagram,
-      url: "https://instagram.com/bubur_kijang",
-      color: "hover:text-pink-500",
-      bgColor: "hover:bg-pink-50",
-    },
-    {
-      name: "Lokasi Bubur Kijang",
-      icon: MapPinCheck,
-      url: "https://share.google/mAVAKocMZpP8U5bd4",
-      color: "hover:text-green-500",
-      bgColor: "hover:bg-green-50",
-    },
     {
       name: "Fotoin Project",
       icon: Instagram,
@@ -172,20 +172,6 @@ const config2025: YearlyConfig = {
       url: "https://twitter.com/kamarbacamgl",
       color: "hover:text-black",
       bgColor: "hover:bg-gray-50",
-    },
-    {
-      name: "Mie Ayam Cap 2 Jago",
-      icon: Instagram,
-      url: "https://instagram.com/capduajago",
-      color: "hover:text-pink-500",
-      bgColor: "hover:bg-pink-50",
-    },
-    {
-      name: "Lokasi Mie Ayam Cap 2 Jago",
-      icon: MapPinCheck,
-      url: "https://share.google/B1duOw7KomBpI1igN",
-      color: "hover:text-green-500",
-      bgColor: "hover:bg-green-50",
     },
     {
       name: "Sickillshoes",

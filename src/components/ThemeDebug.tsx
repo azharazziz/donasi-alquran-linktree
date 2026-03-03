@@ -3,10 +3,10 @@
  * Shows current year, theme colors, and CSS variables for debugging
  */
 
-import { useYearConfig } from "@/hooks/useYearConfig";
+import { useYearContext } from "@/contexts/YearContext";
 
 export function ThemeDebug() {
-  const { activeYear, themeVariables } = useYearConfig();
+  const { activeYear, themeVariables } = useYearContext();
 
   // Get computed CSS variables from document
   const rootStyles = getComputedStyle(document.documentElement);

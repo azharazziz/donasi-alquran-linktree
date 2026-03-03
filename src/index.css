@@ -6,87 +6,12 @@
 
 @layer base {
   :root {
-    --background: 40 33% 96%;
-    --foreground: 220 40% 13%;
-
-    --card: 40 30% 98%;
-    --card-foreground: 220 40% 13%;
-
-    --popover: 40 30% 98%;
-    --popover-foreground: 220 40% 13%;
-
-    --primary: 220 60% 22%;
-    --primary-foreground: 40 33% 96%;
-
-    --secondary: 220 20% 90%;
-    --secondary-foreground: 220 60% 22%;
-
-    --muted: 40 20% 92%;
-    --muted-foreground: 220 15% 40%;
-
-    --accent: 43 45% 54%;
-    --accent-foreground: 40 33% 96%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 220 15% 85%;
-    --input: 220 15% 85%;
-    --ring: 220 60% 22%;
-
+    /* CSS variables will be set dynamically by ThemeProvider */
+    /* These are fallback/default values, will be overridden */
     --radius: 1rem;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-
-    /* Custom tokens */
-    --gold: 43 45% 54%;
-    --gold-light: 43 50% 75%;
-    --navy-deep: 220 60% 22%;
-    --navy-dark: 220 55% 15%;
-    --cream: 40 33% 96%;
-    --cream-dark: 40 20% 90%;
-    --charcoal: 220 40% 13%;
   }
 
-  .dark {
-    --background: 220 50% 15%;
-    --foreground: 40 33% 96%;
-    --card: 220 40% 20%;
-    --card-foreground: 40 33% 96%;
-    --popover: 220 40% 20%;
-    --popover-foreground: 40 33% 96%;
-    --primary: 220 70% 60%;
-    --primary-foreground: 40 33% 96%;
-    --secondary: 220 30% 30%;
-    --secondary-foreground: 40 33% 96%;
-    --muted: 220 20% 35%;
-    --muted-foreground: 40 20% 80%;
-    --accent: 43 45% 54%;
-    --accent-foreground: 220 50% 15%;
-    --border: 220 20% 30%;
-    --input: 220 20% 30%;
-    --ring: 220 70% 60%;
-    --sidebar-background: 220 50% 15%;
-    --sidebar-foreground: 40 33% 96%;
-    --sidebar-primary: 220 70% 60%;
-    --sidebar-primary-foreground: 220 50% 15%;
-    --sidebar-accent: 220 40% 25%;
-    --sidebar-accent-foreground: 40 33% 96%;
-    --sidebar-border: 220 20% 30%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-
-    /* Dark mode custom tokens */
-    --navy-deep: 220 70% 60%;
-    --navy-dark: 220 50% 15%;
-    --charcoal: 220 40% 20%;
-  }
+  /* Dark mode variables will also be set dynamically by ThemeProvider */
 }
 
 @layer base {
@@ -156,8 +81,8 @@
   .donation-amount {
     background: linear-gradient(
       135deg,
-      hsl(var(--navy-deep)),
-      hsl(var(--navy-dark))
+      hsl(var(--primary) / 0.95),
+      hsl(var(--primary) / 0.75)
     );
     @apply rounded-2xl;
     color: hsl(var(--primary-foreground));

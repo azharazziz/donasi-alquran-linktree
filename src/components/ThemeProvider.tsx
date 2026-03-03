@@ -4,24 +4,30 @@
  */
 
 import React, { useEffect } from "react";
-import { useYearConfig } from "@/hooks/useYearConfig";
+import { useYearContext } from "@/contexts/YearContext";
 
 interface ThemeProviderProps {
   children: React.ReactNode;
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const { themeVariables } = useYearConfig();
+  const { themeVariables } = useYearContext();
 
   useEffect(() => {
-    console.log("🎨 ThemeProvider: Applying theme variables", themeVariables);
-    // Apply theme variables to :root
+    // Apply theme variables to :root immediately
     const rootElement = document.documentElement;
+    
+    // Apply all theme variables
     Object.entries(themeVariables).forEach(([key, value]) => {
       rootElement.style.setProperty(key, value);
-      console.log(`  ✓ Set ${key} = ${value}`);
     });
-    console.log("✅ Theme variables applied to :root");
+
+    // Log for debugging
+    console.log('Theme variables applied to :root:', {
+      timestamp: new Date().toISOString(),
+      variableCount: Object.keys(themeVariables).length,
+      sample: themeVariables['--primary']
+    });
   }, [themeVariables]);
 
   return <>{children}</>;
