@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { SPREADSHEET_ID, SHEET_NAMES } from "@/config";
+import { isHighlightColumn, extractFlag, stripFlags } from "@/lib/flags";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -13,39 +14,7 @@ export interface HighlightItem {
 }
 
 // ---------------------------------------------------------------------------
-// Header flag parser
-// ---------------------------------------------------------------------------
-
-interface ParsedHeader {
-  index: number;
-  name: string;
-  icon?: string;
-  color?: string;
-}
-
-/**
- * Parses a header like "Al Quran [highlight] [icon:book] [color:#2E7D32]"
- * Returns null if the header doesn't contain [highlight].
- */
-function parseHighlightHeader(label: string, index: number): ParsedHeader | null {
-  if (!/\[highlight\]/i.test(label)) return null;
-
-  // Extract name by stripping all [...] tags
-  const name = label.replace(/\s*\[[^\]]*\]\s*/g, " ").trim();
-
-  const iconMatch = label.match(/\[icon:([^\]]+)\]/i);
-  const colorMatch = label.match(/\[color:([^\]]+)\]/i);
-
-  return {
-    index,
-    name,
-    icon: iconMatch?.[1]?.trim(),
-    color: colorMatch?.[1]?.trim(),
-  };
-}
-
-// ---------------------------------------------------------------------------
-// GViz helpers (duplicated minimal set to avoid circular deps)
+// GViz helpers (minimal set to avoid circular deps)
 // ---------------------------------------------------------------------------
 
 type GvizCell = { v: string | number | null; f?: string } | null;
@@ -69,8 +38,80 @@ function extractGvizJson(text: string): GvizJson | null {
   }
 }
 
+async function fetchSheetJson(sheetName: string): Promise<GvizJson> {
+  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = extractGvizJson(await res.text());
+  if (!json?.table) throw new Error("Invalid response");
+  return json;
+}
+
 // ---------------------------------------------------------------------------
-// Hook
+// Resolve headers + data rows from a sheet (handles both parsed & unparsed)
+// ---------------------------------------------------------------------------
+
+interface SheetParsed {
+  headers: string[];
+  dataRows: { c: GvizCell[] }[];
+}
+
+function resolveHeadersAndRows(json: GvizJson): SheetParsed {
+  const cols = json.table!.cols ?? [];
+  const rows = json.table!.rows ?? [];
+  const parsedNumHeaders = json.table!.parsedNumHeaders ?? 1;
+
+  if (parsedNumHeaders > 0 && cols.some((c) => c.label?.trim())) {
+    return { headers: cols.map((c) => c.label || ""), dataRows: rows };
+  }
+
+  // Detect header row from data
+  for (let i = 0; i < Math.min(rows.length, 5); i++) {
+    const vals = rows[i].c?.map((c) => c?.v?.toString() ?? "") ?? [];
+    const nonEmpty = vals.filter((v) => v.length > 0);
+    const hasDate = vals.some((v) => v.startsWith("Date("));
+    if (nonEmpty.length >= 2 && !hasDate) {
+      const headers = rows[i].c?.map((c) => c?.v?.toString()?.trim() ?? "") ?? [];
+      return { headers, dataRows: rows.slice(i + 1) };
+    }
+  }
+
+  return { headers: cols.map((_, i) => `col_${i}`), dataRows: rows };
+}
+
+// ---------------------------------------------------------------------------
+// Sum highlight columns from one sheet
+// ---------------------------------------------------------------------------
+
+function sumHighlightColumns(headers: string[], dataRows: { c: GvizCell[] }[]): HighlightItem[] {
+  const results: HighlightItem[] = [];
+
+  headers.forEach((h, colIndex) => {
+    if (!isHighlightColumn(h)) return;
+
+    const name = stripFlags(h);
+    const icon = extractFlag(h, "icon");
+    const color = extractFlag(h, "color");
+
+    let total = 0;
+    for (const row of dataRows) {
+      const cell = row.c?.[colIndex];
+      if (cell?.v != null) {
+        const num = typeof cell.v === "number"
+          ? cell.v
+          : parseFloat(String(cell.v).replace(/[^\d.-]/g, ""));
+        if (!isNaN(num)) total += num;
+      }
+    }
+
+    results.push({ name, total, icon, color });
+  });
+
+  return results;
+}
+
+// ---------------------------------------------------------------------------
+// Hook — scans ALL sheets for [highlight] columns
 // ---------------------------------------------------------------------------
 
 export function useHighlightItems(enabled = true) {
@@ -81,64 +122,36 @@ export function useHighlightItems(enabled = true) {
     if (!enabled) return;
     setLoading(true);
     try {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAMES.PENYALURAN)}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const json = extractGvizJson(await res.text());
-      if (!json?.table) throw new Error("Invalid response");
+      const allSheets = Object.values(SHEET_NAMES);
+      const jsonResults = await Promise.all(
+        allSheets.map((name) => fetchSheetJson(name).catch(() => null))
+      );
 
-      const cols = json.table.cols ?? [];
-      const rows = json.table.rows ?? [];
-      const parsedNumHeaders = json.table.parsedNumHeaders ?? 1;
+      const allItems: HighlightItem[] = [];
+      const seenNames = new Map<string, number>(); // merge same-name items across sheets
 
-      // Determine actual headers — same logic as useGoogleSheetDynamic
-      let headers: string[];
-      let dataRows: { c: GvizCell[] }[];
+      for (const json of jsonResults) {
+        if (!json) continue;
+        const { headers, dataRows } = resolveHeadersAndRows(json);
+        const sheetItems = sumHighlightColumns(headers, dataRows);
 
-      if (parsedNumHeaders > 0 && cols.some((c) => c.label?.trim())) {
-        headers = cols.map((c) => c.label || "");
-        dataRows = rows;
-      } else {
-        let headerRowIndex = -1;
-        for (let i = 0; i < Math.min(rows.length, 5); i++) {
-          const cellValues = rows[i].c?.map((c) => c?.v?.toString() ?? "") ?? [];
-          const nonEmpty = cellValues.filter((v) => v.length > 0);
-          const hasDate = cellValues.some((v) => v.startsWith("Date("));
-          if (nonEmpty.length >= 2 && !hasDate) {
-            headerRowIndex = i;
-            break;
+        for (const item of sheetItems) {
+          const key = item.name.toLowerCase();
+          if (seenNames.has(key)) {
+            // Merge totals for same item name across sheets
+            const idx = seenNames.get(key)!;
+            allItems[idx].total += item.total;
+            // Keep icon/color from whichever defines it
+            if (item.icon && !allItems[idx].icon) allItems[idx].icon = item.icon;
+            if (item.color && !allItems[idx].color) allItems[idx].color = item.color;
+          } else {
+            seenNames.set(key, allItems.length);
+            allItems.push({ ...item });
           }
-        }
-        if (headerRowIndex >= 0) {
-          headers = rows[headerRowIndex].c?.map((c) => c?.v?.toString()?.trim() ?? "") ?? [];
-          dataRows = rows.slice(headerRowIndex + 1);
-        } else {
-          headers = cols.map((_, i) => `col_${i}`);
-          dataRows = rows;
         }
       }
 
-      // Find [highlight] columns
-      const highlightCols = headers
-        .map((h, i) => parseHighlightHeader(h, i))
-        .filter((p): p is ParsedHeader => p !== null);
-
-      // Sum each highlight column
-      const result: HighlightItem[] = highlightCols.map(({ index, name, icon, color }) => {
-        let total = 0;
-        for (const row of dataRows) {
-          const cell = row.c?.[index];
-          if (cell?.v != null) {
-            const num = typeof cell.v === "number"
-              ? cell.v
-              : parseFloat(String(cell.v).replace(/[^\d.-]/g, ""));
-            if (!isNaN(num)) total += num;
-          }
-        }
-        return { name, total, icon, color };
-      });
-
-      setItems(result);
+      setItems(allItems);
     } catch (err) {
       console.error("Failed to fetch highlight items:", err);
       setItems([]);

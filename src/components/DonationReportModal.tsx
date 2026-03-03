@@ -13,6 +13,7 @@ import {
   useGoogleSheetDynamic,
   type SheetName,
 } from "@/hooks/useGoogleSheets";
+import { stripFlags, isHiddenColumn, isPrivateColumn } from "@/lib/flags";
 import DynamicDetailModal from "./DynamicDetailModal";
 
 interface DonationReportModalProps {
@@ -25,18 +26,6 @@ const TAB_CONFIG: { key: string; label: string; sheet: SheetName }[] = [
   { key: "realisasi", label: "Realisasi", sheet: "Realisasi" },
   { key: "penyaluran", label: "Penyaluran", sheet: "Penyaluran Donasi" },
 ];
-
-function stripMarkers(header: string): string {
-  return header.replace(/\s*\[(hide|private)\]\s*/gi, "").trim();
-}
-
-function isHiddenColumn(header: string): boolean {
-  return /\[(hide|private)\]/i.test(header);
-}
-
-function isPrivateColumn(header: string): boolean {
-  return /\[private\]/i.test(header);
-}
 
 const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) => {
   const [activeTab, setActiveTab] = useState("donasi");
@@ -191,7 +180,7 @@ function DynamicSheetTable({
         style={{ gridTemplateColumns: `repeat(${visibleHeaders.length}, 1fr) 28px` }}
       >
         {visibleHeaders.map((header) => (
-          <span key={header}>{stripMarkers(header)}</span>
+          <span key={header}>{stripFlags(header)}</span>
         ))}
         <span />
       </div>
