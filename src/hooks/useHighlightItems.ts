@@ -6,6 +6,25 @@ import { isHighlightColumn, extractFlag, stripFlags } from "@/lib/flags";
 // Types
 // ---------------------------------------------------------------------------
 
+/**
+ * Represents a highlighted item for dashboard display.
+ *
+ * Highlight items are columns marked with [highlight] flag across all sheets.
+ * The total is calculated by summing all numeric values in that column.
+ *
+ * @property name - Clean column name (with flags stripped)
+ * @property total - Sum of all numeric values in the column across all rows
+ * @property icon - Custom icon name from [icon:name] flag, e.g., "book"
+ * @property color - Custom hex color from [color:#HEX] flag, e.g., "#4F46E5"
+ *
+ * @example
+ * {
+ *   name: "Quran Distributed",
+ *   total: 75,
+ *   icon: "book",
+ *   color: "#4F46E5"
+ * }
+ */
 export interface HighlightItem {
   name: string;
   total: number;
@@ -83,6 +102,30 @@ function resolveHeadersAndRows(json: GvizJson): SheetParsed {
 // Sum highlight columns from one sheet
 // ---------------------------------------------------------------------------
 
+/**
+ * Scans a sheet's headers for [highlight] flags and calculates totals.
+ *
+ * For each column marked with [highlight]:
+ * 1. Extract the clean name (without flags)
+ * 2. Extract custom icon from [icon:name] if present
+ * 3. Extract custom color from [color:#HEX] if present
+ * 4. Sum all numeric values in that column
+ *
+ * All numeric values are included in the sum, regardless of whether
+ * they're in rows with other [hide] or [private] flags. The total
+ * represents the complete aggregate.
+ *
+ * @param headers - Column headers (with flags intact for detection)
+ * @param dataRows - Raw data rows from the sheet
+ * @returns Array of HighlightItem with name, total, and optional styling
+ *
+ * @example
+ * Headers: ["Item", "Qty [highlight] [icon:book]", "Notes [hide]"]
+ * Rows with Qty values: [10, 15, 25]
+ * Result: [
+ *   { name: "Qty", total: 50, icon: "book" }
+ * ]
+ */
 function sumHighlightColumns(headers: string[], dataRows: { c: GvizCell[] }[]): HighlightItem[] {
   const results: HighlightItem[] = [];
 
@@ -114,6 +157,55 @@ function sumHighlightColumns(headers: string[], dataRows: { c: GvizCell[] }[]): 
 // Hook — scans ALL sheets for [highlight] columns
 // ---------------------------------------------------------------------------
 
+/**
+ * React hook that scans all sheets in the spreadsheet for [highlight] columns
+ * and returns aggregated highlight items for dashboard display.
+ *
+ * **Process Flow:**
+ * 1. Fetches all sheets in parallel (Donasi Masuk, Realisasi, Penyaluran, etc.)
+ * 2. Detects columns marked with [highlight] flag
+ * 3. For each highlight column, sums all numeric values across all rows
+ * 4. Merges items with the same name (case-insensitive) across multiple sheets
+ *   - If same item appears in multiple sheets, totals are combined
+ *   - Custom styling (icon, color) is preserved from first occurrence
+ * 5. Returns array of HighlightItem sorted by appearance
+ *
+ * **Data Integrity:**
+ * - All numeric values are included in calculations
+ * - [hide] and [private] flags don't affect calculations
+ * - Totals are complete aggregates across all sheets and rows
+ *
+ * **Error Handling:**
+ * - Gracefully handles missing sheets
+ * - Returns empty array on fetch failure
+ * - Logs errors to console for debugging
+ *
+ * **Auto-Update:**
+ * - Re-fetches when enabled status changes
+ * - Does not auto-refresh on interval (manual refetch only)
+ * - Use loading state to show skeleton while fetching
+ *
+ * @param enabled - Whether to fetch data (default: true)
+ * @returns Object with:
+ *   - items: Array of HighlightItem with name, total, optional icon/color
+ *   - loading: Boolean indicating fetch in progress
+ *
+ * @example
+ * const { items, loading } = useHighlightItems();
+ *
+ * if (loading) return <SkeletonLoader />;
+ * if (items.length === 0) return <p>No highlights</p>;
+ *
+ * return items.map(item => (
+ *   <HighlightCard
+ *     key={item.name}
+ *     name={item.name}
+ *     total={item.total}
+ *     icon={item.icon}
+ *     color={item.color}
+ *   />
+ * ));
+ */
 export function useHighlightItems(enabled = true) {
   const [items, setItems] = useState<HighlightItem[]>([]);
   const [loading, setLoading] = useState(false);

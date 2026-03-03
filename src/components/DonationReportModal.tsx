@@ -13,7 +13,7 @@ import {
   useGoogleSheetDynamic,
   type SheetName,
 } from "@/hooks/useGoogleSheets";
-import { stripFlags, isHiddenColumn, isPrivateColumn } from "@/lib/flags";
+import { stripFlags, isHiddenColumn, isPrivateColumn, getSummaryHeaders, getDetailHeaders } from "@/lib/flags";
 import DynamicDetailModal from "./DynamicDetailModal";
 
 interface DonationReportModalProps {
@@ -97,7 +97,7 @@ const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) =
                       error={data.error}
                       headers={data.headers}
                       rows={data.rows}
-                      onRowClick={(row) => handleRowClick(row, data.headers.filter(h => !isPrivateColumn(h)), tab.label)}
+                      onRowClick={(row) => handleRowClick(row, getDetailHeaders(data.headers), tab.label)}
                     />
                   </TabsContent>
                 );
@@ -162,7 +162,7 @@ function DynamicSheetTable({
   }
 
   // Filter out hidden columns for table view
-  const visibleHeaders = headers.filter((h) => !isHiddenColumn(h));
+  const visibleHeaders = getSummaryHeaders(headers);
 
   if (visibleHeaders.length === 0) {
     return (

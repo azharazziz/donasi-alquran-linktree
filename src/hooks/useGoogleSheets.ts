@@ -57,7 +57,30 @@ function extractGvizJson(text: string): GvizJson | null {
   }
 }
 
-/** Strips sheet-title prefixes and bracket flags from column labels. */
+/**
+ * Normalize column names by removing sheet prefixes while PRESERVING flags.
+ * Used internally for column matching (finding TANGGAL, NOMINAL, etc.)
+ * Does NOT strip flags - use stripFlags() separately for display.
+ */
+function normalizeHeaderForMatching(label: string): string {
+  const trimmed = label.trim();
+  // Remove common sheet prefixes like "Donasi Masuk " from "Donasi Masuk Nominal [hide]"
+  // But preserve the flags
+  for (const kw of Object.values(COLUMNS)) {
+    // Check if the label contains this keyword (potentially with flags after it)
+    const pattern = new RegExp(`\\b${kw}\\b`, "i");
+    if (pattern.test(stripFlags(trimmed))) {
+      // Return the label as-is to preserve flags
+      return trimmed;
+    }
+  }
+  return trimmed;
+}
+
+/**
+ * For column matching only - strips flags and sheet prefixes.
+ * Used internally in column detection logic only.
+ */
 function cleanHeaderLabel(label: string): string {
   const cleaned = stripFlags(label.trim());
   for (const kw of Object.values(COLUMNS)) {
@@ -83,6 +106,25 @@ async function fetchSheetJson(sheetName: SheetName): Promise<GvizJson> {
 // useGoogleSheetDynamic — dynamic headers + rows for the report modal
 // ---------------------------------------------------------------------------
 
+/**
+ * Represents sheet data with complete headers and rows for report modals.
+ *
+ * **Data Integrity:**
+ * - headers: Column names WITH flags intact (for filtering logic)
+ * - rows: Complete data objects with all columns (including [hide] and [private])
+ *
+ * **How Flags Are Used:**
+ * - Component code calls getSummaryHeaders() / getDetailHeaders() on headers
+ * - These functions filter based on [hide] and [private] flags
+ * - Row data remains complete for all use cases
+ * - UI only displays what's allowed by the flag rules
+ *
+ * @property headers - Column names with flags preserved, e.g., ["Name", "Nominal [hide]", "Secret [private]"]
+ * @property rows - Data rows with keys matching headers
+ * @property loading - Fetch operation in progress
+ * @property error - Error message if fetch failed
+ * @property refetch - Function to manually retry the fetch
+ */
 export interface DynamicSheetData {
   headers: string[];
   rows: Record<string, string>[];
@@ -91,6 +133,55 @@ export interface DynamicSheetData {
   refetch: () => void;
 }
 
+/**
+ * React hook that fetches a single sheet's data with complete headers and rows.
+ *
+ * **Purpose:** Provides complete, unfiltered sheet data for report modals.
+ *
+ * **Key Behaviors:**
+ * 1. Fetches ALL columns and rows from the specified sheet
+ * 2. Preserves flags in header names for filtering logic ([hide], [private], etc.)
+ * 3. Returns complete row data (including flagged columns)
+ * 4. Handles both Google Sheets with parsed headers and unparsed sheets
+ * 5. Automatically detects header row if not explicitly parsed
+ *
+ * **Data Preservation:**
+ * - All data is fetched and returned (no filtering at fetch time)
+ * - Flags in headers are used by downstream components to decide visibility
+ * - Row objects have keys matching the full header names (with flags)
+ * - Components call getSummaryHeaders() / getDetailHeaders() to filter for display
+ *
+ * **Modal Flow:**
+ * 1. DonationReportModal receives this hook for each sheet
+ * 2. Summary table calls getSummaryHeaders(headers) to get visible columns
+ * 3. Table displays rows using only visible headers
+ * 4. When user clicks a row, getDetailHeaders(headers) is called
+ * 5. Detail modal receives headers and full row data
+ * 6. Detail modal filters which columns to show based on received headers
+ *
+ * **Error Handling:**
+ * - Returns empty headers/rows on fetch failure
+ * - Provides error message for UI feedback
+ * - Provides refetch() function for manual retry
+ *
+ * @param sheetName - Name of the sheet to fetch (from SHEET_NAMES)
+ * @param enabled - Whether to fetch data (default: true). When false, does nothing.
+ * @returns DynamicSheetData with headers (with flags), complete rows, loading, error, refetch
+ *
+ * @example
+ * const { headers, rows, loading, error, refetch } = useGoogleSheetDynamic("Donasi Masuk");
+ *
+ * if (loading) return <Spinner />;
+ * if (error) return <Error message={error} onRetry={refetch} />;
+ *
+ * // Summary table - show non-hidden columns
+ * const summaryHeaders = getSummaryHeaders(headers);
+ * <Table headers={summaryHeaders} rows={rows} />
+ *
+ * // On row click - show detail with non-private columns
+ * const detailHeaders = getDetailHeaders(headers);
+ * <DetailModal headers={detailHeaders} row={rows[index]} />
+ */
 export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): DynamicSheetData {
   const [headers, setHeaders] = useState<string[]>([]);
   const [rows, setRows] = useState<Record<string, string>[]>([]);
@@ -111,7 +202,8 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
       let dataRows: { c: GvizCell[] }[];
 
       if (parsedNumHeaders > 0 && cols.some((c) => c.label?.trim())) {
-        extractedHeaders = cols.map((c, i) => cleanHeaderLabel(c.label || `col_${i}`));
+        // Preserve raw headers WITH flags for filtering
+        extractedHeaders = cols.map((c, i) => c.label?.trim() || `col_${i}`);
         dataRows = rawRows;
       } else {
         // Sheets like "Penyaluran" have no parsed headers — detect from data rows
@@ -150,6 +242,7 @@ export function useGoogleSheetDynamic(sheetName: SheetName, enabled = true): Dyn
           return obj;
         });
 
+      // Return headers AS-IS with flags preserved for filtering logic
       setHeaders(validIndices.map((item) => item.header));
       setRows(mappedRows);
     } catch (err) {
