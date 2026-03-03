@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useDonaturList } from "@/hooks/useGoogleSheets";
 
 const DonaturSection = () => {
-  const { names, loading } = useDonaturList();
+  const { names, anonCount, loading } = useDonaturList();
 
   return (
     <section
@@ -25,7 +25,7 @@ const DonaturSection = () => {
             <Skeleton key={i} className="h-6 w-20 rounded-full" />
           ))}
         </div>
-      ) : names.length === 0 ? (
+      ) : names.length === 0 && anonCount === 0 ? (
         <p className="text-xs text-muted-foreground/60 text-center italic">
           Belum ada data donatur yang ditampilkan
         </p>
@@ -39,6 +39,13 @@ const DonaturSection = () => {
               {name}
             </span>
           ))}
+          {anonCount > 0 && (
+            <span
+              className="inline-block px-3 py-1 text-[11px] rounded-full border border-border/50 bg-card/60 text-muted-foreground"
+            >
+              {anonCount} Donatur Lain yang Tidak Ingin Disebutkan Namanya
+            </span>
+          )}
         </div>
       )}
     </section>

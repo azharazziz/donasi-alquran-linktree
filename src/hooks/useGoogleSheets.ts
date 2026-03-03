@@ -389,6 +389,7 @@ export function useRealisasiTotal(enabled = true) {
 
 export function useDonaturList(enabled = true) {
   const [names, setNames] = useState<string[]>([]);
+  const [anonCount, setAnonCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const fetchNames = useCallback(async () => {
@@ -402,27 +403,35 @@ export function useDonaturList(enabled = true) {
       const donaturIndex = cols.findIndex(
         (c) => cleanHeaderLabel(c.label || "") === COLUMNS.DONATUR
       );
-      if (donaturIndex === -1) { setNames([]); return; }
+      if (donaturIndex === -1) { setNames([]); setAnonCount(0); return; }
 
       const seen = new Set<string>();
       const result: string[] = [];
+      let anonCount = 0;
+      
       for (const row of rows) {
         const raw = (row.c?.[donaturIndex]?.v?.toString() ?? "").trim();
-        const display = ANONYMOUS_NAMES.has(raw.toLowerCase()) ? ANONYMOUS_DISPLAY : raw;
-        if (display && !seen.has(display)) {
-          seen.add(display);
-          result.push(display);
+        const isAnonymous = ANONYMOUS_NAMES.has(raw.toLowerCase());
+        
+        if (isAnonymous) {
+          anonCount++;
+        } else if (raw && !seen.has(raw)) {
+          seen.add(raw);
+          result.push(raw);
         }
       }
+      
       setNames(result);
+      setAnonCount(anonCount);
     } catch (err) {
       console.error("Failed to fetch donatur list:", err);
       setNames([]);
+      setAnonCount(0);
     } finally {
       setLoading(false);
     }
   }, [enabled]);
 
   useEffect(() => { fetchNames(); }, [fetchNames]);
-  return { names, loading };
+  return { names, anonCount, loading };
 }
