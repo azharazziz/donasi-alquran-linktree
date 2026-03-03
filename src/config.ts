@@ -194,6 +194,16 @@ export const BANK_ACCOUNTS = [
   },
 ] as const;
 
+// ---------------------------------------------------------------------------
+// Donation Status Configuration
+// ---------------------------------------------------------------------------
+
+/** Control whether donations are open or closed */
+export const DONATION_STATUS = {
+  isOpen: true, // Set to false to close donations and hide transfer/QRIS options
+  closedMessage: "Periode donasi telah ditutup. Terima kasih atas perhatian Anda. Hubungi kami untuk informasi lebih lanjut.",
+} as const;
+
 /** Social Media Links Configuration */
 export const SOCIAL_MEDIA_LINKS = [
   {
