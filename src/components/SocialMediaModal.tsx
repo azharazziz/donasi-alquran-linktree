@@ -15,6 +15,12 @@ interface SocialMediaModalProps {
 
 const SocialMediaModal = ({ open, onOpenChange }: SocialMediaModalProps) => {
   const handleOpenLink = (url: string) => {
+    try {
+      const parsed = new URL(url);
+      if (!['http:', 'https:', 'mailto:'].includes(parsed.protocol)) return;
+    } catch {
+      return;
+    }
     if (url.startsWith("mailto:")) {
       window.location.href = url;
     } else {

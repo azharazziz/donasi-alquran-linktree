@@ -41,10 +41,10 @@ function getFieldIcon(label: string) {
   return FileText;
 }
 
-function isUrl(value: string): boolean {
+function isSafeUrl(value: string): boolean {
   try {
-    new URL(value);
-    return true;
+    const parsed = new URL(value);
+    return ['http:', 'https:'].includes(parsed.protocol);
   } catch {
     return false;
   }
@@ -88,7 +88,7 @@ declare global {
 function BuktiRenderer({ value }: { value: string }) {
   const [imgError, setImgError] = useState(false);
 
-  if (!value || !isUrl(value)) {
+  if (!value || !isSafeUrl(value)) {
     return <span className="text-sm text-muted-foreground">{value || "-"}</span>;
   }
 
