@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 68 68" style="enable-background:new 0 0 68 68;" xml:space="preserve">
+	 viewBox="0 0 67 67" style="enable-background:new 0 0 67 67;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:none;}
 	.st1{fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-	.st2{fill:url(#XMLID_00000151506016974921773250000002007520337175007412_);}
+	.st2{fill:url(#XMLID_00000121246744953410929390000001197456767630012084_);}
 	.st3{fill:url(#SVGID_1_);}
-	.st4{fill:url(#SVGID_00000137846582664329877930000001496276295111310771_);}
+	.st4{fill:url(#SVGID_00000021107863027209524950000009331496036666660758_);}
 	.st5{fill:#F1F2F2;}
-	.st6{opacity:7.000000e-02;}
+	.st6{opacity:4.000000e-02;}
 	.st7{fill:none;stroke:#1B58A8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
 </style>
-<pattern  x="-2872.2" y="867.2" width="67" height="67" patternUnits="userSpaceOnUse" id="Motivo_nuevo" viewBox="37.8 -134.5 67 67" style="overflow:visible;">
+<pattern  x="-2872.7" y="866.7" width="67" height="67" patternUnits="userSpaceOnUse" id="Motivo_nuevo" viewBox="37.8 -134.5 67 67" style="overflow:visible;">
 	<g>
 		<rect x="37.8" y="-134.5" class="st0" width="67" height="67"/>
 		<g>
@@ -122,55 +122,64 @@
 		</g>
 	</g>
 </pattern>
-<pattern  id="XMLID_00000130635137627309316670000005145632761800790455_" xlink:href="#Motivo_nuevo" patternTransform="matrix(1.728 0 0 1.728 4782.582 6347.7593)">
+<pattern  id="XMLID_00000051348554339746248730000007074182326578312885_" xlink:href="#Motivo_nuevo" patternTransform="matrix(1.728 0 0 1.728 4782.2178 6348.1235)">
 </pattern>
-<rect id="XMLID_169_" x="-3123.7" y="759.3" style="fill:url(#XMLID_00000130635137627309316670000005145632761800790455_);" width="166.7" height="500"/>
-<pattern  id="SVGID_1_" xlink:href="#Motivo_nuevo" patternTransform="matrix(1.728 0 0 1.728 4782.582 6347.7593)">
+<rect id="XMLID_169_" x="-3124.2" y="758.8" style="fill:url(#XMLID_00000051348554339746248730000007074182326578312885_);" width="166.7" height="500"/>
+<pattern  id="SVGID_1_" xlink:href="#Motivo_nuevo" patternTransform="matrix(1.728 0 0 1.728 4782.2178 6348.1235)">
 </pattern>
-<rect x="-2800.2" y="799.2" class="st3" width="121" height="88"/>
-<pattern  id="SVGID_00000179630869360207345080000003421640155280810669_" xlink:href="#Motivo_nuevo" patternTransform="matrix(1.728 0 0 1.728 4782.582 6347.7593)">
+<rect x="-2800.7" y="798.7" class="st3" width="121" height="88"/>
+<pattern  id="SVGID_00000042000751270398892290000005456194649183202975_" xlink:href="#Motivo_nuevo" patternTransform="matrix(1.728 0 0 1.728 4782.2178 6348.1235)">
 </pattern>
-<rect x="-2734.2" y="994.2" style="fill:url(#SVGID_00000179630869360207345080000003421640155280810669_);" width="60" height="60"/>
-<rect x="-13.2" y="159.2" class="st5" width="226" height="226"/>
+<rect x="-2734.7" y="993.7" style="fill:url(#SVGID_00000042000751270398892290000005456194649183202975_);" width="60" height="60"/>
+<rect x="-13.7" y="158.7" class="st5" width="226" height="226"/>
 <g class="st6">
 	<g>
-		<line id="XMLID_00000147933669535846752510000009006837802838005638_" class="st7" x1="59.9" y1="34" x2="54.6" y2="34"/>
-		<polyline id="XMLID_00000181804000031160890640000013635583819784710587_" class="st7" points="41.6,67.5 47,67.5 50.8,63.7 
-			54.6,67.5 67.5,67.5 		"/>
-		<polyline id="XMLID_00000137097877738063069720000018253018498726204823_" class="st7" points="67.5,59.9 67.5,54.6 63.7,50.8 
-			67.5,47 67.5,34 		"/>
-		<polyline id="XMLID_00000042738642761347688730000002003471761094856102_" class="st7" points="59.9,54.6 59.9,59.9 54.6,59.9 		
+		<line id="XMLID_00000049902717182225082490000009852555199880663738_" class="st7" x1="59.4" y1="33.5" x2="54.1" y2="33.5"/>
+		<polyline id="XMLID_00000101103871415420140210000009763940676440785829_" class="st7" points="41.1,67 46.5,67 50.3,63.2 
+			54.1,67 67,67 		"/>
+		<polyline id="XMLID_00000002345722404532540710000016431682031119675802_" class="st7" points="67,59.4 67,54.1 63.2,50.3 
+			67,46.5 67,33.5 		"/>
+		<polyline id="XMLID_00000011004848983119013360000013832748252331008924_" class="st7" points="59.4,54.1 59.4,59.4 54.1,59.4 		
 			"/>
-		<polyline id="XMLID_00000078734332924447377190000008836436022273183122_" class="st7" points="41.6,54.6 41.6,59.9 47,59.9 		"/>
-		<polyline id="XMLID_00000093169518845965766730000012478365313790520459_" class="st7" points="41.6,47 41.6,41.6 47,41.6 		"/>
-		<polyline id="XMLID_00000167390157094079472360000006245961434140200065_" class="st7" points="59.9,47 59.9,41.6 54.6,41.6 		"/>
-		<polyline id="XMLID_00000030481224934259471440000010703171814585853374_" class="st7" points="54.6,59.9 50.8,63.7 47,59.9 		"/>
-		<polyline id="XMLID_00000018223535337844209280000002226113353362127510_" class="st7" points="59.9,54.6 63.7,50.8 59.9,47 		"/>
-		<polyline id="XMLID_00000079468368659173442950000005386592234811982750_" class="st7" points="41.6,47 37.8,50.8 41.6,54.6 		"/>
-		<polyline id="XMLID_00000062157517679510208780000010739340695579562905_" class="st7" points="47,41.6 50.8,37.8 54.6,41.6 		"/>
-		<polygon id="XMLID_00000096738116551875394860000016131147687022550938_" class="st7" points="44.3,48.1 44.3,53.4 48.1,57.2 
-			53.4,57.2 57.2,53.4 57.2,48.1 53.4,44.3 48.1,44.3 		"/>
-		<polyline id="XMLID_00000129894136743371068690000001101468535986349705_" class="st7" points="26.4,21 26.4,26.4 21,26.4 		"/>
-		<polyline id="XMLID_00000063599300023924279880000003529837314067301310_" class="st7" points="8.1,21 8.1,26.4 13.5,26.4 		"/>
-		<polyline id="XMLID_00000120520716096447854910000005755550879087595151_" class="st7" points="26.4,13.5 26.4,8.1 21,8.1 		"/>
-		<polyline id="XMLID_00000062902363070961389450000015961316991723364252_" class="st7" points="8.1,13.5 8.1,8.1 13.5,8.1 		"/>
-		<polyline id="XMLID_00000079480399574646542510000014731238866174600369_" class="st7" points="26.4,21 30.2,17.3 26.4,13.5 		"/>
-		<polyline id="XMLID_00000088105256150584710610000002532083917292202928_" class="st7" points="21,26.4 17.3,30.2 13.5,26.4 		"/>
-		<polyline id="XMLID_00000002361672776453549360000001759024130012597943_" class="st7" points="13.5,8.1 17.3,4.3 21,8.1 		"/>
-		<polyline id="XMLID_00000085250737582988620990000010665816667530072224_" class="st7" points="8.1,13.5 4.3,17.3 8.1,21 		"/>
-		<polygon id="XMLID_00000060019224970616880940000007981439492507366031_" class="st7" points="14.6,10.8 19.9,10.8 23.7,14.6 
-			23.7,19.9 19.9,23.7 14.6,23.7 10.8,19.9 10.8,14.6 		"/>
-		<polyline id="XMLID_00000116944907502552930570000008031302115433197216_" class="st7" points="26.4,0.5 21,0.5 17.3,4.3 
-			13.5,0.5 0.5,0.5 		"/>
-		<polyline id="XMLID_00000020362917460403153010000002455455721858421424_" class="st7" points="0.5,8.1 0.5,13.5 4.3,17.3 0.5,21 
-			0.5,34 		"/>
-		<polyline id="XMLID_00000031189636428628909550000009438938969060609453_" class="st7" points="67.5,8.1 50.8,8.1 50.8,26.4 
-			34,26.4 34,21 30.2,17.3 34,13.5 34,0.5 		"/>
-		<polyline id="XMLID_00000080913492488130435220000016422232266479428281_" class="st7" points="34,67.5 34,54.6 37.8,50.8 34,47 
-			34,41.6 17.3,41.6 17.3,59.9 0.5,59.9 		"/>
-		<line id="XMLID_00000152950254884089607910000015141737345609532807_" class="st7" x1="26.4" y1="50.8" x2="8.1" y2="50.8"/>
-		<polyline id="XMLID_00000042010193175061612670000015724512144753507996_" class="st7" points="41.6,0.5 41.6,17.3 59.9,17.3 
-			59.9,34 54.6,34 50.8,37.8 47,34 34,34 33.8,34 21,34 17.3,30.2 13.5,34 8.1,34 8.1,50.8 26.4,50.8 26.4,67.5 		"/>
+		<polyline id="XMLID_00000144327728991833699120000008655350963846335625_" class="st7" points="41.1,54.1 41.1,59.4 46.5,59.4 		
+			"/>
+		<polyline id="XMLID_00000041286924582666305690000003637189839630385842_" class="st7" points="41.1,46.5 41.1,41.1 46.5,41.1 		
+			"/>
+		<polyline id="XMLID_00000051374088657488671720000016433774852893506179_" class="st7" points="59.4,46.5 59.4,41.1 54.1,41.1 		
+			"/>
+		<polyline id="XMLID_00000112630172887992920290000010420988860043326597_" class="st7" points="54.1,59.4 50.3,63.2 46.5,59.4 		
+			"/>
+		<polyline id="XMLID_00000180343110326115880930000003951756623513734302_" class="st7" points="59.4,54.1 63.2,50.3 59.4,46.5 		
+			"/>
+		<polyline id="XMLID_00000047746051555742092210000006695248775102468017_" class="st7" points="41.1,46.5 37.3,50.3 41.1,54.1 		
+			"/>
+		<polyline id="XMLID_00000097492080203283131240000007589499597308980925_" class="st7" points="46.5,41.1 50.3,37.3 54.1,41.1 		
+			"/>
+		<polygon id="XMLID_00000052086348295708305600000010417594022807116956_" class="st7" points="43.8,47.6 43.8,52.9 47.6,56.7 
+			52.9,56.7 56.7,52.9 56.7,47.6 52.9,43.8 47.6,43.8 		"/>
+		<polyline id="XMLID_00000109709350981330211070000003635923462604309168_" class="st7" points="25.9,20.5 25.9,25.9 20.5,25.9 		
+			"/>
+		<polyline id="XMLID_00000055693253193198501560000001946408224901126326_" class="st7" points="7.6,20.5 7.6,25.9 13,25.9 		"/>
+		<polyline id="XMLID_00000175282927207032621310000013613227296412989583_" class="st7" points="25.9,13 25.9,7.6 20.5,7.6 		"/>
+		<polyline id="XMLID_00000062870968781283545260000005753366688166387098_" class="st7" points="7.6,13 7.6,7.6 13,7.6 		"/>
+		<polyline id="XMLID_00000134958442148821749340000006428649978002598577_" class="st7" points="25.9,20.5 29.7,16.8 25.9,13 		"/>
+		<polyline id="XMLID_00000045612753456666306450000007243431404598268041_" class="st7" points="20.5,25.9 16.8,29.7 13,25.9 		"/>
+		<polyline id="XMLID_00000026878607645324461850000013851791391053900168_" class="st7" points="13,7.6 16.8,3.8 20.5,7.6 		"/>
+		<polyline id="XMLID_00000172430096055322889120000008265373164579306138_" class="st7" points="7.6,13 3.8,16.8 7.6,20.5 		"/>
+		<polygon id="XMLID_00000037667841808022633570000011207085925785266568_" class="st7" points="14.1,10.3 19.4,10.3 23.2,14.1 
+			23.2,19.4 19.4,23.2 14.1,23.2 10.3,19.4 10.3,14.1 		"/>
+		<polyline id="XMLID_00000046336808569195592700000013908368086976489383_" class="st7" points="25.9,0 20.5,0 16.8,3.8 13,0 0,0 
+					"/>
+		<polyline id="XMLID_00000157270286529522090650000000921288863997581959_" class="st7" points="0,7.6 0,13 3.8,16.8 0,20.5 
+			0,33.5 		"/>
+		<polyline id="XMLID_00000013166536344761544180000002239626064202160565_" class="st7" points="67,7.6 50.3,7.6 50.3,25.9 
+			33.5,25.9 33.5,20.5 29.7,16.8 33.5,13 33.5,0 		"/>
+		<polyline id="XMLID_00000059285354481445851540000000057351536408280467_" class="st7" points="33.5,67 33.5,54.1 37.3,50.3 
+			33.5,46.5 33.5,41.1 16.8,41.1 16.8,59.4 0,59.4 		"/>
+		<line id="XMLID_00000179627780606286736160000016504944337166894212_" class="st7" x1="25.9" y1="50.3" x2="7.6" y2="50.3"/>
+		<polyline id="XMLID_00000139992515383623140510000003568297181765356728_" class="st7" points="41.1,0 41.1,16.8 59.4,16.8 
+			59.4,33.5 54.1,33.5 50.3,37.3 46.5,33.5 33.5,33.5 33.3,33.5 20.5,33.5 16.8,29.7 13,33.5 7.6,33.5 7.6,50.3 25.9,50.3 25.9,67 
+					"/>
 	</g>
 </g>
 <image style="overflow:visible;" width="168" height="348" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEASABIAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMA
@@ -290,6 +299,6 @@ HUDf5KcjO1h6TSkkuQukE8B0WooGYixAucgeX6a7A2IBIP8A1oIWDSBQWHGtGoauXooKrAk3sB0V
 pVgWztQUOCTkPRQQsNRwAokuOqbHHj5AqNaQkAAW4muuwFEFgCou3QKDKbg4g02pgNPa6L+Y0KCS
 5ANuAvnUxjQ3ChUIHrq/dkRqlluPXnRIU945uwt1rE4/JUsmkoqpZDa2Ax41FoUjuwWxFruRgMag
 BRrKCWJH0jne9SNoOp3sBbELccPirAWNsBUIKN2i0hI+lVmRtTSdc2PZBwtU0mk9VbILZm2dItiL
-ACxqdwpuxCILcOJ84UvpBzPRQHL9O//Z" transform="matrix(1 0 0 1 143.7643 -86.8168)">
+ACxqdwpuxCILcOJ84UvpBzPRQHL9O//Z" transform="matrix(1 0 0 1 143.2643 -87.3168)">
 </image>
 </svg>
