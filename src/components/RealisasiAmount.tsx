@@ -20,7 +20,7 @@ const RealisasiAmount = ({ amount, loading }: RealisasiAmountProps) => {
         <div className="flex items-center justify-center gap-1.5 mb-1 opacity-70">
           <HandHeart size={14} className="text-accent" />
           <span className="text-[11px] uppercase tracking-widest font-medium text-muted-foreground">
-            Donasi yang Telah Disalurkan
+            Donasi yang Telah Realisasikan
           </span>
         </div>
         {loading ? (
