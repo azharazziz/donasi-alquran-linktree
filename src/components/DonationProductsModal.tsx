@@ -87,7 +87,7 @@ const DonationProductsModal = ({ open, onOpenChange }: DonationProductsModalProp
           {/* Reasons */}
           {current.reasons && current.reasons.length > 0 && (
             <div>
-              <h4 className="font-medium text-primary text-sm mb-3">Alasan Berdonasi:</h4>
+              <h4 className="font-medium text-primary text-sm mb-3">Alasan dipilih:</h4>
               <ul className="space-y-2">
                 {current.reasons.map((reason, index) => (
                   <li key={index} className="flex gap-3 text-sm">
