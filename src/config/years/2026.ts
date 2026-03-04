@@ -163,7 +163,7 @@ const config2026: YearlyConfig = {
   ],
 
   donationStatus: {
-    isOpen: true,
+    isOpen: false,
     closedMessage: "Periode donasi telah ditutup. Terima kasih atas perhatian Anda. Hubungi kami untuk informasi lebih lanjut.",
   },
 
