@@ -21,7 +21,6 @@ const Index = () => {
     backgroundImage: `url('${config.backgroundImage}')`,
     backgroundSize: config.backgroundImageSize || '150px',
     backgroundRepeat: 'repeat',
-    backgroundAttachment: 'fixed',
   } : undefined;
 
   const containerClass = hasCustomBackground 
