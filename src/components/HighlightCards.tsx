@@ -41,16 +41,16 @@ const HighlightCards = () => {
       <div className="max-w-md mx-auto">
         {/* Section label */}
         <div className="flex items-center justify-center gap-1.5 mb-3 opacity-70">
-          <Sparkles size={12} className="text-accent" />
+          <Sparkles size={12} className="text-gold" />
           <span className="text-[10px] uppercase tracking-[0.15em] font-medium text-muted-foreground">
             Item Tersalurkan
           </span>
         </div>
 
         <div
-          className={`grid gap-3 ${
+          className={`grid gap-2.5 ${
             displayItems.length === 1
-              ? "grid-cols-1 max-w-[200px] mx-auto"
+              ? "grid-cols-1 max-w-[180px] mx-auto"
               : displayItems.length === 3
               ? "grid-cols-3"
               : "grid-cols-2"
@@ -66,7 +66,7 @@ const HighlightCards = () => {
 };
 
 // ---------------------------------------------------------------------------
-// Individual card
+// Individual card — clean, minimal, inline with Islamic aesthetic
 // ---------------------------------------------------------------------------
 
 function HighlightCard({ item, index }: { item: HighlightItem; index: number }) {
@@ -75,49 +75,38 @@ function HighlightCard({ item, index }: { item: HighlightItem; index: number }) 
 
   return (
     <div
-      className="group relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-b from-card to-card/60 backdrop-blur-sm shadow-sm hover:shadow-lg transition-all duration-300 animate-fade-in-up"
+      className="group relative overflow-hidden rounded-xl border border-border/40 bg-card/80 backdrop-blur-sm transition-all duration-300 animate-fade-in-up"
       style={{ animationDelay: `${0.55 + index * 0.08}s`, opacity: 0 }}
     >
-      {/* Accent glow at top */}
-      <div
-        className="absolute top-0 inset-x-0 h-16 opacity-[0.07] bg-gradient-to-b from-primary to-transparent"
-        style={accent ? { background: `linear-gradient(to bottom, ${accent}, transparent)` } : undefined}
-      />
-
       {/* Content */}
-      <div className="relative px-4 py-5 text-center">
-        {/* Icon */}
-        <div className="flex items-center justify-center mb-3">
-          <div
-            className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
-            style={accent ? { backgroundColor: `${accent}15` } : undefined}
-          >
-            <Icon
-              size={20}
-              className={accent ? "" : "text-primary"}
-              style={accent ? { color: accent } : undefined}
-            />
-          </div>
+      <div className="relative px-3 py-4 text-center">
+        {/* Icon — small and subtle */}
+        <div className="flex items-center justify-center mb-2">
+          <Icon
+            size={16}
+            className={accent ? "opacity-70" : "text-primary/60"}
+            style={accent ? { color: accent } : undefined}
+          />
         </div>
 
-        {/* Number */}
+        {/* Number — prominent */}
         <p
-          className="text-3xl font-serif font-bold tracking-tight text-primary leading-none"
+          className="text-2xl font-serif font-bold tracking-tight text-primary leading-none"
           style={accent ? { color: accent } : undefined}
         >
           {item.total.toLocaleString("id-ID")}
         </p>
 
         {/* Label */}
-        <p className="text-[10px] mt-2 font-semibold text-muted-foreground uppercase tracking-[0.12em] leading-tight">
+        <p className="text-[9px] mt-1.5 font-semibold text-muted-foreground uppercase tracking-[0.1em] leading-tight">
           {item.name}
         </p>
       </div>
 
-      {/* Bottom accent line */}
+      {/* Subtle bottom accent */}
       <div
-        className="absolute bottom-0 inset-x-4 h-[2px] rounded-full bg-primary/20 group-hover:bg-primary/40 transition-colors duration-300"
-        style={accent ? { backgroundColor: `${accent}30` } : undefined}
+        className="absolute bottom-0 inset-x-0 h-[1.5px] bg-primary/15"
+        style={accent ? { backgroundColor: `${accent}25` } : undefined}
       />
     </div>
   );

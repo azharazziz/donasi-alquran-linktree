@@ -19,7 +19,7 @@ const Footer = () => {
               key={org.name}
               className="flex flex-col items-center gap-2 group"
             >
-              <div className="w-full max-w-[100px] aspect-[3/2] rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center p-2 transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-slate-800 overflow-hidden">
+              <div className="w-full max-w-[100px] aspect-[3/2] rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center p-2 transition-colors duration-300 group-hover:border-primary/40 group-hover:bg-primary/15 overflow-hidden">
                 {config.initiatorLogos[org.name] ? (
                   <img
                     src={config.initiatorLogos[org.name]}

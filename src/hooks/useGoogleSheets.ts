@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { stripFlags } from "@/lib/flags";
 import { useYearContext } from "@/contexts/YearContext";
 
-export type SheetName = "Donasi Masuk" | "Realisasi" | "Penyaluran Donasi";
+export type SheetName = string;
 
 // ---------------------------------------------------------------------------
 // Cell / response parsing
