@@ -35,7 +35,6 @@
     background-image: url("/src/assets/islamic-pattern.svg");
     background-size: 150px;
     background-repeat: repeat;
-    background-attachment: fixed;
     background-color: hsl(var(--primary) / 0.08);
   }
 
