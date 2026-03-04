@@ -12,6 +12,10 @@ export interface YearlyConfig {
     primaryColor: string; // Hex color code
   };
 
+  // Background
+  backgroundImage?: string; // Background image path
+  backgroundImageSize?: string; // Background image size (e.g. "200px", "300px")
+
   // Google Sheets
   spreadsheetId: string;
   sheetNames: {

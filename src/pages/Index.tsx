@@ -8,13 +8,31 @@ import DonaturSection from "@/components/DonaturSection";
 import Footer from "@/components/Footer";
 import { YearSwitcher } from "@/components/YearSwitcher";
 import { useDonasiTotal, useRealisasiTotal } from "@/hooks/useGoogleSheets";
+import { useYearContext } from "@/contexts/YearContext";
 
 const Index = () => {
   const { total, loading, lastUpdate } = useDonasiTotal();
   const { total: realisasiTotal, loading: realisasiLoading } = useRealisasiTotal();
+  const { config } = useYearContext();
+
+  // Conditional styling - gunakan config jika ada, otherwise gunakan CSS default
+  const hasCustomBackground = config.backgroundImage;
+  const backgroundStyles = hasCustomBackground ? {
+    backgroundImage: `url('${config.backgroundImage}')`,
+    backgroundSize: config.backgroundImageSize || '150px',
+    backgroundRepeat: 'repeat',
+    backgroundAttachment: 'fixed',
+  } : undefined;
+
+  const containerClass = hasCustomBackground 
+    ? "min-h-screen bg-background islamic-pattern-base"
+    : "min-h-screen bg-background islamic-pattern";
 
   return (
-    <div className="min-h-screen bg-background islamic-pattern">
+    <div 
+      className={containerClass}
+      style={backgroundStyles}
+    >
       <div className="flex flex-col items-center max-w-lg mx-auto">
         {/* Year Switcher */}
         <div className="w-full px-4 pt-4 pb-2">

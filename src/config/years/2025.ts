@@ -27,11 +27,14 @@ import SKSFoundationLogo from "@/assets/sks-foundation.png";
 import QRISImage from "@/assets/qris-code.png";
 import Quran2025 from "@/assets/quran 2025.png";
 import Iqro2025 from "@/assets/iqro.png";
+import BackgroundImage2025 from "@/assets/islamic-pattern-2.svg";
 
 const config2025: YearlyConfig = {
   theme: {
     primaryColor: "#164c67", // Emerald/Green
   },
+
+  backgroundImage: BackgroundImage2025,
 
   spreadsheetId: "1q__tKYjR_SDgzul8NPiiclYdne7iE2jH42UUjbOcxTI",
 

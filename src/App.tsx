@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -12,30 +11,6 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => {
-  useEffect(() => {
-    // Auto-detect system dark mode preference
-    const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const htmlElement = document.documentElement;
-
-    if (isDarkMode) {
-      htmlElement.classList.add("dark");
-    } else {
-      htmlElement.classList.remove("dark");
-    }
-
-    // Listen for changes in system preference
-    const mediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = (e: MediaQueryListEvent) => {
-      if (e.matches) {
-        htmlElement.classList.add("dark");
-      } else {
-        htmlElement.classList.remove("dark");
-      }
-    };
-
-    mediaQueryList.addEventListener("change", handleChange);
-    return () => mediaQueryList.removeEventListener("change", handleChange);
-  }, []);
 
   return (
     <YearProvider>

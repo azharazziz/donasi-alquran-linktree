@@ -32,11 +32,14 @@ import KamarBacaMagelangLogo from "@/assets/kamar-baca-magelang.png";
 import SKSFoundationLogo from "@/assets/sks-foundation.png";
 import QRISImage from "@/assets/qris-code.png";
 import Quran2025 from "@/assets/quran 2025.png";
+import BackgroundImage2026 from "@/assets/islamic-pattern.svg";
 
 const config2026: YearlyConfig = {
   theme: {
     primaryColor: "#082e6e", // Blue
   },
+
+  backgroundImage: BackgroundImage2026,
 
   spreadsheetId: "16-BQVDuCcsKixvTynVXVIOcYTwCcq-Tkz3rdajJIHis",
 
