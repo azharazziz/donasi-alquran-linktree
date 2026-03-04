@@ -5,6 +5,9 @@ import TransferBankModal from "./TransferBankModal";
 import QRISModal from "./QRISModal";
 import SocialMediaModal from "./SocialMediaModal";
 import DonationReportModal from "./DonationReportModal";
+import FAQModal from "./FAQModal";
+import HowToDonateModal from "./HowToDonateModal";
+import DonationProductsModal from "./DonationProductsModal";
 import { useYearContext } from "@/contexts/YearContext";
 
 const LinkList = () => {
@@ -13,6 +16,9 @@ const LinkList = () => {
   const [qrisOpen, setQrisOpen] = useState(false);
   const [socialMediaOpen, setSocialMediaOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+  const [faqOpen, setFaqOpen] = useState(false);
+  const [howToDonateOpen, setHowToDonateOpen] = useState(false);
+  const [donationProductsOpen, setDonationProductsOpen] = useState(false);
 
   // Map action types to their handlers
   const getHandler = (action?: string) => {
@@ -23,6 +29,12 @@ const LinkList = () => {
         return () => setQrisOpen(true);
       case "report":
         return () => setReportOpen(true);
+      case "faq":
+        return () => setFaqOpen(true);
+      case "howToDonate":
+        return () => setHowToDonateOpen(true);
+      case "donationProducts":
+        return () => setDonationProductsOpen(true);
       case "social":
         return () => setSocialMediaOpen(true);
       default:
@@ -82,6 +94,9 @@ const LinkList = () => {
       <QRISModal open={qrisOpen} onOpenChange={setQrisOpen} />
       <SocialMediaModal open={socialMediaOpen} onOpenChange={setSocialMediaOpen} />
       <DonationReportModal open={reportOpen} onOpenChange={setReportOpen} />
+      <FAQModal open={faqOpen} onOpenChange={setFaqOpen} />
+      <HowToDonateModal open={howToDonateOpen} onOpenChange={setHowToDonateOpen} />
+      <DonationProductsModal open={donationProductsOpen} onOpenChange={setDonationProductsOpen} />
     </>
   );
 };

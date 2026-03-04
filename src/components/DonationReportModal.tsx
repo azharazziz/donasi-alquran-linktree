@@ -81,7 +81,7 @@ const DonationReportModal = ({ open, onOpenChange }: DonationReportModalProps) =
                 variant="ghost"
                 size="icon"
                 onClick={handleRefresh}
-                className="h-8 w-8 text-muted-foreground hover:text-primary flex-shrink-0"
+                className="h-8 w-8 text-primary hover:bg-primary hover:text-primary-foreground flex-shrink-0 transition-colors"
               >
                 <RefreshCw size={14} />
               </Button>

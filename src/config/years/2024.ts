@@ -8,14 +8,18 @@ import {
   QrCode,
   Globe,
   MessageCircle,
+  HelpCircle,
   FileText,
   Instagram,
   BarChart3,
   Twitter,
   MapPinCheck,
+  BookOpen,
+  Gift,
 } from "lucide-react";
 import type { YearlyConfig } from "../types";
 import Logo from "@/assets/logo 2024.png";
+import alQuran2024 from "@/assets/Al Quran.png";
 import BuburKijangLogo from "@/assets/bubur-kijang.png";
 import CapDuaJagoLogo from "@/assets/cap-dua-jago.png";
 import FotoinProjectLogo from "@/assets/fotoin-project.png";
@@ -79,6 +83,18 @@ const config2024: YearlyConfig = {
 
   links: [
     {
+      icon: Gift,
+      title: "Wujud Donasi",
+      subtitle: "Informasi tentang Wujud Donasi yang disalurkan",
+      action: "donationProducts",
+    },
+    {
+      icon: BookOpen,
+      title: "Cara Berdonasi",
+      subtitle: "Panduan langkah demi langkah",
+      action: "howToDonate",
+    },
+    {
       icon: Landmark,
       title: "Donasi via Transfer Bank",
       subtitle: "Bank UOB",
@@ -101,6 +117,12 @@ const config2024: YearlyConfig = {
       title: "Laporan Donasi",
       subtitle: "Lihat laporan donasi terkini",
       action: "report",
+    },
+    {
+      icon: HelpCircle,
+      title: "FAQ",
+      subtitle: "Pertanyaan yang sering diajukan",
+      action: "faq",
     },
     {
       icon: MessageCircle,
@@ -193,6 +215,89 @@ const config2024: YearlyConfig = {
       url: "https://instagram.com/sksfound",
       color: "hover:text-pink-500",
       bgColor: "hover:bg-pink-50",
+    },
+  ],
+  faq: [
+    {
+      question: "Berapa minimal donasi yang dapat diberikan?",
+      answer: "Tidak terdapat batas minimal donasi. Namun, kami menyarankan agar nominal donasi disesuaikan dengan tujuan penyaluran. Sebagai gambaran, donasi untuk 1 (satu) mushaf Al-Qur’an dimulai dari Rp50.000 beserta kelipatannya.",
+    },
+    {
+      question: "Saya telah melakukan transfer. Bagaimana cara mengirimkan bukti donasi?",
+      answer: "Setelah melakukan pembayaran, silakan unggah bukti transfer melalui tautan berikut: https://donasi-alquran.vercel.app/",
+    },
+    {
+      question: "Di mana saya dapat melihat laporan keuangan donasi?",
+      answer: "Laporan keuangan donasi dapat diakses secara transparan melalui tautan berikut: https://donasi-alquran.vercel.app/",
+    },
+    {
+      question: "Apakah bisa berdonasi dengan kirim barang?",
+      answer: "Mohon maaf, saat ini donasi hanya kami terima dalam bentuk uang melalui transfer. Hal ini dilakukan untuk menyeragamkan bentuk donasi yang disalurkan serta menghindari perbedaan nilai donasi antar lokasi.",
+    },
+    {
+      question: "Kapan donasi akan mulai disalurkan kepada penerima?",
+      answer: "Donasi direncanakan mulai disalurkan pada minggu ke-2 atau ke-3 bulan Ramadhan.",
+    },
+    {
+      question: "Kapan donasi ini akan ditutup?",
+      answer: "Donasi direncanakan akan ditutup pada 20 Maret 2024. Namun demikian, donasi dapat ditutup lebih awal apabila kuota donasi yang dibutuhkan telah terpenuhi.",
+    },
+  ],
+
+  howToDonate: {
+    title: "CARA BERDONASI",
+    description: "Ikuti langkah-langkah sederhana berikut untuk melakukan donasi",
+    steps: [
+      {
+        number: 1,
+        title: "Tentukan nominal donasi yang akan diberikan.",
+        description: "Donasi dapat diberikan dengan jumlah berapa pun.",
+      },
+      {
+        number: 2,
+        title: "Lakukan transfer donasi melalui bank atau melalui QRIS Kamar Baca Magelang.",
+        description: "",
+      },
+      {
+        number: 3,
+        title: "Simpan bukti pembayaran berupa foto atau tangkapan layar.",
+        description: "",
+      },
+      {
+        number: 4,
+        title: "Lakukan konfirmasi donasi dengan mengakses https://donasi-alquran.vercel.app",
+        description: "Kemudian lengkapi data dan unggah bukti transfer.",
+      },
+      {
+        number: 5,
+        title: "Terima kasih atas partisipasi dan kepercayaan Anda.",
+        description: "Semoga Allah membalas dengan keberkahan dan kebaikan yang berlipat.",
+      },
+    ],
+  },
+
+  donationProducts: [
+    {
+      title: "HAFAZAN 8 PERKATA LATIN 2 WARNA “AL-MUBAROK”",
+      image: alQuran2024,
+      description: "Al-Qur’an Hafazan 8 Perkata Latin 2 Warna “Al-Mubarok” adalah mushaf hafalan berformat A5 dengan sistem 8 blok warna per halaman, dilengkapi transliterasi latin terpisah, terjemah perkata standar Kemenag RI, kolom awal dan nomor ayat, serta tanda waqaf untuk memudahkan membaca, memahami, dan menghafal Al-Qur’an secara terstruktur.",
+      advantages: [
+        "Sistem 8 blok warna per halaman memudahkan visualisasi dan pembagian hafalan.",
+        "Transliterasi latin terpisah membantu yang belum lancar membaca huruf Arab.",
+        "Menggunakan Rasm Utsmani Standar Indonesia.",
+        "Dilengkapi terjemah perkata standar Kemenag RI.",
+        "Tersedia kolom awal ayat dan nomor ayat untuk memudahkan mengingat posisi ayat.",
+        "Memiliki pedoman transliterasi Arab-Latin.",
+        "Dilengkapi tanda waqaf dan ibtida (jeda/terus).",
+        "Disertai doa khatam Al-Qur’an dan Asmaul Husna.",
+      ],
+      reasons: [
+        "Memudahkan proses menghafal secara terstruktur dan sistematis.",
+        "Membantu menjaga konsistensi hafalan per blok.",
+        "Cocok untuk pemula hingga program tahfidz lanjutan.",
+        "Mendukung hafalan sekaligus pemahaman makna ayat.",
+        "Ideal digunakan di sekolah, pesantren, maupun pembelajaran di rumah.",
+      ],
     },
   ],
 };

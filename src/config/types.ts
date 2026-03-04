@@ -98,4 +98,30 @@ export interface YearlyConfig {
     color: string;
     bgColor: string;
   }>;
+
+  // FAQ
+  faq: Array<{
+    question: string;
+    answer: string;
+  }>;
+
+  // How to Donate Card
+  howToDonate: {
+    title: string;
+    description: string;
+    steps: Array<{
+      number: number;
+      title: string;
+      description: string;
+    }>;
+  };
+
+  // Donation Products (Items given to donors)
+  donationProducts: Array<{
+    title: string;
+    image: string;
+    description: string;
+    advantages: string[];
+    reasons: string[];
+  }>;
 }

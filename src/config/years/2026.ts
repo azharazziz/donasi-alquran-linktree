@@ -10,6 +10,7 @@ import {
   QrCode,
   Globe,
   MessageCircle,
+  HelpCircle,
   FileText,
   Instagram,
   BarChart3,
@@ -19,6 +20,8 @@ import {
   Linkedin,
   Mail,
   MapPinCheck,
+  BookOpen,
+  Gift,
 } from "lucide-react";
 import type { YearlyConfig } from "../types";
 import Logo from "@/assets/logo.png";
@@ -28,6 +31,7 @@ import FotoinProjectLogo from "@/assets/fotoin-project.png";
 import KamarBacaMagelangLogo from "@/assets/kamar-baca-magelang.png";
 import SKSFoundationLogo from "@/assets/sks-foundation.png";
 import QRISImage from "@/assets/qris-code.png";
+import Quran2025 from "@/assets/quran 2025.png";
 
 const config2026: YearlyConfig = {
   theme: {
@@ -90,6 +94,18 @@ const config2026: YearlyConfig = {
 
   links: [
     {
+      icon: Gift,
+      title: "Wujud Donasi",
+      subtitle: "Informasi tentang Wujud Donasi yang disalurkan",
+      action: "donationProducts",
+    },
+    {
+      icon: BookOpen,
+      title: "Cara Berdonasi",
+      subtitle: "Panduan langkah demi langkah",
+      action: "howToDonate",
+    },
+    {
       icon: Landmark,
       title: "Donasi via Transfer Bank",
       subtitle: "Bank BSI dan UOB",
@@ -112,6 +128,12 @@ const config2026: YearlyConfig = {
       title: "Laporan Donasi",
       subtitle: "Lihat laporan donasi terkini",
       action: "report",
+    },
+    {
+      icon: HelpCircle,
+      title: "FAQ",
+      subtitle: "Pertanyaan yang sering diajukan",
+      action: "faq",
     },
     {
       icon: MessageCircle,
@@ -237,6 +259,87 @@ const config2026: YearlyConfig = {
       url: "https://instagram.com/sksfound",
       color: "hover:text-pink-500",
       bgColor: "hover:bg-pink-50",
+    },
+  ],
+
+  faq: [
+    {
+      question: "Berapa minimal donasi yang dapat diberikan?",
+      answer: "Tidak terdapat batas minimal donasi. Namun, kami menyarankan agar nominal donasi disesuaikan dengan tujuan penyaluran. Sebagai gambaran, donasi untuk 1 (satu) mushaf Al-Qur’an dimulai dari Rp50.000 beserta kelipatannya.",
+    },
+    {
+      question: "Saya telah melakukan transfer. Bagaimana cara mengirimkan bukti donasi?",
+      answer: "Setelah melakukan pembayaran, silakan unggah bukti transfer melalui tautan berikut: https://donasi-alquran.vercel.app/",
+    },
+    {
+      question: "Di mana saya dapat melihat laporan keuangan donasi?",
+      answer: "Laporan keuangan donasi dapat diakses secara transparan melalui tautan berikut: https://donasi-alquran.vercel.app/",
+    },
+    {
+      question: "Apakah bisa berdonasi dengan kirim barang?",
+      answer: "Mohon maaf, saat ini donasi hanya kami terima dalam bentuk uang melalui transfer. Hal ini dilakukan untuk menyeragamkan bentuk donasi yang disalurkan serta menghindari perbedaan nilai donasi antar lokasi.",
+    },
+    {
+      question: "Kapan donasi akan mulai disalurkan kepada penerima?",
+      answer: "Donasi direncanakan mulai disalurkan pada minggu ke-2 atau ke-3 bulan Ramadhan.",
+    },
+    {
+      question: "Kapan donasi ini akan ditutup?",
+      answer: "Donasi direncanakan akan ditutup pada 6 Maret 2026. Namun demikian, donasi dapat ditutup lebih awal apabila kuota donasi yang dibutuhkan telah terpenuhi.",
+    },
+  ],
+
+  howToDonate: {
+    title: "CARA BERDONASI",
+    description: "Ikuti langkah-langkah sederhana berikut untuk melakukan donasi",
+    steps: [
+      {
+        number: 1,
+        title: "Tentukan nominal donasi yang akan diberikan.",
+        description: "Donasi dapat diberikan dengan jumlah berapa pun.",
+      },
+      {
+        number: 2,
+        title: "Lakukan transfer donasi melalui bank atau melalui QRIS Kamar Baca Magelang.",
+        description: "",
+      },
+      {
+        number: 3,
+        title: "Simpan bukti pembayaran berupa foto atau tangkapan layar.",
+        description: "",
+      },
+      {
+        number: 4,
+        title: "Lakukan konfirmasi donasi dengan mengakses https://donasi-alquran.vercel.app",
+        description: "Kemudian lengkapi data dan unggah bukti transfer.",
+      },
+      {
+        number: 5,
+        title: "Terima kasih atas partisipasi dan kepercayaan Anda.",
+        description: "Semoga Allah membalas dengan keberkahan dan kebaikan yang berlipat.",
+      },
+    ],
+  },
+
+  donationProducts: [
+    {
+      title: "Al-Qur'an Al-Mubayyin Tematik Multicode",
+      image: Quran2025,
+      description: "Al-Qur'an Al-Mubayyin Tematik Multicode adalah mushaf ukuran A5 dengan hard cover lux, kertas HVS premium, cetak dual colour, dan 617 halaman yang dirancang untuk memudahkan pembaca memahami Al-Qur'an secara tematik, lengkap dengan terjemah per kata, transliterasi latin, kode tajwid, serta QR Code video bacaan",
+      advantages: [
+        "Terjemah per kata untuk membantu memahami makna ayat secara mendalam.",
+        "Transliterasi latin memudahkan pembaca yang belum lancar membaca huruf Arab.",
+        "Dilengkapi tanda waqaf jeda dan terus untuk panduan berhenti dan melanjutkan bacaan.",
+        "Blok tematik pilihan yang mengelompokkan ayat berdasarkan tema tertentu.",
+        "Kode baca tajwid berbasis warna atau simbol untuk membantu membaca dengan tartil.",
+        "QR Code yang terhubung ke 604 video bacaan Al-Qur'an sebagai referensi bacaan yang benar.",
+      ],
+      reasons: [
+        "Membantu memahami Al-Qur'an secara tematik dan sistematis.",
+        "Cocok untuk belajar tajwid secara mandiri.",
+        "Mempermudah memahami arti ayat melalui terjemah per kata.",
+        "Praktis dibawa dan digunakan untuk belajar harian.",
+      ],
     },
   ],
 };
