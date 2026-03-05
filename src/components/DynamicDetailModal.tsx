@@ -56,6 +56,26 @@ function extractGoogleDriveId(url: string): string | null {
   return null;
 }
 
+function convertGoogleDriveUrlToEmbedUrl(url: string): string {
+  // Auto-convert Google Drive link format untuk embed
+  // Input: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+  // Output: https://drive.google.com/uc?id=FILE_ID&export=view
+  const fileId = extractGoogleDriveId(url);
+  if (fileId) {
+    return `https://drive.google.com/uc?id=${fileId}&export=download`;
+  }
+  return url; // Return original jika tidak bisa extract ID
+}
+
+function getGoogleDrivePreviewUrl(url: string): string {
+  // Format untuk iframe preview
+  const fileId = extractGoogleDriveId(url);
+  if (fileId) {
+    return `https://drive.google.com/file/d/${fileId}/preview`;
+  }
+  return url;
+}
+
 function isInstagramUrl(url: string): boolean {
   return url.includes("instagram.com") || url.includes("instagr.am");
 }
@@ -91,17 +111,43 @@ function BuktiRenderer({ value }: { value: string }) {
 
   const driveId = extractGoogleDriveId(value);
 
-  // Google Drive - use iframe embed
-  if (driveId && !imgError) {
-    const embedUrl = `https://drive.google.com/file/d/${driveId}/preview`;
+  // Google Drive - try image first, fallback ke iframe preview
+  if (driveId) {
+    // Jika image gagal load, coba iframe preview
+    if (imgError) {
+      const previewUrl = getGoogleDrivePreviewUrl(value);
+      return (
+        <div className="space-y-3">
+          <div className="bg-muted rounded-lg border border-border overflow-hidden">
+            <iframe
+              src={previewUrl}
+              className="w-full h-96"
+              allow="autoplay"
+              title="Google Drive preview"
+            />
+          </div>
+          <a
+            href={value}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline"
+          >
+            <ExternalLink size={12} />
+            Buka di Google Drive
+          </a>
+        </div>
+      );
+    }
+
+    // Coba direct image embed dulu
+    const imageUrl = convertGoogleDriveUrlToEmbedUrl(value);
     return (
       <div className="space-y-3">
         <div className="bg-muted rounded-lg border border-border overflow-hidden">
-          <iframe
-            src={embedUrl}
-            className="w-full h-96"
-            allow="autoplay"
-            title="Google Drive preview"
+          <img
+            src={imageUrl}
+            alt="Bukti"
+            className="w-full max-h-96 object-contain"
             onError={() => setImgError(true)}
           />
         </div>

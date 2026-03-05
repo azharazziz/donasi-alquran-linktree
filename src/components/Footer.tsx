@@ -49,7 +49,21 @@ const Footer = () => {
           {config.helpers.map((helper, index) => (
             <span
               key={index}
-              className="inline-block px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-xs text-foreground font-medium hover:bg-primary/20 transition-colors"
+              className="
+                inline-block 
+                px-3 py-1.5 
+                rounded-full 
+                bg-primary 
+                text-primary-foreground 
+                border border-primary
+                text-xs 
+                font-medium 
+                shadow-sm
+                transition-all duration-300 
+                hover:-translate-y-0.5 
+                hover:shadow-md
+                hover:bg-primary/90
+              "
             >
               {helper}
             </span>

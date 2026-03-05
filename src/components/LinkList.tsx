@@ -46,17 +46,34 @@ const LinkList = () => {
     <>
       {!config.donationStatus.isOpen && (
         <section className="px-4 pb-6 w-full max-w-md mx-auto animate-fade-in-up" style={{ animationDelay: "0.25s" }}>
-          <div className="relative overflow-hidden rounded-2xl border border-destructive/50 dark:border-destructive/40 bg-destructive/5 dark:bg-destructive/10 px-6 py-4 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 hover:border-destructive/70 group">
-            <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.08))'}} />
-            <div className="relative flex items-center gap-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-destructive/15 dark:bg-destructive/25 flex items-center justify-center text-destructive transition-colors duration-300 group-hover:bg-destructive group-hover:text-destructive-foreground">
+          <div className="relative overflow-hidden rounded-2xl 
+              border border-destructive 
+              bg-destructive 
+              text-destructive-foreground 
+              px-6 py-4 
+              shadow-md 
+              transition-all duration-300 
+              hover:shadow-lg 
+              hover:-translate-y-0.5 
+              hover:bg-destructive/90
+              group">
+
+            <div className="flex items-center gap-4">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl 
+                  bg-destructive-foreground/20 
+                  flex items-center justify-center 
+                  text-destructive-foreground
+                  transition-all duration-300
+                  group-hover:bg-destructive-foreground
+                  group-hover:text-destructive">
                 <AlertCircle size={20} />
               </div>
+
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-destructive dark:text-destructive text-sm md:text-base">
+                <p className="font-semibold text-sm md:text-base">
                   Donasi Ditutup
                 </p>
-                <p className="text-xs text-destructive/70 dark:text-destructive/80 mt-0.5">
+                <p className="text-xs mt-0.5 opacity-90">
                   {config.donationStatus.closedMessage}
                 </p>
               </div>
