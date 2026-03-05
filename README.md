@@ -220,28 +220,11 @@ bun run build
 
 ---
 
-## 🤝 Inisiator & Mitra
-
-### 2026
-- Kamar Baca Magelang · Fotoin Project · SKS Foundation · Mie Ayam Cap 2 Jago · Bubur Kijang
-- Penerbit: Al Qosbah
-
-### 2025
-- Kamar Baca Magelang · Fotoin Project · SKS Foundation
-- Penerbit: Al Qosbah · Depot Iqro
-
-### 2024
-- Kamar Baca Magelang · Fotoin Project · SKS Foundation
-- Penerbit: Al Mubarok
-
----
-
 ## 📞 Kontak
 
 - **Email**: azharazziz13[at]gmail.com
 - **Instagram**: @kamarbacamgl
 - **Twitter**: @kamarbacamgl
-- **WhatsApp**: +6285155238000
 
 ---
 
