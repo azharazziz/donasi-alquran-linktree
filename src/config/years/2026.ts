@@ -41,6 +41,7 @@ const config2026: YearlyConfig = {
   },
 
   backgroundImage: BackgroundImage2026,
+  backgroundImageSize: "200px",
 
   spreadsheetId: "16-BQVDuCcsKixvTynVXVIOcYTwCcq-Tkz3rdajJIHis",
 
