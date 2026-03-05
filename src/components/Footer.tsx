@@ -1,8 +1,15 @@
 import { Heart } from "lucide-react";
 import { useYearContext } from "@/contexts/YearContext";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const Footer = () => {
   const { config } = useYearContext();
+  const primaryColor = config.theme.primaryColor;
+
   return (
     <footer className="px-4 pb-10 pt-4 w-full max-w-md mx-auto animate-fade-in-up" style={{ animationDelay: "0.9s", opacity: 0 }}>
       {/* Divider */}
@@ -84,6 +91,41 @@ const Footer = () => {
       </div>
 
       <div className="gold-divider mb-8" />
+
+      {/* Publishers */}
+      {config.publishers && config.publishers.length > 0 && (
+        <div className="text-center mb-6">
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-3 font-medium">
+            Bekerja sama dengan
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            {config.publishers.map((publisher) => (
+              <div
+                key={publisher.name}
+                className="flex flex-col items-center gap-1"
+              >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div
+                      className="w-16 aspect-[4/3] rounded flex items-center justify-center p-1.5 cursor-pointer"
+                      style={{ backgroundColor: primaryColor }}
+                    >
+                      <img
+                        src={publisher.logo}
+                        alt={publisher.name}
+                        className="max-w-full max-h-full object-contain filter brightness-0 invert"
+                      />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{publisher.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Copyright */}
       <div className="text-center">

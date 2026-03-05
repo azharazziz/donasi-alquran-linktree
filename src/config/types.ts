@@ -53,6 +53,10 @@ export interface YearlyConfig {
     initials: string;
   }>;
   initiatorLogos: Record<string, string>; // Mapping of initiator names to logo paths
+  publishers?: Array<{
+    name: string;
+    logo: string; // Logo path for publisher
+  }>;
   helpers: string[];
 
   // Links

@@ -27,6 +27,7 @@ import KamarBacaMagelangLogo from "@/assets/kamar-baca-magelang.png";
 import SKSFoundationLogo from "@/assets/sks-foundation.png";
 import QRISImage from "@/assets/qris-code.png";
 import BackgroundImage2024 from "@/assets/islamic-pattern-3.svg";
+import AlMubarok from "@/assets/al mubarok.png";
 
 const config2024: YearlyConfig = {
   theme: {
@@ -79,6 +80,10 @@ const config2024: YearlyConfig = {
     "Fotoin Project": FotoinProjectLogo,
     "SKS Foundation": SKSFoundationLogo,
   },
+
+  publishers: [
+    { name: "Al Mubarok", logo: AlMubarok },
+  ],
 
   helpers: [
     "Setya Handayani",

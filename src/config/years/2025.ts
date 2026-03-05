@@ -28,6 +28,8 @@ import QRISImage from "@/assets/qris-code.png";
 import Quran2025 from "@/assets/quran 2025.png";
 import Iqro2025 from "@/assets/iqro.png";
 import BackgroundImage2025 from "@/assets/islamic-pattern-2.svg";
+import AlQosbah from "@/assets/al qosbah.png";
+import DepotIqroLogo from "@/assets/depot iqro.png";
 
 const config2025: YearlyConfig = {
   theme: {
@@ -80,6 +82,11 @@ const config2025: YearlyConfig = {
     "Fotoin Project": FotoinProjectLogo,
     "SKS Foundation": SKSFoundationLogo,
   },
+
+  publishers: [
+    { name: "Al Qosbah", logo: AlQosbah },
+    { name: "Depot Iqro", logo: DepotIqroLogo },
+  ],
 
   helpers: [
     "Mila Nuraeni",
