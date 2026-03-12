@@ -26,7 +26,7 @@ import FotoinProjectLogo from "@/assets/fotoin-project.png";
 import KamarBacaMagelangLogo from "@/assets/kamar-baca-magelang.png";
 import SKSFoundationLogo from "@/assets/sks-foundation.png";
 import QRISImage from "@/assets/qris-code.png";
-import BackgroundImage2024 from "@/assets/islamic-pattern-3.svg";
+import BackgroundImage2024 from "@/assets/islamic-pattern-4.svg";
 import AlMubarok from "@/assets/al mubarok.png";
 
 const config2024: YearlyConfig = {
@@ -35,6 +35,7 @@ const config2024: YearlyConfig = {
   },
 
   backgroundImage: BackgroundImage2024,
+  backgroundImageSize: "100px",
 
   spreadsheetId: "1gQgeowsKnFXgw3xf7DtcqY8uCqG9o3IKsMxlyAQeAFY",
 
