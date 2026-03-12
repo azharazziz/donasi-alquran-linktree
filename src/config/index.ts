@@ -1,6 +1,7 @@
 /**
  * Central Config Index
  * Aggregates all yearly configurations and provides default year selection logic
+ * Merges hardcoded configs with admin (localStorage) overrides
  */
 
 import config2025 from "./years/2025";
@@ -8,42 +9,82 @@ import config2026 from "./years/2026";
 import config2024 from "./years/2024";
 import type { YearlyConfig } from "./types";
 import { generateColorPalette } from "./theme-generator";
+import { getAdminConfigs } from "./admin";
+import { adminConfigToYearly } from "./config-converter";
 
 /**
- * All available yearly configurations
+ * Hardcoded yearly configurations
  */
-export const CONFIG_BY_YEAR = {
+const HARDCODED_CONFIGS: Record<number, YearlyConfig> = {
   2024: config2024,
   2025: config2025,
   2026: config2026,
-} as const;
-
-export type AvailableYear = keyof typeof CONFIG_BY_YEAR;
+};
 
 /**
- * Determine the active year with fallback logic:
- * - Use current year (new Date().getFullYear()) if available
- * - Fallback to the closest previous available year
- * - Never fallback to a future year
+ * Get all available yearly configurations (hardcoded + admin overrides)
+ * Admin configs override hardcoded configs for the same year
+ */
+function getMergedConfigs(): Record<number, YearlyConfig> {
+  const merged: Record<number, YearlyConfig> = { ...HARDCODED_CONFIGS };
+
+  try {
+    const adminConfigs = getAdminConfigs();
+    for (const [yearStr, adminConfig] of Object.entries(adminConfigs)) {
+      const year = parseInt(yearStr, 10);
+      merged[year] = adminConfigToYearly(adminConfig);
+    }
+  } catch (e) {
+    console.warn("[Config] Failed to load admin configs:", e);
+  }
+
+  return merged;
+}
+
+/**
+ * All available yearly configurations (reactive getter)
+ */
+export const CONFIG_BY_YEAR = new Proxy({} as Record<number, YearlyConfig>, {
+  get(_target, prop) {
+    if (typeof prop === "symbol") return undefined;
+    const configs = getMergedConfigs();
+    if (prop === "toString" || prop === "valueOf") return () => configs;
+    const year = parseInt(prop as string, 10);
+    return configs[year];
+  },
+  ownKeys() {
+    return Object.keys(getMergedConfigs());
+  },
+  getOwnPropertyDescriptor(_target, prop) {
+    const configs = getMergedConfigs();
+    const year = parseInt(prop as string, 10);
+    if (configs[year]) {
+      return { configurable: true, enumerable: true, value: configs[year] };
+    }
+    return undefined;
+  },
+  has(_target, prop) {
+    const configs = getMergedConfigs();
+    const year = parseInt(prop as string, 10);
+    return year in configs;
+  },
+});
+
+export type AvailableYear = number;
+
+/**
+ * Determine the active year with fallback logic
  */
 export function getDefaultActiveYear(): AvailableYear {
-  const currentYear = new Date().getFullYear() as AvailableYear;
-  const availableYears = Object.keys(CONFIG_BY_YEAR)
+  const currentYear = new Date().getFullYear();
+  const configs = getMergedConfigs();
+  const availableYears = Object.keys(configs)
     .map(Number)
-    .sort((a, b) => b - a) as AvailableYear[];
+    .sort((a, b) => b - a);
 
-  // If current year exists, use it
-  if (CONFIG_BY_YEAR[currentYear]) {
-    return currentYear;
-  }
-
-  // Find the closest previous year
+  if (configs[currentYear]) return currentYear;
   const previousYear = availableYears.find((year) => year < currentYear);
-  if (previousYear) {
-    return previousYear;
-  }
-
-  // Fallback to the most recent available year
+  if (previousYear) return previousYear;
   return availableYears[0];
 }
 
@@ -51,10 +92,11 @@ export function getDefaultActiveYear(): AvailableYear {
  * Get the configuration for a specific year
  */
 export function getYearConfig(year: AvailableYear): YearlyConfig {
-  if (!CONFIG_BY_YEAR[year]) {
+  const configs = getMergedConfigs();
+  if (!configs[year]) {
     throw new Error(`Configuration not available for year ${year}`);
   }
-  return CONFIG_BY_YEAR[year];
+  return configs[year];
 }
 
 /**
@@ -69,7 +111,8 @@ export function getYearTheme(year: AvailableYear) {
  * Get all available years sorted in descending order
  */
 export function getAvailableYears(): AvailableYear[] {
-  return Object.keys(CONFIG_BY_YEAR)
+  const configs = getMergedConfigs();
+  return Object.keys(configs)
     .map(Number)
-    .sort((a, b) => b - a) as AvailableYear[];
+    .sort((a, b) => b - a);
 }
