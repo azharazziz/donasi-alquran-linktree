@@ -91,6 +91,7 @@ const config2025: YearlyConfig = {
   helpers: [
     "Mila Nuraeni",
     "Fathinatul Amalia",
+    "Tri Masruroh",
   ],
 
   links: [
