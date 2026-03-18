@@ -207,7 +207,7 @@ function BuktiRenderer({ value }: { value: string }) {
           <img
             src={value}
             alt="Bukti"
-            className="w-full object-contain max-h-96"
+            className="w-full object-contain"
             onError={() => setImgError(true)}
           />
         </div>
