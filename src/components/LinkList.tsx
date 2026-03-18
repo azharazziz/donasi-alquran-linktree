@@ -8,6 +8,7 @@ import DonationReportModal from "./DonationReportModal";
 import FAQModal from "./FAQModal";
 import HowToDonateModal from "./HowToDonateModal";
 import DonationProductsModal from "./DonationProductsModal";
+import PenyaluranGalleryModal from "./PenyaluranGalleryModal";
 import { useYearContext } from "@/contexts/YearContext";
 
 const LinkList = () => {
@@ -19,6 +20,7 @@ const LinkList = () => {
   const [faqOpen, setFaqOpen] = useState(false);
   const [howToDonateOpen, setHowToDonateOpen] = useState(false);
   const [donationProductsOpen, setDonationProductsOpen] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
 
   // Map action types to their handlers
   const getHandler = (action?: string) => {
@@ -37,6 +39,8 @@ const LinkList = () => {
         return () => setDonationProductsOpen(true);
       case "social":
         return () => setSocialMediaOpen(true);
+      case "gallery":
+        return () => setGalleryOpen(true);
       default:
         return undefined;
     }
@@ -114,6 +118,7 @@ const LinkList = () => {
       <FAQModal open={faqOpen} onOpenChange={setFaqOpen} />
       <HowToDonateModal open={howToDonateOpen} onOpenChange={setHowToDonateOpen} />
       <DonationProductsModal open={donationProductsOpen} onOpenChange={setDonationProductsOpen} />
+      <PenyaluranGalleryModal open={galleryOpen} onOpenChange={setGalleryOpen} />
     </>
   );
 };

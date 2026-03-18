@@ -22,6 +22,7 @@ import {
   MapPinCheck,
   BookOpen,
   Gift,
+  Image,
 } from "lucide-react";
 import type { YearlyConfig } from "../types";
 import Logo from "@/assets/logo.png";
@@ -107,6 +108,12 @@ const config2026: YearlyConfig = {
       title: "Wujud Donasi",
       subtitle: "Informasi tentang Wujud Donasi yang disalurkan",
       action: "donationProducts",
+    },
+    {
+      icon: Image,
+      title: "Galeri Penyaluran",
+      subtitle: "Bukti nyata penyaluran donasi Al-Qur'an",
+      action: "gallery",
     },
     {
       icon: BookOpen,
