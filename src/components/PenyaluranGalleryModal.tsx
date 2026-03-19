@@ -122,12 +122,12 @@ function ImagePreviewModal({
           </div>
         </DialogHeader>
 
-        <div className="overflow-y-auto flex-1 px-6 py-5 flex flex-col gap-5">
-          <div className="rounded-xl border border-border/50 overflow-hidden bg-muted/30 flex items-center justify-center">
+        <div className="overflow-auto flex-1 px-6 py-5 flex flex-col gap-5">
+          <div className="rounded-xl h-full border border-border/50 overflow-auto bg-muted/30 flex justify-center">
             {imgError && driveId ? (
               <iframe
                 src={getGoogleDrivePreviewUrl(image.originalUrl)}
-                className="w-full h-96"
+                className="w-full h-full"
                 allow="autoplay"
                 title="Image preview"
               />
@@ -135,7 +135,7 @@ function ImagePreviewModal({
               <img
                 src={image.imageUrl}
                 alt={image.title}
-                className="w-full max-h-96 object-contain p-4"
+                className="w-full h-full object-contain"
                 onError={() => setImgError(true)}
               />
             )}
@@ -283,7 +283,7 @@ const PenyaluranGalleryModal = ({ open, onOpenChange }: PenyaluranGalleryModalPr
             )}
 
             {!loading && galleryImages.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 auto-rows-max">
+              <div className="grid grid-cols-3 xl:grid-cols-4 gap-5 auto-rows-max">
                 {galleryImages.map((image, idx) => (
                   <div
                     key={image.id}
