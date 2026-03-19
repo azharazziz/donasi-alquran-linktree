@@ -283,14 +283,14 @@ const PenyaluranGalleryModal = ({ open, onOpenChange }: PenyaluranGalleryModalPr
             )}
 
             {!loading && galleryImages.length > 0 && (
-              <div className="grid grid-cols-3 xl:grid-cols-4 gap-5 auto-rows-max">
+              <div className="grid grid-cols-2 gap-5 auto-rows-max">
                 {galleryImages.map((image, idx) => (
                   <div
                     key={image.id}
                     style={{
                       animationDelay: `${idx * 0.05}s`,
                     }}
-                    className="animate-fade-in-up opacity-0"
+                    className="animate-fade-in-up aspect-square opacity-0"
                   >
                     <GalleryImageCard
                       image={image}
