@@ -108,7 +108,7 @@ function ImagePreviewModal({
 
   return (
     <Dialog open={!!image} onOpenChange={onClose}>
-      <DialogContent className="max-w-[90vw] max-h-[90vh] flex flex-col p-0 rounded-2xl">
+      <DialogContent className="max-w-md max-h-[85vh] flex flex-col p-0 rounded-2xl">
         <DialogHeader className="px-6 pt-6 pb-0 space-y-2">
           <div>
             <DialogTitle className="text-xl font-serif text-primary">
@@ -220,7 +220,7 @@ const PenyaluranGalleryModal = ({ open, onOpenChange }: PenyaluranGalleryModalPr
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-[90vw] max-h-[90vh] flex flex-col p-0 rounded-2xl">
+        <DialogContent className="max-w-md max-h-[85vh] flex flex-col p-0 rounded-2xl">
           <DialogHeader className="px-6 pt-6 pb-4 border-b border-border/50">
             <div className="space-y-1.5">
               <DialogTitle className="text-2xl font-serif text-primary">
